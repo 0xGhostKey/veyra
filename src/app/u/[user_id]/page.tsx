@@ -72,6 +72,15 @@ export default async function PublicProfilePage({ params }: Props) {
   )
 }
 
+const THEME_BG: Record<string, string> = {
+  free_basic: '#f5f5f7',
+  free_dark: '#0a0a0a',
+  luxury_black: '#0a0a0a',
+  glass_premium: '#0f0c29',
+  neon_glow: '#0d0d0d',
+  animated_aurora: '#7c3aed',
+}
+
 function ThemeRenderer({
   profile,
   links,
@@ -81,20 +90,29 @@ function ThemeRenderer({
   links: Link[]
   themeId: string
 }) {
-  switch (themeId) {
-    case 'free_basic':
-      return <FreeBasicTheme profile={profile} links={links} />
-    case 'free_dark':
-      return <FreeDarkTheme profile={profile} links={links} />
-    case 'luxury_black':
-      return <LuxuryBlackTheme profile={profile} links={links} />
-    case 'glass_premium':
-      return <GlassPremiumTheme profile={profile} links={links} />
-    case 'neon_glow':
-      return <NeonGlowTheme profile={profile} links={links} />
-    case 'animated_aurora':
-      return <AnimatedAuroraTheme profile={profile} links={links} />
-    default:
-      return <FreeBasicTheme profile={profile} links={links} />
-  }
+  const bg = THEME_BG[themeId] ?? '#0a0a0a'
+
+  return (
+    <>
+      <style>{`html, body { background-color: ${bg} !important; }`}</style>
+      {(() => {
+        switch (themeId) {
+          case 'free_basic':
+            return <FreeBasicTheme profile={profile} links={links} />
+          case 'free_dark':
+            return <FreeDarkTheme profile={profile} links={links} />
+          case 'luxury_black':
+            return <LuxuryBlackTheme profile={profile} links={links} />
+          case 'glass_premium':
+            return <GlassPremiumTheme profile={profile} links={links} />
+          case 'neon_glow':
+            return <NeonGlowTheme profile={profile} links={links} />
+          case 'animated_aurora':
+            return <AnimatedAuroraTheme profile={profile} links={links} />
+          default:
+            return <FreeBasicTheme profile={profile} links={links} />
+        }
+      })()}
+    </>
+  )
 }
