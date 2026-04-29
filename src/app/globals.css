@@ -13,6 +13,7 @@ html {
 body {
   @apply antialiased;
   -webkit-tap-highlight-color: transparent;
+  background-color: #0a0a0a;
 }
 
 /* Hide scrollbar (for horizontal theme scroll) */
