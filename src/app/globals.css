@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide scrollbar (for horizontal theme scroll) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* iOS safe area */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 24px);
+}
