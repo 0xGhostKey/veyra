@@ -72,13 +72,23 @@ export default async function PublicProfilePage({ params }: Props) {
   )
 }
 
-const THEME_BG: Record<string, string> = {
-  free_basic: '#f5f5f7',
-  free_dark: '#0a0a0a',
-  luxury_black: '#0a0a0a',
-  glass_premium: '#0f0c29',
-  neon_glow: '#0d0d0d',
-  animated_aurora: '#7c3aed',
+const THEME_BODY_CSS: Record<string, string> = {
+  free_basic: `html, body { background-color: #f5f5f7 !important; }`,
+  free_dark: `html, body { background-color: #0a0a0a !important; }`,
+  luxury_black: `html, body { background-color: #0a0a0a !important; }`,
+  glass_premium: `html, body { background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%) !important; background-attachment: fixed !important; }`,
+  neon_glow: `html, body { background-color: #0d0d0d !important; }`,
+  animated_aurora: `
+    @keyframes aurora {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    html, body {
+      background: linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed) !important;
+      background-size: 300% 300% !important;
+      animation: aurora 8s ease infinite !important;
+    }
+  `,
 }
 
 function ThemeRenderer({
@@ -90,11 +100,11 @@ function ThemeRenderer({
   links: Link[]
   themeId: string
 }) {
-  const bg = THEME_BG[themeId] ?? '#0a0a0a'
+  const css = THEME_BODY_CSS[themeId] ?? `html, body { background-color: #0a0a0a !important; }`
 
   return (
     <>
-      <style>{`html, body { background-color: ${bg} !important; }`}</style>
+      <style>{css}</style>
       {(() => {
         switch (themeId) {
           case 'free_basic':
