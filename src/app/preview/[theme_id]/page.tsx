@@ -26,9 +26,9 @@ const DUMMY_PROFILE: Profile = {
 }
 
 const DUMMY_LINKS: Link[] = [
-  { id: '1', profile_id: 'preview', title: 'Instagram', url: '#', icon_type: null, sort_order: 0, is_active: true, created_at: '', updated_at: '' },
-  { id: '2', profile_id: 'preview', title: 'Portfolio', url: '#', icon_type: null, sort_order: 1, is_active: true, created_at: '', updated_at: '' },
-  { id: '3', profile_id: 'preview', title: 'Online Shop', url: '#', icon_type: null, sort_order: 2, is_active: true, created_at: '', updated_at: '' },
+  { id: '1', profile_id: 'preview', title: 'Instagram', url: '#', icon_type: null, link_type: 'text', image_url: null, sort_order: 0, is_active: true, created_at: '', updated_at: '' },
+  { id: '2', profile_id: 'preview', title: 'Portfolio', url: '#', icon_type: null, link_type: 'text', image_url: null, sort_order: 1, is_active: true, created_at: '', updated_at: '' },
+  { id: '3', profile_id: 'preview', title: 'Online Shop', url: '#', icon_type: null, link_type: 'text', image_url: null, sort_order: 2, is_active: true, created_at: '', updated_at: '' },
 ]
 
 const THEME_BODY_CSS: Record<string, string> = {

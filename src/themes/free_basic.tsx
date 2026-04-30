@@ -1,5 +1,6 @@
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
+import ImageLinkGrid from '@/components/ImageLinkGrid'
 
 type Props = {
   profile: Profile
@@ -7,6 +8,9 @@ type Props = {
 }
 
 export default function FreeBasicTheme({ profile, links }: Props) {
+  const textLinks = links.filter((l) => l.link_type !== 'image')
+  const imageLinks = links.filter((l) => l.link_type === 'image')
+
   return (
     <div className="min-h-screen bg-[#f5f5f7] flex flex-col items-center py-12 px-4 pb-safe">
       <div className="w-full max-w-[390px]">
@@ -37,7 +41,7 @@ export default function FreeBasicTheme({ profile, links }: Props) {
 
         {/* Links */}
         <div className="flex flex-col gap-2.5">
-          {links.map((link) => (
+          {textLinks.map((link) => (
             <a
               key={link.id}
               href={link.url}
@@ -49,6 +53,7 @@ export default function FreeBasicTheme({ profile, links }: Props) {
             </a>
           ))}
         </div>
+        <ImageLinkGrid links={imageLinks} />
 
         {/* Logo */}
         {!profile.logo_removed && (

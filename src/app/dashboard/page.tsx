@@ -13,6 +13,14 @@ type EditingLink = {
   url: string
 }
 
+type EditingImageLink = {
+  id: string | null
+  url: string
+  image_url: string | null
+  previewSrc: string | null
+  file: File | null
+}
+
 export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -30,6 +38,9 @@ export default function DashboardPage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [urlCopied, setUrlCopied] = useState(false)
+  const [editingImageLink, setEditingImageLink] = useState<EditingImageLink | null>(null)
+  const [showImageForm, setShowImageForm] = useState(false)
+  const [uploadingImageLink, setUploadingImageLink] = useState(false)
 
   useEffect(() => {
     fetchData()
@@ -121,13 +132,15 @@ export default function DashboardPage() {
     if (!profile || !editingLink) return
     setSaving(true)
 
+    const textLinks = links.filter((l) => l.link_type !== 'image')
     const { data, error } = await supabase
       .from('links')
       .insert({
         profile_id: profile.id,
         title: editingLink.title,
         url: editingLink.url,
-        sort_order: links.length,
+        link_type: 'text',
+        sort_order: textLinks.length,
         is_active: true,
       })
       .select()
@@ -163,6 +176,81 @@ export default function DashboardPage() {
   }
 
   const handleDeleteLink = async (linkId: string) => {
+    const { error } = await supabase.from('links').delete().eq('id', linkId)
+    if (!error) {
+      setLinks(links.filter((l) => l.id !== linkId))
+    }
+  }
+
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !editingImageLink) return
+    const previewSrc = URL.createObjectURL(file)
+    setEditingImageLink({ ...editingImageLink, file, previewSrc })
+  }
+
+  const handleSaveImageLink = async () => {
+    if (!profile || !editingImageLink || !editingImageLink.url) return
+    setUploadingImageLink(true)
+
+    let imageUrl = editingImageLink.image_url
+
+    if (editingImageLink.file) {
+      const ext = editingImageLink.file.name.split('.').pop()
+      const path = `${profile.user_id}/link-images/${Date.now()}.${ext}`
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(path, editingImageLink.file, { upsert: false })
+      if (uploadError) {
+        setUploadingImageLink(false)
+        return
+      }
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+      imageUrl = data.publicUrl
+    }
+
+    if (!imageUrl) {
+      setUploadingImageLink(false)
+      return
+    }
+
+    const imageLinks = links.filter((l) => l.link_type === 'image')
+
+    if (editingImageLink.id) {
+      const { error } = await supabase
+        .from('links')
+        .update({ url: editingImageLink.url, image_url: imageUrl, updated_at: new Date().toISOString() })
+        .eq('id', editingImageLink.id)
+      if (!error) {
+        setLinks(links.map((l) =>
+          l.id === editingImageLink.id ? { ...l, url: editingImageLink.url, image_url: imageUrl! } : l
+        ))
+      }
+    } else {
+      const { data, error } = await supabase
+        .from('links')
+        .insert({
+          profile_id: profile.id,
+          title: '',
+          url: editingImageLink.url,
+          link_type: 'image',
+          image_url: imageUrl,
+          sort_order: imageLinks.length,
+          is_active: true,
+        })
+        .select()
+        .single()
+      if (!error && data) {
+        setLinks([...links, data])
+      }
+    }
+
+    setEditingImageLink(null)
+    setShowImageForm(false)
+    setUploadingImageLink(false)
+  }
+
+  const handleDeleteImageLink = async (linkId: string) => {
     const { error } = await supabase.from('links').delete().eq('id', linkId)
     if (!error) {
       setLinks(links.filter((l) => l.id !== linkId))
@@ -455,7 +543,7 @@ export default function DashboardPage() {
           )}
 
           {/* Links list */}
-          {links.length === 0 ? (
+          {links.filter((l) => l.link_type !== 'image').length === 0 ? (
             <div className="py-8 text-center">
               <p className="text-gray-600 text-[13px] mb-3">リンクがありません</p>
               <button
@@ -470,7 +558,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {links.map((link) => (
+              {links.filter((l) => l.link_type !== 'image').map((link) => (
                 <LinkCard
                   key={link.id}
                   link={link}
@@ -481,6 +569,125 @@ export default function DashboardPage() {
                   onDelete={handleDeleteLink}
                   onToggleActive={handleToggleActive}
                 />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Image links section */}
+        <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase">
+              画像リンク
+            </p>
+            <button
+              onClick={() => {
+                setEditingImageLink({ id: null, url: '', image_url: null, previewSrc: null, file: null })
+                setShowImageForm(true)
+              }}
+              className="w-8 h-8 bg-white/8 hover:bg-white/15 rounded-xl flex items-center justify-center transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Image link form */}
+          {showImageForm && editingImageLink && (
+            <div className="mb-4 p-4 bg-white/5 border border-white/8 rounded-2xl space-y-3">
+              {/* Image upload */}
+              <label className="block cursor-pointer">
+                <div className={`w-full aspect-video rounded-xl border-2 border-dashed border-white/15 flex flex-col items-center justify-center overflow-hidden transition-colors hover:border-white/30 ${editingImageLink.previewSrc ? 'border-solid border-white/20' : ''}`}>
+                  {editingImageLink.previewSrc || editingImageLink.image_url ? (
+                    <img
+                      src={editingImageLink.previewSrc ?? editingImageLink.image_url!}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-center py-6">
+                      <svg className="w-8 h-8 text-gray-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-[12px] text-gray-600">タップして画像を選択</p>
+                    </div>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageFileChange}
+                />
+              </label>
+              {/* URL */}
+              <input
+                type="url"
+                value={editingImageLink.url}
+                onChange={(e) => setEditingImageLink({ ...editingImageLink, url: e.target.value })}
+                placeholder="リンク先URL（https://...）"
+                className="w-full px-4 py-3 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 text-[14px]"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSaveImageLink}
+                  disabled={uploadingImageLink || !editingImageLink.url || (!editingImageLink.file && !editingImageLink.image_url)}
+                  className="flex-1 py-3 bg-white text-black text-[13px] font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-40"
+                >
+                  {uploadingImageLink ? 'アップロード中...' : editingImageLink.id ? '更新' : '追加'}
+                </button>
+                <button
+                  onClick={() => { setEditingImageLink(null); setShowImageForm(false) }}
+                  className="flex-1 py-3 bg-white/5 border border-white/8 text-gray-400 text-[13px] font-medium rounded-xl hover:bg-white/10 transition-colors"
+                >
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Image links grid */}
+          {links.filter((l) => l.link_type === 'image').length === 0 ? (
+            <div className="py-8 text-center">
+              <p className="text-gray-600 text-[13px] mb-3">画像リンクがありません</p>
+              <button
+                onClick={() => {
+                  setEditingImageLink({ id: null, url: '', image_url: null, previewSrc: null, file: null })
+                  setShowImageForm(true)
+                }}
+                className="text-[13px] text-[#d4af37] hover:text-[#e8cc6a] transition-colors"
+              >
+                + 画像リンクを追加する
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2.5">
+              {links.filter((l) => l.link_type === 'image').map((link) => (
+                <div key={link.id} className="relative group aspect-square rounded-2xl overflow-hidden">
+                  <img src={link.image_url!} alt="" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingImageLink({ id: link.id, url: link.url, image_url: link.image_url, previewSrc: null, file: null })
+                        setShowImageForm(true)
+                      }}
+                      className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteImageLink(link.id)}
+                      className="w-9 h-9 bg-red-500/40 rounded-xl flex items-center justify-center hover:bg-red-500/60 transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           )}

@@ -2,6 +2,7 @@
 
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
+import ImageLinkGrid from '@/components/ImageLinkGrid'
 
 type Props = {
   profile: Profile
@@ -9,6 +10,9 @@ type Props = {
 }
 
 export default function GlassPremiumTheme({ profile, links }: Props) {
+  const textLinks = links.filter((l) => l.link_type !== 'image')
+  const imageLinks = links.filter((l) => l.link_type === 'image')
+
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 relative">
       {/* overscroll含め全域をカバーする固定背景レイヤー */}
@@ -73,7 +77,7 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
 
           {/* リンク一覧 */}
           <div className="flex flex-col gap-3">
-            {links.map((link) => (
+            {textLinks.map((link) => (
               <a
                 key={link.id}
                 href={link.url}
@@ -99,6 +103,7 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
               </a>
             ))}
           </div>
+          <ImageLinkGrid links={imageLinks} />
         </div>
 
         {/* ロゴ */}

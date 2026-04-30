@@ -17,6 +17,8 @@ export type Link = {
   title: string
   url: string
   icon_type: string | null
+  link_type: 'text' | 'image'
+  image_url: string | null
   sort_order: number
   is_active: boolean
   created_at: string

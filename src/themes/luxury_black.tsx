@@ -1,5 +1,6 @@
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
+import ImageLinkGrid from '@/components/ImageLinkGrid'
 
 type Props = {
   profile: Profile
@@ -7,6 +8,9 @@ type Props = {
 }
 
 export default function LuxuryBlackTheme({ profile, links }: Props) {
+  const textLinks = links.filter((l) => l.link_type !== 'image')
+  const imageLinks = links.filter((l) => l.link_type === 'image')
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center py-12 px-4">
       {/* ゴールドラインの装飾 */}
@@ -46,7 +50,7 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
 
         {/* リンク一覧 */}
         <div className="flex flex-col gap-4">
-          {links.map((link) => (
+          {textLinks.map((link) => (
             <a
               key={link.id}
               href={link.url}
@@ -60,6 +64,8 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
             </a>
           ))}
         </div>
+
+        <ImageLinkGrid links={imageLinks} />
 
         {/* ボトム装飾 */}
         <div className="h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mt-10 mb-6 opacity-60" />
