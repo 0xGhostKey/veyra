@@ -51,7 +51,7 @@ export default function NeonGlowTheme({ profile, links }: Props) {
             </div>
           )}
           <h1
-            className="text-2xl font-bold tracking-widest uppercase mb-1"
+            className="text-2xl font-bold tracking-widest mb-1"
             style={{
               color: '#ffffff',
               textShadow: '0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4)',

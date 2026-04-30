@@ -36,7 +36,7 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
               </div>
             </div>
           )}
-          <h1 className="text-2xl font-bold text-white tracking-widest uppercase mb-2">
+          <h1 className="text-2xl font-bold text-white tracking-widest mb-2">
             {profile.display_name ?? 'No Name'}
           </h1>
           {/* ゴールドの区切り線 */}
