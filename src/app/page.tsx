@@ -331,6 +331,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="px-5 pt-16 pb-4">
+        <div className="max-w-sm mx-auto">
+          <p className="text-[10px] text-[#d4af37] font-bold tracking-[0.15em] uppercase mb-1">
+            FAQ
+          </p>
+          <h2 className="text-[22px] font-bold mb-8">よくある質問</h2>
+          <div className="space-y-3">
+            {[
+              {
+                q: '無料で使えますか？',
+                a: 'はい。アカウント作成・リンク追加・公開ページ作成はすべて無料です。有料テーマやロゴ削除はオプションです。',
+              },
+              {
+                q: 'テーマは買い切りですか？',
+                a: 'はい。月額費用は一切かかりません。テーマを一度購入すればずっと使えます。',
+              },
+              {
+                q: 'SNSのプロフィールにどう使うの？',
+                a: 'あなたの公開ページURL（veyra.jp/u/...）をTikTok・Instagram・Xなどのプロフィールに貼るだけです。',
+              },
+              {
+                q: 'リンクは何個まで追加できますか？',
+                a: '無制限に追加できます。表示/非表示の切り替えも自由です。',
+              },
+            ].map(({ q, a }) => (
+              <div key={q} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+                <h3 className="font-bold text-[14px] mb-2">{q}</h3>
+                <p className="text-[13px] text-gray-500 leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="px-5 pt-16 pb-20 text-center">
         <div className="max-w-sm mx-auto">

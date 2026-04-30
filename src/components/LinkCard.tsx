@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import type { Link } from '@/types'
 
 type LinkCardProps = {
@@ -10,6 +11,34 @@ type LinkCardProps = {
 }
 
 export default function LinkCard({ link, onEdit, onDelete, onToggleActive }: LinkCardProps) {
+  const [confirming, setConfirming] = useState(false)
+
+  if (confirming) {
+    return (
+      <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl border border-red-500/20 bg-red-500/5">
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] text-gray-400">
+            <span className="text-white font-semibold">{link.title}</span> を削除しますか？
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={() => setConfirming(false)}
+            className="px-3 py-1.5 text-[12px] font-medium text-gray-400 bg-white/5 border border-white/8 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            キャンセル
+          </button>
+          <button
+            onClick={() => onDelete(link.id)}
+            className="px-3 py-1.5 text-[12px] font-bold text-white bg-red-500/70 border border-red-500/40 rounded-lg hover:bg-red-500/90 transition-colors"
+          >
+            削除
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl border transition-colors ${
@@ -69,7 +98,7 @@ export default function LinkCard({ link, onEdit, onDelete, onToggleActive }: Lin
 
         {/* Delete */}
         <button
-          onClick={() => onDelete(link.id)}
+          onClick={() => setConfirming(true)}
           className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-red-400/10 transition-colors"
           title="削除"
         >

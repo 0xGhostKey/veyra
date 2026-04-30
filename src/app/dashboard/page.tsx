@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [saved, setSaved] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const [urlCopied, setUrlCopied] = useState(false)
 
   useEffect(() => {
     fetchData()
@@ -162,12 +163,18 @@ export default function DashboardPage() {
   }
 
   const handleDeleteLink = async (linkId: string) => {
-    if (!confirm('このリンクを削除しますか？')) return
-
     const { error } = await supabase.from('links').delete().eq('id', linkId)
     if (!error) {
       setLinks(links.filter((l) => l.id !== linkId))
     }
+  }
+
+  const handleCopyUrl = () => {
+    if (!profile) return
+    const url = `${window.location.origin}/u/${profile.user_id}`
+    navigator.clipboard.writeText(url)
+    setUrlCopied(true)
+    setTimeout(() => setUrlCopied(false), 2000)
   }
 
   const handleToggleActive = async (linkId: string, isActive: boolean) => {
@@ -277,6 +284,43 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-lg mx-auto px-5 py-6 space-y-4 pb-safe">
+
+        {/* Public URL card */}
+        {profile && (
+          <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
+            <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase mb-3">
+              あなたの公開URL
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex-1 min-w-0 px-4 py-3 bg-white/5 border border-white/8 rounded-xl">
+                <p className="text-[13px] text-gray-300 truncate">
+                  <span className="text-gray-600">veyra.jp/u/</span>
+                  <span className="text-white font-medium">{profile.user_id.slice(0, 8)}...</span>
+                </p>
+              </div>
+              <button
+                onClick={handleCopyUrl}
+                className={`flex-none px-4 py-3 rounded-xl text-[12px] font-bold transition-all active:scale-[0.97] ${
+                  urlCopied
+                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                    : 'bg-white text-black hover:bg-gray-100'
+                }`}
+              >
+                {urlCopied ? 'コピー済み ✓' : 'コピー'}
+              </button>
+            </div>
+            <div className="mt-2.5 flex items-center gap-3">
+              <a
+                href={`/u/${profile.user_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] text-[#d4af37] hover:text-[#e8cc6a] transition-colors"
+              >
+                公開ページを開く ↗
+              </a>
+            </div>
+          </section>
+        )}
 
         {/* Profile section */}
         <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
