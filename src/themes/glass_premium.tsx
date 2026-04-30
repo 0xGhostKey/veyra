@@ -10,12 +10,17 @@ type Props = {
 
 export default function GlassPremiumTheme({ profile, links }: Props) {
   return (
-    <div
-      className="min-h-screen flex flex-col items-center py-12 px-4"
-      style={{
-        background: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%)',
-      }}
-    >
+    <div className="min-h-screen flex flex-col items-center py-12 px-4 relative">
+      {/* overscroll含め全域をカバーする固定背景レイヤー */}
+      <div
+        aria-hidden
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: -1,
+          background: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%)',
+        }}
+      />
       <div className="w-full max-w-md">
         {/* メインカード（ガラスモーフィズム） */}
         <div
