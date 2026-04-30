@@ -78,7 +78,7 @@ function PhoneMockup() {
         style={{ background: 'radial-gradient(ellipse, #d4af37 0%, transparent 70%)' }}
       />
       {/* Phone frame */}
-      <div className="relative rounded-[2.8rem] bg-[#1c1c1e] border border-white/15 overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.9)]">
+      <div className="relative rounded-[2.8rem] bg-[#1c1c1e] border border-white/15 overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.9)] [transform:translateZ(0)]">
         {/* Dynamic island */}
         <div className="bg-[#0a0a0a] flex justify-center pt-3 pb-1">
           <div className="w-[68px] h-[18px] bg-[#1c1c1e] rounded-full" />
@@ -212,7 +212,7 @@ export default function HomePage() {
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
-              className="flex-none w-[148px] rounded-2xl overflow-hidden border border-white/10"
+              className="flex-none w-[148px] rounded-2xl overflow-hidden border border-white/10 [transform:translateZ(0)]"
             >
               {/* Mini profile preview */}
               <div

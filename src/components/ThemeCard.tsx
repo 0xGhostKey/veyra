@@ -37,7 +37,7 @@ export default function ThemeCard({
       <div className="flex justify-center items-center py-5 bg-black/20">
         <div className="relative" style={{ width: 160, height: 286 }}>
           {/* Phone frame */}
-          <div className="absolute inset-0 rounded-[28px] border-2 border-white/20 overflow-hidden shadow-xl bg-[#111]">
+          <div className="absolute inset-0 rounded-[28px] border-2 border-white/20 overflow-hidden shadow-xl bg-[#111] [transform:translateZ(0)]">
             {/* Dynamic island */}
             <div className="absolute top-0 left-0 right-0 h-6 bg-black z-10 flex justify-center items-end pb-1">
               <div className="w-10 h-2 bg-[#1c1c1e] rounded-full" />

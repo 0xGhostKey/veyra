@@ -15,7 +15,7 @@ export default function ImageLinkGrid({ links }: Props) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-2xl overflow-hidden aspect-square active:scale-[0.97] transition-transform"
+          className="block rounded-2xl overflow-hidden aspect-square active:scale-[0.97] transition-transform [transform:translateZ(0)]"
         >
           <img
             src={link.image_url!}

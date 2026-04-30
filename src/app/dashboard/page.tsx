@@ -419,7 +419,7 @@ export default function DashboardPage() {
             {/* Avatar */}
             <div className="flex items-center gap-4">
               <label className="relative cursor-pointer group">
-                <div className="w-16 h-16 rounded-full bg-white/8 border border-white/10 overflow-hidden flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-white/8 border border-white/10 overflow-hidden flex items-center justify-center [transform:translateZ(0)]">
                   {avatarUrl ? (
                     <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
@@ -664,7 +664,7 @@ export default function DashboardPage() {
           ) : (
             <div className="grid grid-cols-2 gap-2.5">
               {links.filter((l) => l.link_type === 'image').map((link) => (
-                <div key={link.id} className="relative group aspect-square rounded-2xl overflow-hidden">
+                <div key={link.id} className="relative group aspect-square rounded-2xl overflow-hidden [transform:translateZ(0)]">
                   <img src={link.image_url!} alt="" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
