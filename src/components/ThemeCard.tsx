@@ -42,12 +42,13 @@ export default function ThemeCard({
             <div className="absolute top-0 left-0 right-0 h-6 bg-black z-10 flex justify-center items-end pb-1">
               <div className="w-10 h-2 bg-[#1c1c1e] rounded-full" />
             </div>
-            {/* iframe scaled to fit */}
+            {/* iframe scaled to fit - top offset by dynamic island height (24px) */}
             <iframe
               src={`/preview/${theme.id}`}
               scrolling="no"
-              className="absolute top-0 left-0 pointer-events-none border-none"
+              className="absolute left-0 pointer-events-none border-none"
               style={{
+                top: 24,
                 width: 390,
                 height: 844,
                 transform: `scale(${160 / 390})`,

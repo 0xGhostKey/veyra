@@ -13,30 +13,59 @@ const THEME_PREVIEWS = [
     bg: '#0a0a0a',
     badge: '人気',
     price: '¥500',
+    avatarBg: 'linear-gradient(135deg, #d4af37, #8B6914)',
+    textColor: '#ffffff',
+    subColor: '#d4af37',
+    linkBorder: 'rgba(212,175,55,0.25)',
+    linkBg: 'rgba(212,175,55,0.07)',
+    linkText: '#d4af37',
+    topDecor: true,
   },
   {
     id: 'glass_premium',
     name: 'Glass Premium',
     accent: '#00d4ff',
-    bg: '#1a1a2e',
+    bg: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #0f3460 100%)',
     badge: 'おすすめ',
     price: '¥500',
+    avatarBg: 'rgba(0,212,255,0.2)',
+    avatarBorder: 'rgba(0,212,255,0.5)',
+    textColor: '#ffffff',
+    subColor: 'rgba(255,255,255,0.5)',
+    linkBorder: 'rgba(255,255,255,0.15)',
+    linkBg: 'rgba(255,255,255,0.07)',
+    linkText: '#ffffff',
   },
   {
     id: 'animated_aurora',
     name: 'Animated Aurora',
     accent: '#ec4899',
-    bg: '#2d1b4e',
+    bg: 'linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed)',
     badge: 'ANIMATED',
     price: '¥900',
+    avatarBg: 'rgba(255,255,255,0.25)',
+    avatarBorder: 'rgba(255,255,255,0.5)',
+    textColor: '#ffffff',
+    subColor: 'rgba(255,255,255,0.7)',
+    linkBorder: 'rgba(255,255,255,0.35)',
+    linkBg: 'rgba(255,255,255,0.18)',
+    linkText: '#ffffff',
+    animated: true,
   },
   {
     id: 'neon_glow',
     name: 'Neon Glow',
     accent: '#39ff14',
-    bg: '#0a0d0a',
+    bg: '#0d0d0d',
     badge: 'NEW',
     price: '¥600',
+    avatarBg: 'rgba(57,255,20,0.15)',
+    avatarBorder: 'rgba(57,255,20,0.6)',
+    textColor: '#ffffff',
+    subColor: 'rgba(57,255,20,0.6)',
+    linkBorder: 'rgba(57,255,20,0.25)',
+    linkBg: 'rgba(57,255,20,0.06)',
+    linkText: 'rgba(57,255,20,0.9)',
   },
 ]
 
@@ -172,46 +201,66 @@ export default function HomePage() {
           </p>
           <h2 className="text-[22px] font-bold">プレミアムテーマ</h2>
         </div>
+        {/* Aurora animation */}
+        <style>{`
+          @keyframes aurora-card {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+        `}</style>
         <div className="flex gap-3 overflow-x-auto px-5 pb-3 scrollbar-hide">
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
               className="flex-none w-[148px] rounded-2xl overflow-hidden border border-white/10"
             >
-              {/* Mini preview */}
+              {/* Mini profile preview */}
               <div
-                className="h-[184px] flex flex-col items-center justify-center px-4 py-5"
-                style={{ backgroundColor: theme.bg }}
+                className="h-[210px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
+                style={
+                  theme.animated
+                    ? {
+                        background: 'linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed)',
+                        backgroundSize: '300% 300%',
+                        animation: 'aurora-card 8s ease infinite',
+                      }
+                    : { background: theme.bg }
+                }
               >
+                {/* Luxury top line */}
+                {'topDecor' in theme && theme.topDecor && (
+                  <div className="w-full h-px mb-3 opacity-50" style={{ background: 'linear-gradient(to right, transparent, #d4af37, transparent)' }} />
+                )}
+                {/* Avatar */}
                 <div
-                  className="w-10 h-10 rounded-full mb-2.5"
+                  className="w-11 h-11 rounded-full flex items-center justify-center text-[15px] font-bold mb-2 flex-none"
                   style={{
-                    background: `radial-gradient(circle, ${theme.accent}60, ${theme.accent}20)`,
-                    border: `1.5px solid ${theme.accent}50`,
-                  }}
-                />
-                <div
-                  className="h-[5px] w-[52px] rounded-full mb-3"
-                  style={{ backgroundColor: theme.accent + '50' }}
-                />
-                <div
-                  className="h-7 w-full rounded-xl mb-2 flex items-center justify-center"
-                  style={{
-                    border: `1px solid ${theme.accent}25`,
-                    backgroundColor: theme.accent + '08',
+                    background: theme.avatarBg,
+                    border: `1.5px solid ${'avatarBorder' in theme ? theme.avatarBorder : 'transparent'}`,
+                    color: theme.accent,
+                    boxShadow: `0 0 12px ${'avatarBorder' in theme ? theme.avatarBorder : theme.accent + '40'}`,
                   }}
                 >
-                  <div className="h-[3px] w-12 rounded-full" style={{ backgroundColor: theme.accent + '50' }} />
+                  Y
                 </div>
-                <div
-                  className="h-7 w-full rounded-xl flex items-center justify-center"
-                  style={{
-                    border: `1px solid ${theme.accent}25`,
-                    backgroundColor: theme.accent + '08',
-                  }}
-                >
-                  <div className="h-[3px] w-10 rounded-full" style={{ backgroundColor: theme.accent + '50' }} />
-                </div>
+                {/* Name */}
+                <p className="text-[11px] font-bold mb-0.5" style={{ color: theme.textColor }}>Yuna</p>
+                {/* Bio */}
+                <p className="text-[8px] mb-3" style={{ color: theme.subColor }}>photographer · Tokyo</p>
+                {/* Links */}
+                {['Instagram', 'Portfolio', 'Shop'].map((label) => (
+                  <div
+                    key={label}
+                    className="w-full h-[26px] rounded-xl mb-1.5 flex items-center justify-center text-[8px] font-semibold tracking-wide flex-none"
+                    style={{
+                      border: `1px solid ${theme.linkBorder}`,
+                      background: theme.linkBg,
+                      color: theme.linkText,
+                    }}
+                  >
+                    {label}
+                  </div>
+                ))}
               </div>
               {/* Info */}
               <div className="p-3 bg-[#111]">
