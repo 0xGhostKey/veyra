@@ -20,6 +20,7 @@ const THEME_PREVIEWS = [
     linkBg: 'rgba(212,175,55,0.07)',
     linkText: '#d4af37',
     topDecor: true,
+    pt: 'pt-2',
   },
   {
     id: 'glass_premium',
@@ -216,7 +217,7 @@ export default function HomePage() {
             >
               {/* Mini profile preview */}
               <div
-                className="h-[210px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
+                className={`h-[210px] flex flex-col items-center ${'pt' in theme ? theme.pt : 'pt-5'} px-3.5 overflow-hidden`}
                 style={
                   theme.animated
                     ? {
