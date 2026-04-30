@@ -31,25 +31,60 @@ const DUMMY_LINKS: Link[] = [
   { id: '3', profile_id: 'preview', title: 'Online Shop', url: '#', icon_type: null, sort_order: 2, is_active: true, created_at: '', updated_at: '' },
 ]
 
+const THEME_BODY_CSS: Record<string, string> = {
+  free_basic: `html, body { background-color: #f5f5f7 !important; }`,
+  free_dark: `html, body { background-color: #0a0a0a !important; }`,
+  luxury_black: `html, body { background-color: #0a0a0a !important; }`,
+  glass_premium: `html, body { background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%) !important; background-attachment: fixed !important; }`,
+  neon_glow: `html, body { background-color: #0d0d0d !important; }`,
+  animated_aurora: `
+    @keyframes aurora {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    html, body {
+      background: linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed) !important;
+      background-size: 300% 300% !important;
+      animation: aurora 8s ease infinite !important;
+    }
+  `,
+}
+
 export default async function ThemePreviewPage({ params }: Props) {
   const { theme_id } = await params
   const theme = THEMES.find((t) => t.id === theme_id)
   if (!theme) notFound()
 
+  const css = THEME_BODY_CSS[theme_id] ?? `html, body { background-color: #0a0a0a !important; }`
+
+  let content
   switch (theme_id) {
     case 'free_basic':
-      return <FreeBasicTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <FreeBasicTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     case 'free_dark':
-      return <FreeDarkTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <FreeDarkTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     case 'luxury_black':
-      return <LuxuryBlackTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <LuxuryBlackTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     case 'glass_premium':
-      return <GlassPremiumTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <GlassPremiumTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     case 'neon_glow':
-      return <NeonGlowTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <NeonGlowTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     case 'animated_aurora':
-      return <AnimatedAuroraTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      content = <AnimatedAuroraTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
     default:
       notFound()
   }
+
+  return (
+    <>
+      <style>{css}</style>
+      {content}
+    </>
+  )
 }
