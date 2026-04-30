@@ -10,15 +10,8 @@ type Props = {
 
 export default function AnimatedAuroraTheme({ profile, links }: Props) {
   return (
-    <div
-      className="min-h-screen flex flex-col items-center py-12 px-4 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed)',
-        backgroundSize: '300% 300%',
-        animation: 'aurora 8s ease infinite',
-      }}
-    >
-      {/* オーロラのアニメーションCSS */}
+    <div className="min-h-screen flex flex-col items-center py-12 px-4 relative">
+      {/* アニメーションCSS */}
       <style jsx>{`
         @keyframes aurora {
           0%, 100% { background-position: 0% 50%; }
@@ -36,6 +29,19 @@ export default function AnimatedAuroraTheme({ profile, links }: Props) {
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
       `}</style>
+
+      {/* overscroll含め全域をカバーする固定アニメーション背景 */}
+      <div
+        aria-hidden
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: -1,
+          background: 'linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed)',
+          backgroundSize: '300% 300%',
+          animation: 'aurora 8s ease infinite',
+        }}
+      />
 
       {/* 背景の光の球 */}
       <div

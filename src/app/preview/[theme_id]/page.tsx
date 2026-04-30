@@ -37,17 +37,7 @@ const THEME_BODY_CSS: Record<string, string> = {
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
   glass_premium: `html, body { background-color: #0f0c29 !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
-  animated_aurora: `
-    @keyframes aurora-bg {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    html, body {
-      background: linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed) !important;
-      background-size: 300% 300% !important;
-      animation: aurora-bg 8s ease infinite !important;
-    }
-  `,
+  animated_aurora: `html, body { background-color: #7c3aed !important; }`,
 }
 
 export default async function ThemePreviewPage({ params }: Props) {
