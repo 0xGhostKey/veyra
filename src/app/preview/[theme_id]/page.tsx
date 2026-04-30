@@ -35,9 +35,9 @@ const THEME_BODY_CSS: Record<string, string> = {
   free_basic: `html, body { background-color: #f5f5f7 !important; }`,
   free_dark: `html, body { background-color: #0a0a0a !important; }`,
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
-  glass_premium: `html, body { background-color: #0f0c29 !important; }`,
+  glass_premium: `html, body { background: transparent !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
-  animated_aurora: `html, body { background-color: #7c3aed !important; }`,
+  animated_aurora: `html, body { background: transparent !important; }`,
 }
 
 export default async function ThemePreviewPage({ params }: Props) {
