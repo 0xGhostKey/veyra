@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { Link } from '@/types'
 
 type Props = {
@@ -9,13 +9,27 @@ type Props = {
 
 export default function GallerySection({ photos }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const touchStartX = useRef<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || lightboxIndex === null) return
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) < 40) return
+    if (diff > 0 && lightboxIndex < photos.length - 1) setLightboxIndex(lightboxIndex + 1)
+    if (diff < 0 && lightboxIndex > 0) setLightboxIndex(lightboxIndex - 1)
+    touchStartX.current = null
+  }
 
   if (photos.length === 0) return null
 
   return (
     <>
-      {/* Horizontal scroll, square thumbnails */}
-      <div className="mt-5 flex gap-2 overflow-x-auto scrollbar-hide">
+      {/* Centered square thumbnails */}
+      <div className="mt-5 flex gap-2 justify-center">
         {photos.map((photo, idx) => (
           <button
             key={photo.id}
@@ -47,10 +61,12 @@ export default function GallerySection({ photos }: Props) {
             </svg>
           </button>
 
-          {/* Image — natural ratio, no forced crop, no rounded corners */}
+          {/* Image — natural ratio, no forced crop, no rounded corners, swipeable */}
           <div
             className="max-w-[100vw]"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <img
               src={photos[lightboxIndex].image_url!}

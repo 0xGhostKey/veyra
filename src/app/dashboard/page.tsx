@@ -24,7 +24,6 @@ import SortableLinkCard from '@/components/SortableLinkCard'
 import type { Profile, Link as LinkType } from '@/types'
 
 type EditingLink = { id: string | null; title: string; url: string }
-type EditingImageLink = { id: string | null; title: string; url: string; image_url: string | null; previewSrc: string | null; file: File | null }
 type EditingGalleryPhoto = { id: string | null; image_url: string | null; previewSrc: string | null; file: File | null }
 
 export default function DashboardPage() {
@@ -44,9 +43,6 @@ export default function DashboardPage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [urlCopied, setUrlCopied] = useState(false)
-  const [editingImageLink, setEditingImageLink] = useState<EditingImageLink | null>(null)
-  const [showImageForm, setShowImageForm] = useState(false)
-  const [uploadingImageLink, setUploadingImageLink] = useState(false)
   const [editingGalleryPhoto, setEditingGalleryPhoto] = useState<EditingGalleryPhoto | null>(null)
   const [showGalleryForm, setShowGalleryForm] = useState(false)
   const [uploadingGalleryPhoto, setUploadingGalleryPhoto] = useState(false)
@@ -101,10 +97,10 @@ export default function DashboardPage() {
   const handleAddLink = async () => {
     if (!profile || !editingLink) return
     setSaving(true)
-    const editableLinks = links.filter(l => l.link_type !== 'gallery')
+    const currentTextLinks = links.filter(l => l.link_type === 'text')
     const { data, error } = await supabase.from('links').insert({
       profile_id: profile.id, title: editingLink.title, url: editingLink.url,
-      link_type: 'text', link_size: 'small', sort_order: editableLinks.length, is_active: true,
+      link_type: 'text', link_size: 'small', sort_order: currentTextLinks.length, is_active: true,
     }).select().single()
     if (!error && data) { setLinks([...links, data]); setEditingLink(null); setShowLinkForm(false) }
     setSaving(false)
@@ -128,63 +124,21 @@ export default function DashboardPage() {
     if (!error) setLinks(links.map(l => l.id === linkId ? { ...l, is_active: isActive } : l))
   }
 
-  // ── Unified drag-and-drop (text + image) ──
+  // ── Text link drag-and-drop ──
 
   const handleLinkDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
 
-    const editableLinks = links.filter(l => l.link_type !== 'gallery')
-    const oldIdx = editableLinks.findIndex(l => l.id === active.id)
-    const newIdx = editableLinks.findIndex(l => l.id === over.id)
-    const reordered = arrayMove(editableLinks, oldIdx, newIdx)
+    const textLinks = links.filter(l => l.link_type === 'text')
+    const oldIdx = textLinks.findIndex(l => l.id === active.id)
+    const newIdx = textLinks.findIndex(l => l.id === over.id)
+    const reordered = arrayMove(textLinks, oldIdx, newIdx)
 
-    const galleryLinks = links.filter(l => l.link_type === 'gallery')
-    setLinks([...reordered.map((l, idx) => ({ ...l, sort_order: idx })), ...galleryLinks])
+    const otherLinks = links.filter(l => l.link_type !== 'text')
+    setLinks([...reordered.map((l, idx) => ({ ...l, sort_order: idx })), ...otherLinks])
 
     await Promise.all(reordered.map((l, idx) => supabase.from('links').update({ sort_order: idx }).eq('id', l.id)))
-  }
-
-  // ── Image link ──
-
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file || !editingImageLink) return
-    setEditingImageLink({ ...editingImageLink, file, previewSrc: URL.createObjectURL(file) })
-  }
-
-  const handleSaveImageLink = async () => {
-    if (!profile || !editingImageLink || !editingImageLink.url) return
-    setUploadingImageLink(true)
-    let imageUrl = editingImageLink.image_url
-    if (editingImageLink.file) {
-      const ext = editingImageLink.file.name.split('.').pop()
-      const path = `${profile.user_id}/link-images/${Date.now()}.${ext}`
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(path, editingImageLink.file, { upsert: false })
-      if (uploadError) { setUploadingImageLink(false); return }
-      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-      imageUrl = data.publicUrl
-    }
-    if (!imageUrl) { setUploadingImageLink(false); return }
-
-    if (editingImageLink.id) {
-      const { error } = await supabase.from('links').update({ title: editingImageLink.title, url: editingImageLink.url, image_url: imageUrl, updated_at: new Date().toISOString() }).eq('id', editingImageLink.id)
-      if (!error) setLinks(links.map(l => l.id === editingImageLink.id ? { ...l, title: editingImageLink.title, url: editingImageLink.url, image_url: imageUrl! } : l))
-    } else {
-      const editableLinks = links.filter(l => l.link_type !== 'gallery')
-      const { data, error } = await supabase.from('links').insert({
-        profile_id: profile.id, title: editingImageLink.title, url: editingImageLink.url,
-        link_type: 'image', image_url: imageUrl, link_size: 'small',
-        sort_order: editableLinks.length, is_active: true,
-      }).select().single()
-      if (!error && data) setLinks([...links, data])
-    }
-    setEditingImageLink(null); setShowImageForm(false); setUploadingImageLink(false)
-  }
-
-  const handleDeleteImageLink = async (linkId: string) => {
-    const { error } = await supabase.from('links').delete().eq('id', linkId)
-    if (!error) setLinks(links.filter(l => l.id !== linkId))
   }
 
   // ── Gallery ──
@@ -279,7 +233,7 @@ export default function DashboardPage() {
     )
   }
 
-  const editableLinks = links.filter(l => l.link_type !== 'gallery')
+  const textLinks = links.filter(l => l.link_type === 'text')
   const galleryPhotos = links.filter(l => l.link_type === 'gallery')
 
   return (
@@ -373,26 +327,17 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ── Unified Links (text + image) ── */}
+        {/* ── Links ── */}
         <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
           <div className="flex items-center justify-between mb-5">
             <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase">リンク</p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { setEditingLink({ id: null, title: '', url: '' }); setShowLinkForm(true); setShowImageForm(false) }}
-                className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
-              >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                テキスト
-              </button>
-              <button
-                onClick={() => { setEditingImageLink({ id: null, title: '', url: '', image_url: null, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
-                className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
-              >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                画像
-              </button>
-            </div>
+            <button
+              onClick={() => { setEditingLink({ id: null, title: '', url: '' }); setShowLinkForm(true) }}
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              追加
+            </button>
           </div>
 
           {/* Text link form */}
@@ -417,71 +362,23 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Image link form */}
-          {showImageForm && editingImageLink && (
-            <div className="mb-4 p-4 bg-white/5 border border-white/8 rounded-2xl space-y-3">
-              <label className="block cursor-pointer">
-                <div className="w-2/5 rounded-xl border-2 border-dashed border-white/15 flex flex-col items-center justify-center overflow-hidden transition-colors hover:border-white/30"
-                  style={{ aspectRatio: '5/7' }}>
-                  {editingImageLink.previewSrc || editingImageLink.image_url ? (
-                    <img src={editingImageLink.previewSrc ?? editingImageLink.image_url!} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="text-center py-6 px-3">
-                      <svg className="w-7 h-7 text-gray-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-[11px] text-gray-600">画像を選択</p>
-                      <p className="text-[10px] text-gray-700 mt-0.5">5:7</p>
-                    </div>
-                  )}
-                </div>
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageFileChange} />
-              </label>
-              <input type="text" value={editingImageLink.title} onChange={e => setEditingImageLink({ ...editingImageLink, title: e.target.value })}
-                placeholder="ラベル（任意・画像の下に表示）"
-                className="w-full px-4 py-3 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 text-[14px]" />
-              <input type="url" value={editingImageLink.url} onChange={e => setEditingImageLink({ ...editingImageLink, url: e.target.value })}
-                placeholder="リンク先URL（https://...）"
-                className="w-full px-4 py-3 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 text-[14px]" />
-              <div className="flex gap-2">
-                <button onClick={handleSaveImageLink} disabled={uploadingImageLink || !editingImageLink.url || (!editingImageLink.file && !editingImageLink.image_url)}
-                  className="flex-1 py-3 bg-white text-black text-[13px] font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-40">
-                  {uploadingImageLink ? 'アップロード中...' : editingImageLink.id ? '更新' : '追加'}
-                </button>
-                <button onClick={() => { setEditingImageLink(null); setShowImageForm(false) }}
-                  className="flex-1 py-3 bg-white/5 border border-white/8 text-gray-400 text-[13px] font-medium rounded-xl hover:bg-white/10 transition-colors">
-                  キャンセル
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Unified sortable list */}
-          {editableLinks.length === 0 ? (
+          {/* Sortable text links */}
+          {textLinks.length === 0 ? (
             <div className="py-8 text-center">
               <p className="text-gray-600 text-[13px]">リンクがありません</p>
             </div>
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleLinkDragEnd}>
-              <SortableContext items={editableLinks.map(l => l.id)} strategy={verticalListSortingStrategy}>
+              <SortableContext items={textLinks.map(l => l.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-2">
-                  {editableLinks.map(link => (
-                    link.link_type === 'text' ? (
-                      <SortableLinkCard
-                        key={link.id}
-                        link={link}
-                        onEdit={l => { setEditingLink({ id: l.id, title: l.title, url: l.url }); setShowLinkForm(true); setShowImageForm(false) }}
-                        onDelete={handleDeleteLink}
-                        onToggleActive={handleToggleActive}
-                      />
-                    ) : (
-                      <SortableImageRow
-                        key={link.id}
-                        link={link}
-                        onEdit={() => { setEditingImageLink({ id: link.id, title: link.title, url: link.url, image_url: link.image_url, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
-                        onDelete={handleDeleteImageLink}
-                      />
-                    )
+                  {textLinks.map(link => (
+                    <SortableLinkCard
+                      key={link.id}
+                      link={link}
+                      onEdit={l => { setEditingLink({ id: l.id, title: l.title, url: l.url }); setShowLinkForm(true) }}
+                      onDelete={handleDeleteLink}
+                      onToggleActive={handleToggleActive}
+                    />
                   ))}
                 </div>
               </SortableContext>
@@ -593,34 +490,3 @@ export default function DashboardPage() {
   )
 }
 
-// ── Sortable image row for dashboard ──
-
-function SortableImageRow({ link, onEdit, onDelete }: { link: LinkType; onEdit: () => void; onDelete: (id: string) => void }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: link.id })
-  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1 }
-
-  return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-3 px-3 py-3 rounded-2xl border border-white/8 bg-white/5">
-      <div className="text-gray-600 cursor-grab active:cursor-grabbing flex-shrink-0 touch-none" {...attributes} {...listeners}>
-        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z" />
-        </svg>
-      </div>
-      <div className="flex-none rounded-lg overflow-hidden bg-white/8" style={{ width: 32, aspectRatio: '5/7' }}>
-        {link.image_url && <img src={link.image_url} alt="" className="w-full h-full object-cover" />}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[12px] text-gray-300 truncate">{link.url || '—'}</p>
-        <p className="text-[10px] text-gray-600 mt-0.5">画像リンク</p>
-      </div>
-      <div className="flex items-center gap-0.5 flex-shrink-0">
-        <button onClick={onEdit} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-600 hover:text-blue-400 hover:bg-blue-400/10 transition-colors">
-          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
-        </button>
-        <button onClick={() => onDelete(link.id)} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-red-400/10 transition-colors">
-          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
-        </button>
-      </div>
-    </div>
-  )
-}
