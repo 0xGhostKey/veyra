@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
+type Role = 'user' | 'admin' | 'complete'
+
 type User = {
   user_id: string
   display_name: string | null
   email: string
-  role: 'user' | 'admin'
+  role: Role
   created_at: string
 }
 
@@ -26,6 +28,15 @@ type Props = {
   purchases: Purchase[]
 }
 
+async function setRole(targetUserId: string, role: Role) {
+  const res = await fetch('/api/admin/set-role', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ target_user_id: targetUserId, role }),
+  })
+  return res.ok
+}
+
 export default function AdminClient({ users, purchases }: Props) {
   const [tab, setTab] = useState<'users' | 'purchases'>('users')
   const [localUsers, setLocalUsers] = useState(users)
@@ -33,24 +44,33 @@ export default function AdminClient({ users, purchases }: Props) {
 
   const totalRevenue = purchases.filter(p => p.status === 'paid').reduce((sum, p) => sum + p.amount, 0)
 
-  const handleToggleRole = async (targetUserId: string, currentRole: 'user' | 'admin') => {
-    const newRole = currentRole === 'admin' ? 'user' : 'admin'
-
-    if (currentRole === 'admin') {
-      const ok = window.confirm('このアカウントのAdmin権限を解除しますか？\n解除すると管理画面にアクセスできなくなります。')
-      if (!ok) return
-    }
-
+  const updateRole = async (targetUserId: string, newRole: Role) => {
     setLoading(targetUserId)
-    const res = await fetch('/api/admin/set-role', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ target_user_id: targetUserId, role: newRole }),
-    })
-    if (res.ok) {
+    const ok = await setRole(targetUserId, newRole)
+    if (ok) {
       setLocalUsers(prev => prev.map(u => u.user_id === targetUserId ? { ...u, role: newRole } : u))
     }
     setLoading(null)
+  }
+
+  const handleToggleAdmin = async (user: User) => {
+    if (user.role === 'admin') {
+      const ok = window.confirm('Admin権限を解除しますか？')
+      if (!ok) return
+      await updateRole(user.user_id, 'user')
+    } else {
+      await updateRole(user.user_id, 'admin')
+    }
+  }
+
+  const handleToggleComplete = async (user: User) => {
+    if (user.role === 'complete') {
+      const ok = window.confirm('Complete権限を解除しますか？')
+      if (!ok) return
+      await updateRole(user.user_id, 'user')
+    } else {
+      await updateRole(user.user_id, 'complete')
+    }
   }
 
   return (
@@ -117,34 +137,64 @@ export default function AdminClient({ users, purchases }: Props) {
               <div className="divide-y divide-white/5">
                 {localUsers.map((user) => (
                   <div key={user.user_id} className="flex items-center gap-3 px-5 py-4">
+                    {/* Avatar */}
                     <div className="flex-none w-8 h-8 rounded-full bg-white/8 flex items-center justify-center text-[12px] font-bold text-gray-400">
                       {(user.display_name ?? user.email ?? '?')[0].toUpperCase()}
                     </div>
+
+                    {/* Info */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-[13px] font-semibold truncate">{user.display_name ?? '—'}</p>
                         {user.role === 'admin' && (
                           <span className="flex-none text-[9px] px-1.5 py-0.5 rounded-full bg-[#d4af37]/15 text-[#d4af37] font-bold tracking-wider uppercase">
                             Admin
                           </span>
                         )}
+                        {user.role === 'complete' && (
+                          <span className="flex-none text-[9px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-bold tracking-wider uppercase">
+                            Complete
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-gray-600 truncate">{user.email || user.user_id}</p>
                     </div>
+
+                    {/* Date */}
                     <p className="hidden sm:block flex-none text-[11px] text-gray-700">
                       {new Date(user.created_at).toLocaleDateString('ja-JP')}
                     </p>
-                    <button
-                      onClick={() => handleToggleRole(user.user_id, user.role)}
-                      disabled={loading === user.user_id}
-                      className={`flex-none px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40 ${
-                        user.role === 'admin'
-                          ? 'bg-white/8 text-gray-400 hover:bg-red-500/15 hover:text-red-400'
-                          : 'bg-white/8 text-gray-500 hover:bg-[#d4af37]/15 hover:text-[#d4af37]'
-                      }`}
-                    >
-                      {loading === user.user_id ? '...' : user.role === 'admin' ? '解除' : 'Admin化'}
-                    </button>
+
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-1.5 flex-none">
+                      {/* Complete toggle — admin には不要（admin は既に全権限あり） */}
+                      {user.role !== 'admin' && (
+                        <button
+                          onClick={() => handleToggleComplete(user)}
+                          disabled={loading === user.user_id}
+                          className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40 ${
+                            user.role === 'complete'
+                              ? 'bg-purple-500/15 text-purple-400 hover:bg-red-500/15 hover:text-red-400'
+                              : 'bg-white/8 text-gray-500 hover:bg-purple-500/15 hover:text-purple-400'
+                          }`}
+                        >
+                          {loading === user.user_id ? '...' : user.role === 'complete' ? 'Complete解除' : 'Complete付与'}
+                        </button>
+                      )}
+
+                      {/* Admin toggle */}
+                      <button
+                        onClick={() => handleToggleAdmin(user)}
+                        disabled={loading === user.user_id}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40 ${
+                          user.role === 'admin'
+                            ? 'bg-[#d4af37]/10 text-[#d4af37] hover:bg-red-500/15 hover:text-red-400'
+                            : 'bg-white/8 text-gray-500 hover:bg-[#d4af37]/15 hover:text-[#d4af37]'
+                        }`}
+                      >
+                        {loading === user.user_id ? '...' : user.role === 'admin' ? 'Admin解除' : 'Admin化'}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

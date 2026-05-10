@@ -50,7 +50,7 @@ export default function ThemesPage() {
       setActiveTab(tabForTheme(profileData.selected_theme))
     }
 
-    if (profileData?.role === 'admin') {
+    if (profileData?.role === 'admin' || profileData?.role === 'complete') {
       const { THEMES } = await import('@/themes')
       setPurchasedThemeIds(THEMES.filter((t) => !t.isFree).map((t) => t.id))
     } else {

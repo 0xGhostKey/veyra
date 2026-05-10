@@ -28,7 +28,7 @@ export default async function AdminPage() {
     user_id: p.user_id,
     display_name: p.display_name,
     email: emailMap[p.user_id] ?? '',
-    role: p.role as 'user' | 'admin',
+    role: p.role as 'user' | 'admin' | 'complete',
     created_at: p.created_at,
   }))
 

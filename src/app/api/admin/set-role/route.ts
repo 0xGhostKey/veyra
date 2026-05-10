@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   // リクエストボディ
   const { target_user_id, role } = await request.json()
-  if (!target_user_id || !['user', 'admin'].includes(role)) {
+  if (!target_user_id || !['user', 'admin', 'complete'].includes(role)) {
     return NextResponse.json({ error: 'Invalid params' }, { status: 400 })
   }
 

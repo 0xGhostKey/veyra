@@ -6,7 +6,7 @@ export type Profile = {
   avatar_url: string | null
   selected_theme: string
   logo_removed: boolean
-  role: 'user' | 'admin'
+  role: 'user' | 'admin' | 'complete'
   created_at: string
   updated_at: string
 }
