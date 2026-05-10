@@ -14,13 +14,13 @@ export default function GallerySection({ photos }: Props) {
 
   return (
     <>
-      <div className="mt-5 grid grid-cols-3 gap-2">
+      {/* Horizontal scroll, square thumbnails */}
+      <div className="mt-5 flex gap-2 overflow-x-auto scrollbar-hide">
         {photos.map((photo, idx) => (
           <button
             key={photo.id}
             onClick={() => setLightboxIndex(idx)}
-            className="block w-full rounded-xl overflow-hidden active:scale-[0.97] transition-transform [transform:translateZ(0)] focus:outline-none"
-            style={{ aspectRatio: '5/7' }}
+            className="flex-none w-[70px] h-[70px] rounded-xl overflow-hidden active:scale-[0.97] transition-transform [transform:translateZ(0)] focus:outline-none"
           >
             <img
               src={photo.image_url!}
@@ -31,15 +31,15 @@ export default function GallerySection({ photos }: Props) {
         ))}
       </div>
 
-      {/* Lightbox */}
+      {/* Lightbox — original ratio */}
       {lightboxIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
           onClick={() => setLightboxIndex(null)}
         >
           {/* Close */}
           <button
-            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
             onClick={() => setLightboxIndex(null)}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -50,7 +50,7 @@ export default function GallerySection({ photos }: Props) {
           {/* Prev */}
           {lightboxIndex > 0 && (
             <button
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); setLightboxIndex(lightboxIndex - 1) }}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -59,22 +59,22 @@ export default function GallerySection({ photos }: Props) {
             </button>
           )}
 
-          {/* Image */}
+          {/* Image — natural ratio, no forced crop */}
           <div
-            className="max-w-[90vw] max-h-[85vh]"
+            className="px-14 max-w-[100vw]"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={photos[lightboxIndex].image_url!}
               alt=""
-              className="max-w-full max-h-[85vh] rounded-2xl object-contain shadow-2xl"
+              className="max-w-[80vw] max-h-[80vh] w-auto h-auto rounded-2xl shadow-2xl object-contain"
             />
           </div>
 
           {/* Next */}
           {lightboxIndex < photos.length - 1 && (
             <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
               onClick={(e) => { e.stopPropagation(); setLightboxIndex(lightboxIndex + 1) }}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -90,9 +90,7 @@ export default function GallerySection({ photos }: Props) {
                 <button
                   key={idx}
                   onClick={(e) => { e.stopPropagation(); setLightboxIndex(idx) }}
-                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                    idx === lightboxIndex ? 'bg-white' : 'bg-white/30'
-                  }`}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === lightboxIndex ? 'bg-white' : 'bg-white/30'}`}
                 />
               ))}
             </div>

@@ -42,6 +42,7 @@ export default function FreeBasicTheme({ profile, links }: Props) {
 
         <MixedLinks
           links={activeLinks}
+          titleColor="text-gray-500"
           renderTextLink={(link) => (
             <a
               key={link.id}

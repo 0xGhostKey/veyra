@@ -24,7 +24,7 @@ import SortableLinkCard from '@/components/SortableLinkCard'
 import type { Profile, Link as LinkType } from '@/types'
 
 type EditingLink = { id: string | null; title: string; url: string }
-type EditingImageLink = { id: string | null; url: string; image_url: string | null; previewSrc: string | null; file: File | null }
+type EditingImageLink = { id: string | null; title: string; url: string; image_url: string | null; previewSrc: string | null; file: File | null }
 type EditingGalleryPhoto = { id: string | null; image_url: string | null; previewSrc: string | null; file: File | null }
 
 export default function DashboardPage() {
@@ -168,12 +168,12 @@ export default function DashboardPage() {
     if (!imageUrl) { setUploadingImageLink(false); return }
 
     if (editingImageLink.id) {
-      const { error } = await supabase.from('links').update({ url: editingImageLink.url, image_url: imageUrl, updated_at: new Date().toISOString() }).eq('id', editingImageLink.id)
-      if (!error) setLinks(links.map(l => l.id === editingImageLink.id ? { ...l, url: editingImageLink.url, image_url: imageUrl! } : l))
+      const { error } = await supabase.from('links').update({ title: editingImageLink.title, url: editingImageLink.url, image_url: imageUrl, updated_at: new Date().toISOString() }).eq('id', editingImageLink.id)
+      if (!error) setLinks(links.map(l => l.id === editingImageLink.id ? { ...l, title: editingImageLink.title, url: editingImageLink.url, image_url: imageUrl! } : l))
     } else {
       const editableLinks = links.filter(l => l.link_type !== 'gallery')
       const { data, error } = await supabase.from('links').insert({
-        profile_id: profile.id, title: '', url: editingImageLink.url,
+        profile_id: profile.id, title: editingImageLink.title, url: editingImageLink.url,
         link_type: 'image', image_url: imageUrl, link_size: 'small',
         sort_order: editableLinks.length, is_active: true,
       }).select().single()
@@ -386,7 +386,7 @@ export default function DashboardPage() {
                 テキスト
               </button>
               <button
-                onClick={() => { setEditingImageLink({ id: null, url: '', image_url: null, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
+                onClick={() => { setEditingImageLink({ id: null, title: '', url: '', image_url: null, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
                 className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
               >
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
@@ -437,6 +437,9 @@ export default function DashboardPage() {
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageFileChange} />
               </label>
+              <input type="text" value={editingImageLink.title} onChange={e => setEditingImageLink({ ...editingImageLink, title: e.target.value })}
+                placeholder="ラベル（任意・画像の下に表示）"
+                className="w-full px-4 py-3 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 text-[14px]" />
               <input type="url" value={editingImageLink.url} onChange={e => setEditingImageLink({ ...editingImageLink, url: e.target.value })}
                 placeholder="リンク先URL（https://...）"
                 className="w-full px-4 py-3 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 text-[14px]" />
@@ -475,7 +478,7 @@ export default function DashboardPage() {
                       <SortableImageRow
                         key={link.id}
                         link={link}
-                        onEdit={() => { setEditingImageLink({ id: link.id, url: link.url, image_url: link.image_url, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
+                        onEdit={() => { setEditingImageLink({ id: link.id, title: link.title, url: link.url, image_url: link.image_url, previewSrc: null, file: null }); setShowImageForm(true); setShowLinkForm(false) }}
                         onDelete={handleDeleteImageLink}
                       />
                     )
