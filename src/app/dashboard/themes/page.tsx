@@ -7,13 +7,13 @@ import { createClient } from '@/lib/supabase'
 import ThemeCard from '@/components/ThemeCard'
 import { THEMES } from '@/themes'
 
-type Tab = 'free' | 'neon' | 'premium'
+type Tab = 'free' | 'neon' | 'luxury'
 
 function tabForTheme(themeId: string): Tab {
   const theme = THEMES.find((t) => t.id === themeId)
   if (!theme || theme.series === 'free') return 'free'
   if (theme.series === 'neon') return 'neon'
-  return 'premium'
+  return 'luxury'
 }
 
 export default function ThemesPage() {
@@ -113,28 +113,27 @@ export default function ThemesPage() {
 
   const freeThemes = THEMES.filter((t) => t.series === 'free')
   const neonThemes = THEMES.filter((t) => t.series === 'neon')
-  const premiumThemes = THEMES.filter((t) => t.series === 'premium')
-  // legacy: 購入済みのユーザーにのみ表示
-  const legacyThemes = THEMES.filter(
-    (t) => t.series === 'legacy' && purchasedThemeIds.includes(t.id)
-  )
+  const luxuryThemes = THEMES.filter((t) => t.series === 'luxury')
 
   const currentThemeName = THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'free', label: '無料' },
     { key: 'neon', label: 'Neon' },
-    { key: 'premium', label: 'Premium' },
+    { key: 'luxury', label: 'Luxury' },
   ]
 
-  // ネオンシリーズの進捗（ステッパー用）
-  const neonProgress = neonThemes.map((theme) => ({
-    theme,
-    isOwned: purchasedThemeIds.includes(theme.id),
-    isPrerequisiteLocked:
-      theme.prerequisiteId !== null &&
-      !purchasedThemeIds.includes(theme.prerequisiteId),
-  }))
+  const makeSeriesProgress = (themes: typeof THEMES) =>
+    themes.map((theme) => ({
+      theme,
+      isOwned: theme.isFree || purchasedThemeIds.includes(theme.id),
+      isPrerequisiteLocked:
+        theme.prerequisiteId !== null &&
+        !purchasedThemeIds.includes(theme.prerequisiteId),
+    }))
+
+  const neonProgress = makeSeriesProgress(neonThemes)
+  const luxuryProgress = makeSeriesProgress(luxuryThemes)
 
   const getPrerequisiteName = (prerequisiteId: string | null) => {
     if (!prerequisiteId) return undefined
@@ -275,38 +274,70 @@ export default function ThemesPage() {
           </div>
         )}
 
-        {/* PREMIUM tab */}
-        {activeTab === 'premium' && (
-          <div className="flex flex-col gap-3">
-            {premiumThemes.map((theme) => (
-              <ThemeCard
-                key={theme.id}
-                theme={theme}
-                isSelected={selectedTheme === theme.id}
-                isPurchased={purchasedThemeIds.includes(theme.id)}
-                onSelect={handleSelectTheme}
-                onPurchase={handlePurchaseTheme}
-              />
-            ))}
+        {/* LUXURY tab */}
+        {activeTab === 'luxury' && (
+          <div>
+            {/* Series progress stepper */}
+            <div className="flex items-start mb-6 px-1">
+              {luxuryProgress.map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#d4af37]' : 'text-gray-600'}`}>
+                      STEP {idx + 1}
+                    </span>
+                    <div
+                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
+                        item.isOwned
+                          ? 'bg-[#d4af37] border-[#d4af37]'
+                          : selectedTheme === item.theme.id
+                          ? 'bg-white/10 border-white/40'
+                          : 'bg-transparent border-white/20'
+                      }`}
+                    >
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>
+                      {item.theme.name}
+                    </span>
+                  </div>
+                  {idx < luxuryProgress.length - 1 && (
+                    <div
+                      className={`flex-1 h-px mt-[30px] mx-1 ${
+                        item.isOwned ? 'bg-[#d4af37]/40' : 'bg-white/10'
+                      }`}
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </div>
 
-            {/* Legacy themes (purchased only) */}
-            {legacyThemes.length > 0 && (
-              <>
-                <p className="text-[10px] font-bold text-gray-700 tracking-[0.15em] uppercase mt-4 mb-1">
-                  Legacy
-                </p>
-                {legacyThemes.map((theme) => (
-                  <ThemeCard
-                    key={theme.id}
-                    theme={theme}
-                    isSelected={selectedTheme === theme.id}
-                    isPurchased={true}
-                    onSelect={handleSelectTheme}
-                    onPurchase={handlePurchaseTheme}
-                  />
-                ))}
-              </>
-            )}
+            <p className="text-[12px] text-gray-600 mb-4 text-center">
+              各ステップ ¥500 — 順番に解除していくシリーズ
+            </p>
+
+            <div className="flex flex-col gap-3">
+              {luxuryProgress.map((item, idx) => (
+                <ThemeCard
+                  key={item.theme.id}
+                  theme={item.theme}
+                  isSelected={selectedTheme === item.theme.id}
+                  isPurchased={item.isOwned}
+                  isPrerequisiteLocked={item.isPrerequisiteLocked}
+                  prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)}
+                  stepNumber={idx + 1}
+                  onSelect={handleSelectTheme}
+                  onPurchase={handlePurchaseTheme}
+                />
+              ))}
+            </div>
           </div>
         )}
       </main>

@@ -4,11 +4,11 @@ import { createClient } from '@/lib/supabase-server'
 import FreeBasicTheme from '@/themes/free_basic'
 import FreeDarkTheme from '@/themes/free_dark'
 import LuxuryBlackTheme from '@/themes/luxury_black'
-import GlassPremiumTheme from '@/themes/glass_premium'
+import LuxuryNavyTheme from '@/themes/luxury_navy'
+import LuxuryIvoryTheme from '@/themes/luxury_ivory'
 import NeonGlowTheme from '@/themes/neon_glow'
 import NeonAmberTheme from '@/themes/neon_amber'
 import NeonVioletTheme from '@/themes/neon_violet'
-import AnimatedAuroraTheme from '@/themes/animated_aurora'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -78,11 +78,11 @@ const THEME_BODY_CSS: Record<string, string> = {
   free_basic: `html, body { background-color: #f5f5f7 !important; }`,
   free_dark: `html, body { background-color: #0a0a0a !important; }`,
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
-  glass_premium: `html, body { background: transparent !important; }`,
+  luxury_navy: `html, body { background-color: #0a0f1e !important; }`,
+  luxury_ivory: `html, body { background-color: #f8f5ef !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
   neon_amber: `html, body { background-color: #0a0800 !important; }`,
   neon_violet: `html, body { background-color: #050510 !important; }`,
-  animated_aurora: `html, body { background: transparent !important; }`,
 }
 
 function ThemeRenderer({
@@ -107,16 +107,16 @@ function ThemeRenderer({
             return <FreeDarkTheme profile={profile} links={links} />
           case 'luxury_black':
             return <LuxuryBlackTheme profile={profile} links={links} />
-          case 'glass_premium':
-            return <GlassPremiumTheme profile={profile} links={links} />
+          case 'luxury_navy':
+            return <LuxuryNavyTheme profile={profile} links={links} />
+          case 'luxury_ivory':
+            return <LuxuryIvoryTheme profile={profile} links={links} />
           case 'neon_glow':
             return <NeonGlowTheme profile={profile} links={links} />
           case 'neon_amber':
             return <NeonAmberTheme profile={profile} links={links} />
           case 'neon_violet':
             return <NeonVioletTheme profile={profile} links={links} />
-          case 'animated_aurora':
-            return <AnimatedAuroraTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }

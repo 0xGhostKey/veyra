@@ -3,11 +3,11 @@ import { THEMES } from '@/themes'
 import FreeBasicTheme from '@/themes/free_basic'
 import FreeDarkTheme from '@/themes/free_dark'
 import LuxuryBlackTheme from '@/themes/luxury_black'
-import GlassPremiumTheme from '@/themes/glass_premium'
+import LuxuryNavyTheme from '@/themes/luxury_navy'
+import LuxuryIvoryTheme from '@/themes/luxury_ivory'
 import NeonGlowTheme from '@/themes/neon_glow'
 import NeonAmberTheme from '@/themes/neon_amber'
 import NeonVioletTheme from '@/themes/neon_violet'
-import AnimatedAuroraTheme from '@/themes/animated_aurora'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -37,11 +37,11 @@ const THEME_BODY_CSS: Record<string, string> = {
   free_basic: `html, body { background-color: #f5f5f7 !important; }`,
   free_dark: `html, body { background-color: #0a0a0a !important; }`,
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
-  glass_premium: `html, body { background: transparent !important; }`,
+  luxury_navy: `html, body { background-color: #0a0f1e !important; }`,
+  luxury_ivory: `html, body { background-color: #f8f5ef !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
   neon_amber: `html, body { background-color: #0a0800 !important; }`,
   neon_violet: `html, body { background-color: #050510 !important; }`,
-  animated_aurora: `html, body { background: transparent !important; }`,
 }
 
 export default async function ThemePreviewPage({ params }: Props) {
@@ -62,8 +62,11 @@ export default async function ThemePreviewPage({ params }: Props) {
     case 'luxury_black':
       content = <LuxuryBlackTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
-    case 'glass_premium':
-      content = <GlassPremiumTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+    case 'luxury_navy':
+      content = <LuxuryNavyTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'luxury_ivory':
+      content = <LuxuryIvoryTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
     case 'neon_glow':
       content = <NeonGlowTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
@@ -73,9 +76,6 @@ export default async function ThemePreviewPage({ params }: Props) {
       break
     case 'neon_violet':
       content = <NeonVioletTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
-      break
-    case 'animated_aurora':
-      content = <AnimatedAuroraTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
     default:
       notFound()
