@@ -17,8 +17,9 @@ export type Link = {
   title: string
   url: string
   icon_type: string | null
-  link_type: 'text' | 'image'
+  link_type: 'text' | 'image' | 'gallery'
   image_url: string | null
+  link_size: 'small' | 'large'
   sort_order: number
   is_active: boolean
   created_at: string

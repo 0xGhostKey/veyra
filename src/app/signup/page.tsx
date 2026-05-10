@@ -46,8 +46,8 @@ export default function SignupPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-[22px] font-bold text-white mb-3">確認メールを送信しました</h2>
-          <p className="text-[13px] text-gray-500 mb-8 leading-relaxed">
+          <h2 className="text-[24px] font-bold text-white mb-3">確認メールを送信しました</h2>
+          <p className="text-[14px] text-gray-500 mb-8 leading-relaxed">
             {email} に確認メールを送りました。
             <br />
             メール内のリンクをクリックして登録を完了してください。
@@ -64,76 +64,85 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center px-5 pb-safe">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-1.5 mb-4">
-            <div className="w-[7px] h-[7px] rounded-full bg-[#d4af37]" />
-            <span className="text-[20px] font-bold tracking-wider text-white">Veyra</span>
-          </Link>
-          <p className="text-[14px] text-gray-500">アカウントを作成して始めましょう</p>
-        </div>
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col px-5 pb-safe">
+      {/* Nav */}
+      <div className="flex items-center justify-between py-5 max-w-sm mx-auto w-full">
+        <Link href="/" className="flex items-center gap-1.5">
+          <div className="w-[7px] h-[7px] rounded-full bg-[#d4af37]" />
+          <span className="text-[16px] font-bold tracking-wider text-white">Veyra</span>
+        </Link>
+        <Link href="/login" className="text-[13px] text-gray-500 hover:text-white transition-colors">
+          ログイン
+        </Link>
+      </div>
 
-        {/* Form card */}
-        <div className="bg-[#111] border border-white/8 rounded-3xl p-6">
-          {error && (
-            <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px]">
-              {error}
-            </div>
-          )}
+      {/* Form */}
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="w-full max-w-sm">
+          <div className="mb-8">
+            <h1 className="text-[26px] font-bold text-white mb-2">無料で始めよう</h1>
+            <p className="text-[14px] text-gray-500">アカウントを作成して、高級プロフィールページを作る</p>
+          </div>
 
-          <form onSubmit={handleSignup} className="space-y-3">
-            <div>
-              <label className="block text-[11px] text-gray-500 mb-1.5" htmlFor="email">
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="you@example.com"
-                className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] text-gray-500 mb-1.5" htmlFor="password">
-                パスワード
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={8}
-                placeholder="8文字以上"
-                className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
-              />
-            </div>
+          <div className="bg-[#111] border border-white/8 rounded-3xl p-6">
+            {error && (
+              <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px]">
+                {error}
+              </div>
+            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-[15px] bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-1 text-[15px]"
-            >
-              {loading ? '処理中...' : '無料で登録する'}
-            </button>
-          </form>
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div>
+                <label className="block text-[12px] text-gray-500 mb-2" htmlFor="email">
+                  メールアドレス
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
+                />
+              </div>
+              <div>
+                <label className="block text-[12px] text-gray-500 mb-2" htmlFor="password">
+                  パスワード
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={8}
+                  placeholder="8文字以上"
+                  className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
+                />
+              </div>
 
-          <p className="text-center text-[13px] text-gray-600 mt-5">
-            すでにアカウントをお持ちの方は{' '}
-            <Link href="/login" className="text-[#d4af37] hover:text-[#e8cc6a] transition-colors">
-              ログイン
-            </Link>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-[15px] bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-[15px] mt-2"
+              >
+                {loading ? '処理中...' : '無料で登録する'}
+              </button>
+            </form>
+
+            <p className="text-center text-[13px] text-gray-600 mt-5">
+              すでにアカウントをお持ちの方は{' '}
+              <Link href="/login" className="text-[#d4af37] hover:text-[#e8cc6a] transition-colors">
+                ログイン
+              </Link>
+            </p>
+          </div>
+
+          <p className="text-center text-[11px] text-gray-700 mt-5">
+            登録することで、利用規約とプライバシーポリシーに同意したものとみなされます。
           </p>
         </div>
-
-        <p className="text-center text-[11px] text-gray-700 mt-5">
-          登録することで、利用規約とプライバシーポリシーに同意したものとみなされます。
-        </p>
       </div>
     </div>
   )

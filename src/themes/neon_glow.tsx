@@ -1,6 +1,7 @@
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
 import ImageLinkGrid from '@/components/ImageLinkGrid'
+import GallerySection from '@/components/GallerySection'
 
 type Props = {
   profile: Profile
@@ -8,8 +9,9 @@ type Props = {
 }
 
 export default function NeonGlowTheme({ profile, links }: Props) {
-  const textLinks = links.filter((l) => l.link_type !== 'image')
+  const textLinks = links.filter((l) => l.link_type === 'text')
   const imageLinks = links.filter((l) => l.link_type === 'image')
+  const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] flex flex-col items-center py-12 px-4">
@@ -101,6 +103,7 @@ export default function NeonGlowTheme({ profile, links }: Props) {
         </div>
 
         <ImageLinkGrid links={imageLinks} />
+        <GallerySection photos={galleryPhotos} />
 
         {/* ロゴ */}
         {!profile.logo_removed && (
