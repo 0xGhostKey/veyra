@@ -6,6 +6,9 @@ type ThemeCardProps = {
   theme: ThemeDefinition
   isSelected: boolean
   isPurchased: boolean
+  isPrerequisiteLocked?: boolean
+  prerequisiteName?: string
+  stepNumber?: number
   onSelect: (themeId: string) => void
   onPurchase: (themeId: string) => void
 }
@@ -14,18 +17,22 @@ export default function ThemeCard({
   theme,
   isSelected,
   isPurchased,
+  isPrerequisiteLocked = false,
+  prerequisiteName,
+  stepNumber,
   onSelect,
   onPurchase,
 }: ThemeCardProps) {
   const isAccessible = theme.isFree || isPurchased
-  const isLocked = !theme.isFree && !isPurchased
+  const isPurchaseLocked = !theme.isFree && !isPurchased && !isPrerequisiteLocked
+  const isAnyLocked = !isAccessible
 
   return (
     <div
       className={`relative rounded-2xl border overflow-hidden transition-all duration-200 ${
         isSelected
           ? 'border-[#d4af37]/50 bg-[#d4af37]/5'
-          : isLocked
+          : isAnyLocked
           ? 'border-white/8 bg-white/[0.02]'
           : 'border-white/10 bg-[#111] hover:border-white/20 cursor-pointer'
       }`}
@@ -42,7 +49,7 @@ export default function ThemeCard({
             <div className="absolute top-0 left-0 right-0 h-6 bg-black z-10 flex justify-center items-end pb-1">
               <div className="w-10 h-2 bg-[#1c1c1e] rounded-full" />
             </div>
-            {/* iframe scaled to fit - top offset by dynamic island height (24px) */}
+            {/* iframe scaled to fit */}
             <iframe
               src={`/preview/${theme.id}`}
               scrolling="no"
@@ -62,13 +69,18 @@ export default function ThemeCard({
           </div>
 
           {/* Lock overlay */}
-          {isLocked && (
-            <div className="absolute inset-0 rounded-[28px] bg-black/40 z-20 flex flex-col items-center justify-center gap-2">
+          {isAnyLocked && (
+            <div className="absolute inset-0 rounded-[28px] bg-black/50 z-20 flex flex-col items-center justify-center gap-2">
               <div className="w-9 h-9 bg-black/60 rounded-full flex items-center justify-center border border-white/15">
                 <svg className="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
               </div>
+              {isPrerequisiteLocked && prerequisiteName && (
+                <span className="text-[10px] text-white/50 font-medium px-3 text-center leading-tight">
+                  {prerequisiteName} を先に入手
+                </span>
+              )}
             </div>
           )}
 
@@ -78,6 +90,15 @@ export default function ThemeCard({
               <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
+            </div>
+          )}
+
+          {/* Step badge */}
+          {stepNumber !== undefined && (
+            <div className="absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full bg-black/60 border border-white/15">
+              <span className="text-[9px] font-bold text-white/60 tracking-widest">
+                STEP {stepNumber}
+              </span>
             </div>
           )}
         </div>
@@ -113,7 +134,11 @@ export default function ThemeCard({
           </a>
 
           {/* Action button */}
-          {isLocked ? (
+          {isPrerequisiteLocked ? (
+            <div className="flex-1 py-2.5 text-center text-[12px] text-gray-600 font-medium cursor-not-allowed">
+              🔒 前のステップが必要
+            </div>
+          ) : isPurchaseLocked ? (
             <button
               onClick={(e) => {
                 e.stopPropagation()

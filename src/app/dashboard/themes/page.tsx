@@ -1,16 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import ThemeCard from '@/components/ThemeCard'
 import { THEMES } from '@/themes'
 
+type Tab = 'free' | 'neon' | 'premium'
+
+function tabForTheme(themeId: string): Tab {
+  const theme = THEMES.find((t) => t.id === themeId)
+  if (!theme || theme.series === 'free') return 'free'
+  if (theme.series === 'neon') return 'neon'
+  return 'premium'
+}
+
 export default function ThemesPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  const [activeTab, setActiveTab] = useState<Tab>('free')
   const [selectedTheme, setSelectedTheme] = useState('free_basic')
   const [purchasedThemeIds, setPurchasedThemeIds] = useState<string[]>([])
   const [profileId, setProfileId] = useState<string | null>(null)
@@ -37,9 +47,9 @@ export default function ThemesPage() {
     if (profileData) {
       setProfileId(profileData.id)
       setSelectedTheme(profileData.selected_theme)
+      setActiveTab(tabForTheme(profileData.selected_theme))
     }
 
-    // admin は全有料テーマを使用可能
     if (profileData?.role === 'admin') {
       const { THEMES } = await import('@/themes')
       setPurchasedThemeIds(THEMES.filter((t) => !t.isFree).map((t) => t.id))
@@ -62,15 +72,11 @@ export default function ThemesPage() {
   const handleSelectTheme = async (themeId: string) => {
     if (!profileId) return
     setSaving(true)
-
     const { error } = await supabase
       .from('profiles')
       .update({ selected_theme: themeId, updated_at: new Date().toISOString() })
       .eq('id', profileId)
-
-    if (!error) {
-      setSelectedTheme(themeId)
-    }
+    if (!error) setSelectedTheme(themeId)
     setSaving(false)
   }
 
@@ -105,8 +111,35 @@ export default function ThemesPage() {
     )
   }
 
-  const freeThemes = THEMES.filter((t) => t.isFree)
-  const paidThemes = THEMES.filter((t) => !t.isFree)
+  const freeThemes = THEMES.filter((t) => t.series === 'free')
+  const neonThemes = THEMES.filter((t) => t.series === 'neon')
+  const premiumThemes = THEMES.filter((t) => t.series === 'premium')
+  // legacy: 購入済みのユーザーにのみ表示
+  const legacyThemes = THEMES.filter(
+    (t) => t.series === 'legacy' && purchasedThemeIds.includes(t.id)
+  )
+
+  const currentThemeName = THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme
+
+  const tabs: { key: Tab; label: string }[] = [
+    { key: 'free', label: '無料' },
+    { key: 'neon', label: 'Neon' },
+    { key: 'premium', label: 'Premium' },
+  ]
+
+  // ネオンシリーズの進捗（ステッパー用）
+  const neonProgress = neonThemes.map((theme) => ({
+    theme,
+    isOwned: purchasedThemeIds.includes(theme.id),
+    isPrerequisiteLocked:
+      theme.prerequisiteId !== null &&
+      !purchasedThemeIds.includes(theme.prerequisiteId),
+  }))
+
+  const getPrerequisiteName = (prerequisiteId: string | null) => {
+    if (!prerequisiteId) return undefined
+    return THEMES.find((t) => t.id === prerequisiteId)?.name
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -130,26 +163,36 @@ export default function ThemesPage() {
 
       <main className="max-w-lg mx-auto px-5 py-6 pb-safe">
         {/* Title */}
-        <div className="mb-6">
-          <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase mb-1">
-            Themes
-          </p>
+        <div className="mb-5">
+          <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase mb-1">Themes</p>
           <h1 className="text-[22px] font-bold mb-0.5">テーマを選択</h1>
           <p className="text-[13px] text-gray-500">
             現在:{' '}
-            <span className="text-gray-300 font-medium">
-              {THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme}
-            </span>
+            <span className="text-gray-300 font-medium">{currentThemeName}</span>
             {saving && <span className="text-[#d4af37] ml-2">保存中...</span>}
           </p>
         </div>
 
-        {/* Free themes */}
-        <section className="mb-5">
-          <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase mb-3">
-            無料テーマ
-          </p>
-          <div className="grid grid-cols-1 gap-3">
+        {/* Tabs */}
+        <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex-1 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
+                activeTab === tab.key
+                  ? 'bg-white/10 text-white'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* FREE tab */}
+        {activeTab === 'free' && (
+          <div className="flex flex-col gap-3">
             {freeThemes.map((theme) => (
               <ThemeCard
                 key={theme.id}
@@ -161,15 +204,81 @@ export default function ThemesPage() {
               />
             ))}
           </div>
-        </section>
+        )}
 
-        {/* Paid themes */}
-        <section>
-          <p className="text-[10px] font-bold text-gray-600 tracking-[0.15em] uppercase mb-3">
-            プレミアムテーマ
-          </p>
-          <div className="grid grid-cols-1 gap-3">
-            {paidThemes.map((theme) => (
+        {/* NEON tab */}
+        {activeTab === 'neon' && (
+          <div>
+            {/* Series progress stepper */}
+            <div className="flex items-start mb-6 px-1">
+              {neonProgress.map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#d4af37]' : 'text-gray-600'}`}>
+                      STEP {idx + 1}
+                    </span>
+                    <div
+                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
+                        item.isOwned
+                          ? 'bg-[#d4af37] border-[#d4af37]'
+                          : selectedTheme === item.theme.id
+                          ? 'bg-white/10 border-white/40'
+                          : 'bg-transparent border-white/20'
+                      }`}
+                    >
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>
+                      {item.theme.name}
+                    </span>
+                  </div>
+                  {idx < neonProgress.length - 1 && (
+                    <div
+                      className={`flex-1 h-px mt-[30px] mx-1 ${
+                        item.isOwned ? 'bg-[#d4af37]/40' : 'bg-white/10'
+                      }`}
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+
+            {/* Series description */}
+            <p className="text-[12px] text-gray-600 mb-4 text-center">
+              各ステップ ¥500 — 順番に解除していくシリーズ
+            </p>
+
+            {/* Neon theme cards */}
+            <div className="flex flex-col gap-3">
+              {neonProgress.map((item, idx) => (
+                <ThemeCard
+                  key={item.theme.id}
+                  theme={item.theme}
+                  isSelected={selectedTheme === item.theme.id}
+                  isPurchased={item.isOwned}
+                  isPrerequisiteLocked={item.isPrerequisiteLocked}
+                  prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)}
+                  stepNumber={idx + 1}
+                  onSelect={handleSelectTheme}
+                  onPurchase={handlePurchaseTheme}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* PREMIUM tab */}
+        {activeTab === 'premium' && (
+          <div className="flex flex-col gap-3">
+            {premiumThemes.map((theme) => (
               <ThemeCard
                 key={theme.id}
                 theme={theme}
@@ -179,8 +288,27 @@ export default function ThemesPage() {
                 onPurchase={handlePurchaseTheme}
               />
             ))}
+
+            {/* Legacy themes (purchased only) */}
+            {legacyThemes.length > 0 && (
+              <>
+                <p className="text-[10px] font-bold text-gray-700 tracking-[0.15em] uppercase mt-4 mb-1">
+                  Legacy
+                </p>
+                {legacyThemes.map((theme) => (
+                  <ThemeCard
+                    key={theme.id}
+                    theme={theme}
+                    isSelected={selectedTheme === theme.id}
+                    isPurchased={true}
+                    onSelect={handleSelectTheme}
+                    onPurchase={handlePurchaseTheme}
+                  />
+                ))}
+              </>
+            )}
           </div>
-        </section>
+        )}
       </main>
     </div>
   )
