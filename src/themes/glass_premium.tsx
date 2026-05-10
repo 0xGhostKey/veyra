@@ -2,8 +2,8 @@
 
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
-import ImageLinkGrid from '@/components/ImageLinkGrid'
 import GallerySection from '@/components/GallerySection'
+import MixedLinks from '@/components/MixedLinks'
 
 type Props = {
   profile: Profile
@@ -11,24 +11,19 @@ type Props = {
 }
 
 export default function GlassPremiumTheme({ profile, links }: Props) {
-  const textLinks = links.filter((l) => l.link_type === 'text')
-  const imageLinks = links.filter((l) => l.link_type === 'image')
+  const activeLinks = links.filter((l) => l.link_type !== 'gallery')
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 relative">
-      {/* overscroll含め全域をカバーする固定背景レイヤー */}
       <div
         aria-hidden
         style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: -1,
+          position: 'fixed', inset: 0, zIndex: -1,
           background: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%)',
         }}
       />
       <div className="w-full max-w-md">
-        {/* メインカード（ガラスモーフィズム） */}
         <div
           className="rounded-3xl p-8 mb-6"
           style={{
@@ -39,14 +34,11 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
           }}
         >
-          {/* アバター・プロフィール */}
           <div className="flex flex-col items-center mb-8">
             {profile.avatar_url ? (
               <div
                 className="p-0.5 rounded-full mb-4"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,212,255,0.8), rgba(255,255,255,0.3))',
-                }}
+                style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.8), rgba(255,255,255,0.3))' }}
               >
                 <img
                   src={profile.avatar_url}
@@ -57,10 +49,7 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
             ) : (
               <div
                 className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
-                style={{
-                  background: 'rgba(0, 212, 255, 0.15)',
-                  border: '1px solid rgba(0, 212, 255, 0.4)',
-                }}
+                style={{ background: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.4)' }}
               >
                 <span className="text-3xl text-cyan-300">
                   {(profile.display_name ?? 'U')[0].toUpperCase()}
@@ -77,9 +66,10 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
             )}
           </div>
 
-          {/* リンク一覧 */}
-          <div className="flex flex-col gap-3">
-            {textLinks.map((link) => (
+          <MixedLinks
+            links={activeLinks}
+            gap="gap-3"
+            renderTextLink={(link) => (
               <a
                 key={link.id}
                 href={link.url}
@@ -103,13 +93,11 @@ export default function GlassPremiumTheme({ profile, links }: Props) {
               >
                 {link.title}
               </a>
-            ))}
-          </div>
-          <ImageLinkGrid links={imageLinks} />
+            )}
+          />
           <GallerySection photos={galleryPhotos} />
         </div>
 
-        {/* ロゴ */}
         {!profile.logo_removed && (
           <div className="flex justify-center">
             <Logo dark />

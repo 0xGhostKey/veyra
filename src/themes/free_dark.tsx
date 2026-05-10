@@ -1,7 +1,7 @@
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
-import ImageLinkGrid from '@/components/ImageLinkGrid'
 import GallerySection from '@/components/GallerySection'
+import MixedLinks from '@/components/MixedLinks'
 
 type Props = {
   profile: Profile
@@ -9,14 +9,12 @@ type Props = {
 }
 
 export default function FreeDarkTheme({ profile, links }: Props) {
-  const textLinks = links.filter((l) => l.link_type === 'text')
-  const imageLinks = links.filter((l) => l.link_type === 'image')
+  const activeLinks = links.filter((l) => l.link_type !== 'gallery')
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center py-12 px-4 pb-safe">
       <div className="w-full max-w-[390px]">
-        {/* Avatar + Profile */}
         <div className="flex flex-col items-center mb-8">
           {profile.avatar_url ? (
             <img
@@ -41,9 +39,9 @@ export default function FreeDarkTheme({ profile, links }: Props) {
           )}
         </div>
 
-        {/* Links */}
-        <div className="flex flex-col gap-2.5">
-          {textLinks.map((link) => (
+        <MixedLinks
+          links={activeLinks}
+          renderTextLink={(link) => (
             <a
               key={link.id}
               href={link.url}
@@ -53,12 +51,10 @@ export default function FreeDarkTheme({ profile, links }: Props) {
             >
               {link.title}
             </a>
-          ))}
-        </div>
-        <ImageLinkGrid links={imageLinks} />
+          )}
+        />
         <GallerySection photos={galleryPhotos} />
 
-        {/* Logo */}
         {!profile.logo_removed && (
           <div className="mt-12 flex justify-center">
             <Logo dark />

@@ -2,8 +2,8 @@
 
 import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
-import ImageLinkGrid from '@/components/ImageLinkGrid'
 import GallerySection from '@/components/GallerySection'
+import MixedLinks from '@/components/MixedLinks'
 
 type Props = {
   profile: Profile
@@ -11,12 +11,11 @@ type Props = {
 }
 
 export default function AnimatedAuroraTheme({ profile, links }: Props) {
-  const textLinks = links.filter((l) => l.link_type === 'text')
-  const imageLinks = links.filter((l) => l.link_type === 'image')
+  const activeLinks = links.filter((l) => l.link_type !== 'gallery')
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
+
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 relative">
-      {/* アニメーションCSS */}
       <style jsx>{`
         @keyframes aurora {
           0%, 100% { background-position: 0% 50%; }
@@ -26,49 +25,30 @@ export default function AnimatedAuroraTheme({ profile, links }: Props) {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
         }
-        .float-anim {
-          animation: float 3s ease-in-out infinite;
-        }
-        .link-hover:hover {
-          transform: scale(1.03);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        }
+        .float-anim { animation: float 3s ease-in-out infinite; }
+        .link-hover:hover { transform: scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
       `}</style>
 
-      {/* overscroll含め全域をカバーする固定アニメーション背景 */}
       <div
         aria-hidden
         style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: -1,
+          position: 'fixed', inset: 0, zIndex: -1,
           background: 'linear-gradient(270deg, #7c3aed, #2563eb, #ec4899, #7c3aed)',
           backgroundSize: '300% 300%',
           animation: 'aurora 8s ease infinite',
         }}
       />
-
-      {/* 背景の光の球 */}
-      <div
-        className="absolute top-20 left-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ background: '#ec4899', animation: 'aurora 6s ease infinite' }}
-      />
-      <div
-        className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ background: '#2563eb', animation: 'aurora 8s ease infinite reverse' }}
-      />
+      <div className="absolute top-20 left-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
+        style={{ background: '#ec4899', animation: 'aurora 6s ease infinite' }} />
+      <div className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
+        style={{ background: '#2563eb', animation: 'aurora 8s ease infinite reverse' }} />
 
       <div className="w-full max-w-md relative z-10">
-        {/* アバター・プロフィール */}
         <div className="flex flex-col items-center mb-10 float-anim">
           {profile.avatar_url ? (
             <div
               className="p-1 rounded-full mb-4"
-              style={{
-                background: 'rgba(255,255,255,0.3)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 0 30px rgba(255, 255, 255, 0.3)',
-              }}
+              style={{ background: 'rgba(255,255,255,0.3)', backdropFilter: 'blur(10px)', boxShadow: '0 0 30px rgba(255,255,255,0.3)' }}
             >
               <img
                 src={profile.avatar_url}
@@ -79,22 +59,14 @@ export default function AnimatedAuroraTheme({ profile, links }: Props) {
           ) : (
             <div
               className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.4)',
-                boxShadow: '0 0 30px rgba(255, 255, 255, 0.2)',
-              }}
+              style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 0 30px rgba(255,255,255,0.2)' }}
             >
               <span className="text-3xl font-bold text-white drop-shadow-lg">
                 {(profile.display_name ?? 'U')[0].toUpperCase()}
               </span>
             </div>
           )}
-          <h1
-            className="text-2xl font-bold text-white mb-2 drop-shadow-lg"
-            style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-          >
+          <h1 className="text-2xl font-bold text-white mb-2 drop-shadow-lg" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
             {profile.display_name ?? 'No Name'}
           </h1>
           {profile.bio && (
@@ -104,9 +76,10 @@ export default function AnimatedAuroraTheme({ profile, links }: Props) {
           )}
         </div>
 
-        {/* リンク一覧 */}
-        <div className="flex flex-col gap-4">
-          {textLinks.map((link) => (
+        <MixedLinks
+          links={activeLinks}
+          gap="gap-4"
+          renderTextLink={(link) => (
             <a
               key={link.id}
               href={link.url}
@@ -114,22 +87,19 @@ export default function AnimatedAuroraTheme({ profile, links }: Props) {
               rel="noopener noreferrer"
               className="link-hover block w-full px-6 py-4 rounded-2xl text-center text-white font-medium transition-all duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.2)',
+                background: 'rgba(255,255,255,0.2)',
                 backdropFilter: 'blur(15px)',
                 WebkitBackdropFilter: 'blur(15px)',
-                border: '1px solid rgba(255, 255, 255, 0.35)',
+                border: '1px solid rgba(255,255,255,0.35)',
                 textShadow: '0 1px 3px rgba(0,0,0,0.3)',
               }}
             >
               {link.title}
             </a>
-          ))}
-        </div>
-
-        <ImageLinkGrid links={imageLinks} />
+          )}
+        />
         <GallerySection photos={galleryPhotos} />
 
-        {/* ロゴ */}
         {!profile.logo_removed && (
           <div className="mt-10 flex justify-center">
             <Logo dark />
