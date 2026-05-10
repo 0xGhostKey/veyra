@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 type Role = 'user' | 'admin' | 'complete'
@@ -38,6 +39,7 @@ async function setRole(targetUserId: string, role: Role) {
 }
 
 export default function AdminClient({ users, purchases }: Props) {
+  const router = useRouter()
   const [tab, setTab] = useState<'users' | 'purchases'>('users')
   const [localUsers, setLocalUsers] = useState(users)
   const [loading, setLoading] = useState<string | null>(null)
@@ -49,6 +51,7 @@ export default function AdminClient({ users, purchases }: Props) {
     const ok = await setRole(targetUserId, newRole)
     if (ok) {
       setLocalUsers(prev => prev.map(u => u.user_id === targetUserId ? { ...u, role: newRole } : u))
+      router.refresh()
     }
     setLoading(null)
   }
