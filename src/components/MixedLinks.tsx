@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 type Props = {
   links: Link[]
-  renderTextLink: (link: Link) => ReactNode
+  renderTextLink: (link: Link, index: number) => ReactNode
   gap?: string
   titleColor?: string
 }
@@ -11,7 +11,7 @@ type Props = {
 export default function MixedLinks({ links, renderTextLink, gap = 'gap-2.5' }: Props) {
   return (
     <div className={`flex flex-col ${gap}`}>
-      {links.map((link) => renderTextLink(link))}
+      {links.map((link, index) => renderTextLink(link, index))}
     </div>
   )
 }

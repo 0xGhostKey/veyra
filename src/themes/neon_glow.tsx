@@ -67,8 +67,7 @@ export default function NeonGlowTheme({ profile, links }: Props) {
         <MixedLinks
           links={activeLinks}
           gap="gap-4"
-          renderTextLink={(link) => {
-            const idx = activeLinks.filter(l => l.link_type === 'text').indexOf(link)
+          renderTextLink={(link, idx) => {
             return (
               <a
                 key={link.id}
