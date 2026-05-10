@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function GlassPremiumTheme({ profile, links }: Props) {
-  const activeLinks = links.filter((l) => l.link_type !== 'gallery')
+  const activeLinks = links.filter((l) => l.link_type === 'text')
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
