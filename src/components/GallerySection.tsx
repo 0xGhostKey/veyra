@@ -99,16 +99,17 @@ export default function GallerySection({ photos }: Props) {
           <div
             className="absolute inset-0 transition-opacity duration-300"
             style={{
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
               opacity: 1 - dragProgress * 0.8,
             }}
           />
 
-          {/* Dark tint */}
+          {/* Dark tint — tap to close */}
           <div
-            className="absolute inset-0 bg-black/70 transition-opacity duration-300"
+            className="absolute inset-0 bg-black/60 transition-opacity duration-300"
             style={{ opacity: 1 - dragProgress * 0.8 }}
+            onClick={() => setLightboxIndex(null)}
           />
 
           {/* Image */}
@@ -119,6 +120,7 @@ export default function GallerySection({ photos }: Props) {
               opacity: imageOpacity,
               transition: dragY === 0 ? 'transform 0.25s ease, opacity 0.25s ease' : 'none',
             }}
+            onClick={(e) => e.stopPropagation()}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
