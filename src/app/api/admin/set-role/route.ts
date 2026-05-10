@@ -1,23 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
+import type { SetAllCookies } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import { createAdminClient } from '@/lib/supabase-admin'
 
 export async function POST(request: NextRequest) {
-  // 呼び出し元が admin かチェック
+  const cookieStore = await cookies()
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: () => {},
+        getAll() { return cookieStore.getAll() },
+        setAll(cookiesToSet: Parameters<SetAllCookies>[0]) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options as any))
+        },
       },
     }
   )
 
+  // 呼び出し元のセッション確認
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  // 呼び出し元が admin かチェック
   const { data: callerProfile } = await supabase
     .from('profiles')
     .select('role')
@@ -34,7 +42,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid params' }, { status: 400 })
   }
 
-  // service roleで更新（RLSをバイパス）
+  // service role で更新（RLS をバイパス）
   const admin = createAdminClient()
   const { error } = await admin
     .from('profiles')
