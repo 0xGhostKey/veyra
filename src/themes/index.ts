@@ -61,6 +61,26 @@ export const THEMES: ThemeDefinition[] = [
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ANIMATED_AURORA ?? null,
     previewColors: ['#7c3aed', '#2563eb', '#ec4899'],
   },
+  {
+    id: 'neon_amber',
+    name: 'Neon Amber',
+    description: 'オレンジ×ゴールドの熱いネオンテーマ',
+    price: 600,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_NEON_AMBER ?? null,
+    previewColors: ['#0a0800', '#ff8c00', '#ffd700'],
+  },
+  {
+    id: 'neon_violet',
+    name: 'Neon Violet',
+    description: 'パープル×グリーンのサイバーパンクネオンテーマ',
+    price: 600,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_NEON_VIOLET ?? null,
+    previewColors: ['#050510', '#bf00ff', '#39ff14'],
+  },
 ]
 
 export function getThemeById(id: string): ThemeDefinition | undefined {

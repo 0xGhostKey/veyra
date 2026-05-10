@@ -4,6 +4,8 @@ import FreeDarkTheme from '@/themes/free_dark'
 import LuxuryBlackTheme from '@/themes/luxury_black'
 import GlassPremiumTheme from '@/themes/glass_premium'
 import NeonGlowTheme from '@/themes/neon_glow'
+import NeonAmberTheme from '@/themes/neon_amber'
+import NeonVioletTheme from '@/themes/neon_violet'
 import AnimatedAuroraTheme from '@/themes/animated_aurora'
 
 type ProfilePreviewProps = {
@@ -36,6 +38,10 @@ function getThemeComponent(themeId: string) {
       return GlassPremiumTheme
     case 'neon_glow':
       return NeonGlowTheme
+    case 'neon_amber':
+      return NeonAmberTheme
+    case 'neon_violet':
+      return NeonVioletTheme
     case 'animated_aurora':
       return AnimatedAuroraTheme
     default:

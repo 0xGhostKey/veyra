@@ -5,6 +5,8 @@ import FreeDarkTheme from '@/themes/free_dark'
 import LuxuryBlackTheme from '@/themes/luxury_black'
 import GlassPremiumTheme from '@/themes/glass_premium'
 import NeonGlowTheme from '@/themes/neon_glow'
+import NeonAmberTheme from '@/themes/neon_amber'
+import NeonVioletTheme from '@/themes/neon_violet'
 import AnimatedAuroraTheme from '@/themes/animated_aurora'
 import type { Profile, Link } from '@/types'
 
@@ -37,6 +39,8 @@ const THEME_BODY_CSS: Record<string, string> = {
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
   glass_premium: `html, body { background: transparent !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
+  neon_amber: `html, body { background-color: #0a0800 !important; }`,
+  neon_violet: `html, body { background-color: #050510 !important; }`,
   animated_aurora: `html, body { background: transparent !important; }`,
 }
 
@@ -63,6 +67,12 @@ export default async function ThemePreviewPage({ params }: Props) {
       break
     case 'neon_glow':
       content = <NeonGlowTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'neon_amber':
+      content = <NeonAmberTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'neon_violet':
+      content = <NeonVioletTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
     case 'animated_aurora':
       content = <AnimatedAuroraTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />

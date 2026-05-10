@@ -6,6 +6,8 @@ import FreeDarkTheme from '@/themes/free_dark'
 import LuxuryBlackTheme from '@/themes/luxury_black'
 import GlassPremiumTheme from '@/themes/glass_premium'
 import NeonGlowTheme from '@/themes/neon_glow'
+import NeonAmberTheme from '@/themes/neon_amber'
+import NeonVioletTheme from '@/themes/neon_violet'
 import AnimatedAuroraTheme from '@/themes/animated_aurora'
 import type { Profile, Link } from '@/types'
 
@@ -78,6 +80,8 @@ const THEME_BODY_CSS: Record<string, string> = {
   luxury_black: `html, body { background-color: #0a0a0a !important; }`,
   glass_premium: `html, body { background: transparent !important; }`,
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
+  neon_amber: `html, body { background-color: #0a0800 !important; }`,
+  neon_violet: `html, body { background-color: #050510 !important; }`,
   animated_aurora: `html, body { background: transparent !important; }`,
 }
 
@@ -107,6 +111,10 @@ function ThemeRenderer({
             return <GlassPremiumTheme profile={profile} links={links} />
           case 'neon_glow':
             return <NeonGlowTheme profile={profile} links={links} />
+          case 'neon_amber':
+            return <NeonAmberTheme profile={profile} links={links} />
+          case 'neon_violet':
+            return <NeonVioletTheme profile={profile} links={links} />
           case 'animated_aurora':
             return <AnimatedAuroraTheme profile={profile} links={links} />
           default:
