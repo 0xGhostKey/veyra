@@ -186,7 +186,6 @@ export const THEMES: ThemeDefinition[] = [
     series: 'chrome',
     prerequisiteId: 'chrome_platinum',
   },
-]
 
   // ── Ocean series ──
   {
