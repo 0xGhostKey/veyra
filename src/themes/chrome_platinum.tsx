@@ -14,8 +14,8 @@ function HexCell({ size, color }: { size: number; color: string }) {
     return `${size / 2 + (size / 2 - 1.5) * Math.cos(r)},${size / 2 + (size / 2 - 1.5) * Math.sin(r)}`
   }).join(' ')
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', filter: `drop-shadow(0 0 3px ${color})` }}>
-      <polygon points={pts} fill={color} fillOpacity={0.1} stroke={color} strokeWidth="1.1" strokeOpacity={1} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', filter: `drop-shadow(0 0 2px ${color})` }}>
+      <polygon points={pts} fill={color} fillOpacity={0.06} stroke={color} strokeWidth="1.1" strokeOpacity={1} />
     </svg>
   )
 }
@@ -50,7 +50,7 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
         html, body { background-color: #08090c !important; }
         @keyframes hexPulsePlatinum {
           0%, 100% { opacity: 0; }
-          35%, 65%  { opacity: 0.55; }
+          35%, 65%  { opacity: 0.38; }
         }
         @keyframes orbitPlatinum {
           from { transform: rotate(0deg); }
@@ -76,6 +76,7 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
               left: h.left,
               top: h.top,
               animation: `hexPulsePlatinum ${h.dur}s ease-in-out ${h.delay}s infinite`,
+              animationFillMode: 'backwards',
             }}
           >
             <HexCell size={h.size} color={accent} />

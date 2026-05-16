@@ -276,7 +276,7 @@ export default function HomePage() {
         <div className="mt-14 overflow-hidden relative">
           <div className="absolute inset-y-0 left-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #0a0a0a, transparent)' }} />
           <div className="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #0a0a0a, transparent)' }} />
-          <div className="flex gap-3 animate-carousel w-max">
+          <div className="flex gap-2 animate-carousel w-max">
             {[...CAROUSEL_AVATARS, ...CAROUSEL_AVATARS, ...CAROUSEL_AVATARS].map((a, i) => (
               <div key={i} className="flex flex-col items-center gap-2 flex-none">
                 <div
@@ -353,7 +353,7 @@ export default function HomePage() {
         </div>
 
         <div className="flex gap-4 overflow-x-auto pb-4 theme-card-scroll">
-          <div className="flex-none w-10" aria-hidden="true" />
+          <div className="flex-none w-5" aria-hidden="true" />
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
