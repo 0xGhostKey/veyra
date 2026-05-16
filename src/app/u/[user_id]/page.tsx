@@ -19,6 +19,9 @@ import ChromeVoidTheme from '@/themes/chrome_void'
 import OceanAbyssTheme from '@/themes/ocean_abyss'
 import OceanLagoonTheme from '@/themes/ocean_lagoon'
 import OceanArcticTheme from '@/themes/ocean_arctic'
+import SnowNightTheme from '@/themes/snow_night'
+import SnowAuroraTheme from '@/themes/snow_aurora'
+import SnowPowderTheme from '@/themes/snow_powder'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -103,6 +106,9 @@ const THEME_BODY_CSS: Record<string, string> = {
   ocean_abyss: `html, body { background-color: #020c14 !important; }`,
   ocean_lagoon: `html, body { background-color: #02100e !important; }`,
   ocean_arctic: `html, body { background-color: #04080e !important; }`,
+  snow_night:   `html, body { background-color: #020615 !important; }`,
+  snow_aurora:  `html, body { background-color: #030d09 !important; }`,
+  snow_powder:  `html, body { background-color: #f0f5ff !important; }`,
 }
 
 function ThemeRenderer({
@@ -157,6 +163,12 @@ function ThemeRenderer({
             return <OceanLagoonTheme profile={profile} links={links} />
           case 'ocean_arctic':
             return <OceanArcticTheme profile={profile} links={links} />
+          case 'snow_night':
+            return <SnowNightTheme profile={profile} links={links} />
+          case 'snow_aurora':
+            return <SnowAuroraTheme profile={profile} links={links} />
+          case 'snow_powder':
+            return <SnowPowderTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }

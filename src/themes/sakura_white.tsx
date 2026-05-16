@@ -8,6 +8,25 @@ type Props = {
   links: Link[]
 }
 
+// SVG cherry blossom — consistent cross-platform (no font dependency)
+function SakuraFlower({ size, color, opacity = 1 }: { size: number; color: string; opacity?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+      {[0, 72, 144, 216, 288].map((deg) => (
+        <g key={deg} transform={`rotate(${deg}, 10, 10)`}>
+          {/* Petal: curves to left/right tip, then L commands make a sharp V-notch at outer tip */}
+          <path
+            d="M10,10 C7.5,9 5.5,6 9.5,2.5 L10,4.5 L10.5,2.5 C14.5,6 12.5,9 10,10 Z"
+            fill={color}
+            fillOpacity={opacity}
+          />
+        </g>
+      ))}
+      <circle cx="10" cy="10" r="1.3" fill="rgba(255,255,255,0.5)" />
+    </svg>
+  )
+}
+
 const PETALS = [
   { top: '4%',  size: 11, dur: 14, delay: 0,   op: 0.55 },
   { top: '12%', size: 8,  dur: 19, delay: 2.5, op: 0.45 },
@@ -32,7 +51,7 @@ export default function SakuraWhiteTheme({ profile, links }: Props) {
       <style>{`
         html, body { background-color: #fdf6f8 !important; }
         @keyframes sakuraPetal {
-          0%   { transform: translateX(0) translateY(0px)  rotate(0deg);    opacity: 0; }
+          0%   { transform: translateX(0) translateY(0px) rotate(0deg);       opacity: 0; }
           8%   { opacity: 1; }
           25%  { transform: translateX(-25vw) translateY(18px) rotate(-25deg); }
           50%  { transform: translateX(-50vw) translateY(-6px) rotate(-55deg); }
@@ -55,13 +74,12 @@ export default function SakuraWhiteTheme({ profile, links }: Props) {
         {PETALS.map((p, i) => (
           <div key={i} style={{ position: 'absolute', top: p.top, right: '-15px', animation: `sakuraPetal ${p.dur}s ease-in-out ${p.delay}s infinite` }}>
             <svg width={p.size} height={Math.round(p.size * 1.4)} viewBox="0 0 20 28">
-              {/* Petal body: rounded teardrop with top notch — characteristic sakura shape */}
+              {/* Angular petal: L commands at top create sharp V-notch corners */}
               <path
-                d="M10,6 C9,2.5 6.5,0.5 4,1.5 C1.5,2.5 0.5,6.5 0.5,11 C0.5,17 3.5,23 10,26.5 C16.5,23 19.5,17 19.5,11 C19.5,6.5 18.5,2.5 16,1.5 C13.5,0.5 11,2.5 10,6 Z"
+                d="M10,6.5 L4,1.5 C1.5,3 0.5,7 0.5,11.5 C0.5,17.5 3.5,23 10,26.5 C16.5,23 19.5,17.5 19.5,11.5 C19.5,7 18.5,3 16,1.5 L10,6.5 Z"
                 fill="#c4849a" fillOpacity={p.op}
               />
-              {/* Midrib vein — slightly curved */}
-              <path d="M10,6 Q10.6,16 10,26.5" stroke="rgba(255,255,255,0.28)" strokeWidth="0.6" fill="none" />
+              <path d="M10,6.5 Q10.6,16 10,26.5" stroke="rgba(100,60,80,0.2)" strokeWidth="0.6" fill="none" />
             </svg>
           </div>
         ))}
@@ -71,29 +89,23 @@ export default function SakuraWhiteTheme({ profile, links }: Props) {
 
         {/* Top decoration */}
         <div className="flex justify-center gap-5 mb-6" style={{ opacity: 0.35 }}>
-          <span style={{ color: '#c4849a', fontSize: 9 }}>✿</span>
-          <span style={{ color: '#c4849a', fontSize: 13 }}>✿</span>
-          <span style={{ color: '#c4849a', fontSize: 9 }}>✿</span>
+          <SakuraFlower size={9} color="#c4849a" />
+          <SakuraFlower size={13} color="#c4849a" />
+          <SakuraFlower size={9} color="#c4849a" />
         </div>
 
         <div className="flex flex-col items-center mb-10">
           {profile.avatar_url ? (
             <div
               className="p-0.5 rounded-full mb-4"
-              style={{
-                background: 'linear-gradient(135deg, #e8b4c0, #c4849a)',
-                animation: 'sakuraGlow 3.5s ease-in-out infinite',
-              }}
+              style={{ background: 'linear-gradient(135deg, #e8b4c0, #c4849a)', animation: 'sakuraGlow 3.5s ease-in-out infinite' }}
             >
               <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-24 h-24 rounded-full object-cover" />
             </div>
           ) : (
             <div
               className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
-              style={{
-                background: 'linear-gradient(135deg, #f5d0da, #e8b4c0)',
-                animation: 'sakuraGlow 3.5s ease-in-out infinite',
-              }}
+              style={{ background: 'linear-gradient(135deg, #f5d0da, #e8b4c0)', animation: 'sakuraGlow 3.5s ease-in-out infinite' }}
             >
               <span className="text-3xl font-bold" style={{ color: '#8a4060' }}>
                 {(profile.display_name ?? 'U')[0].toUpperCase()}
@@ -105,7 +117,9 @@ export default function SakuraWhiteTheme({ profile, links }: Props) {
           </h1>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-8 h-px" style={{ background: '#c4849a' }} />
-            <span style={{ color: '#c4849a', fontSize: 15, display: 'inline-block', animation: 'sakuraSep 4s ease-in-out infinite' }}>✿</span>
+            <span style={{ display: 'inline-block', animation: 'sakuraSep 4s ease-in-out infinite' }}>
+              <SakuraFlower size={14} color="#c4849a" opacity={0.9} />
+            </span>
             <div className="w-8 h-px" style={{ background: '#c4849a' }} />
           </div>
           {profile.bio && (
@@ -125,12 +139,7 @@ export default function SakuraWhiteTheme({ profile, links }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 hover:scale-[1.01]"
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e8b4c0',
-                color: '#5a2840',
-                boxShadow: '0 2px 12px rgba(196,132,154,0.12)',
-              }}
+              style={{ background: '#ffffff', border: '1px solid #e8b4c0', color: '#5a2840', boxShadow: '0 2px 12px rgba(196,132,154,0.12)' }}
             >
               {link.title}
             </a>

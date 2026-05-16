@@ -224,6 +224,44 @@ export const THEMES: ThemeDefinition[] = [
     series: 'ocean',
     prerequisiteId: 'ocean_lagoon',
   },
+
+  // ── Snow series ──
+  {
+    id: 'snow_night',
+    name: 'Snow Night',
+    description: '真夜中の雪景色。星空×氷晶ブルーの幻想テーマ',
+    price: 600,
+    isFree: false,
+    isAnimated: true,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SNOW_NIGHT ?? null,
+    previewColors: ['#020615', '#a8d4ff', '#dce8ff'],
+    series: 'snow',
+    prerequisiteId: null,
+  },
+  {
+    id: 'snow_aurora',
+    name: 'Snow Aurora',
+    description: 'オーロラ×雪の幻想的な二色テーマ',
+    price: 600,
+    isFree: false,
+    isAnimated: true,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SNOW_AURORA ?? null,
+    previewColors: ['#030d09', '#80ffcc', '#b070ff'],
+    series: 'snow',
+    prerequisiteId: 'snow_night',
+  },
+  {
+    id: 'snow_powder',
+    name: 'Snow Powder',
+    description: '真っ白な粉雪の昼。冬の青空をイメージしたライトテーマ',
+    price: 600,
+    isFree: false,
+    isAnimated: true,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SNOW_POWDER ?? null,
+    previewColors: ['#f0f5ff', '#3060c0', '#1a2a4a'],
+    series: 'snow',
+    prerequisiteId: 'snow_aurora',
+  },
 ]
 
 export function getThemeById(id: string): ThemeDefinition | undefined {

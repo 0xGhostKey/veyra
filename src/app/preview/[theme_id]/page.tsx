@@ -18,6 +18,9 @@ import ChromeVoidTheme from '@/themes/chrome_void'
 import OceanAbyssTheme from '@/themes/ocean_abyss'
 import OceanLagoonTheme from '@/themes/ocean_lagoon'
 import OceanArcticTheme from '@/themes/ocean_arctic'
+import SnowNightTheme from '@/themes/snow_night'
+import SnowAuroraTheme from '@/themes/snow_aurora'
+import SnowPowderTheme from '@/themes/snow_powder'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -62,6 +65,9 @@ const THEME_BODY_CSS: Record<string, string> = {
   ocean_abyss: `html, body { background-color: #020c14 !important; }`,
   ocean_lagoon: `html, body { background-color: #02100e !important; }`,
   ocean_arctic: `html, body { background-color: #04080e !important; }`,
+  snow_night:   `html, body { background-color: #020615 !important; }`,
+  snow_aurora:  `html, body { background-color: #030d09 !important; }`,
+  snow_powder:  `html, body { background-color: #f0f5ff !important; }`,
 }
 
 export default async function ThemePreviewPage({ params }: Props) {
@@ -126,6 +132,15 @@ export default async function ThemePreviewPage({ params }: Props) {
       break
     case 'ocean_arctic':
       content = <OceanArcticTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'snow_night':
+      content = <SnowNightTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'snow_aurora':
+      content = <SnowAuroraTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'snow_powder':
+      content = <SnowPowderTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
     default:
       notFound()
