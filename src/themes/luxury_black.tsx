@@ -53,7 +53,7 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
               )}
               <h1
                 className="text-center"
-                style={{ color: '#f0e8d0', fontSize: 14, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: 12 }}
+                style={{ color: '#f0e8d0', fontSize: 14, fontWeight: 600, letterSpacing: '0.3em', marginBottom: 12 }}
               >
                 {profile.display_name ?? 'No Name'}
               </h1>

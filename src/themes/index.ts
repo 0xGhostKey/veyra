@@ -26,6 +26,18 @@ export const THEMES: ThemeDefinition[] = [
     prerequisiteId: null,
   },
   {
+    id: 'luxury_ivory',
+    name: 'Luxury Ivory',
+    description: 'アイボリー×アンティークゴールドの洗練されたテーマ',
+    price: 500,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LUXURY_IVORY ?? null,
+    previewColors: ['#f8f5ef', '#a07840', '#ede8de'],
+    series: 'luxury',
+    prerequisiteId: null,
+  },
+  {
     id: 'luxury_black',
     name: 'Luxury Black',
     description: 'ゴールドアクセントで高級感を演出',
@@ -35,7 +47,7 @@ export const THEMES: ThemeDefinition[] = [
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LUXURY_BLACK ?? null,
     previewColors: ['#0a0a0a', '#d4af37', '#1a1a1a'],
     series: 'luxury',
-    prerequisiteId: null,
+    prerequisiteId: 'luxury_ivory',
   },
   {
     id: 'luxury_navy',
@@ -49,19 +61,19 @@ export const THEMES: ThemeDefinition[] = [
     series: 'luxury',
     prerequisiteId: 'luxury_black',
   },
+
   {
-    id: 'luxury_ivory',
-    name: 'Luxury Ivory',
-    description: 'アイボリー×アンティークゴールドの洗練されたテーマ',
+    id: 'neon_violet',
+    name: 'Neon Violet',
+    description: 'パープル×グリーンのサイバーパンクネオンテーマ',
     price: 500,
     isFree: false,
     isAnimated: false,
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LUXURY_IVORY ?? null,
-    previewColors: ['#f8f5ef', '#a07840', '#ede8de'],
-    series: 'luxury',
-    prerequisiteId: 'luxury_navy',
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_NEON_VIOLET ?? null,
+    previewColors: ['#050510', '#bf00ff', '#39ff14'],
+    series: 'neon',
+    prerequisiteId: null,
   },
-
   {
     id: 'neon_glow',
     name: 'Neon Glow',
@@ -72,7 +84,7 @@ export const THEMES: ThemeDefinition[] = [
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_NEON_GLOW ?? null,
     previewColors: ['#0d0d0d', '#ff00ff', '#00ffff'],
     series: 'neon',
-    prerequisiteId: null,
+    prerequisiteId: 'neon_violet',
   },
   {
     id: 'neon_amber',
@@ -85,18 +97,6 @@ export const THEMES: ThemeDefinition[] = [
     previewColors: ['#0a0800', '#ff8c00', '#ffd700'],
     series: 'neon',
     prerequisiteId: 'neon_glow',
-  },
-  {
-    id: 'neon_violet',
-    name: 'Neon Violet',
-    description: 'パープル×グリーンのサイバーパンクネオンテーマ',
-    price: 500,
-    isFree: false,
-    isAnimated: false,
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_NEON_VIOLET ?? null,
-    previewColors: ['#050510', '#bf00ff', '#39ff14'],
-    series: 'neon',
-    prerequisiteId: 'neon_amber',
   },
 
   // ── Sakura series ──

@@ -54,7 +54,7 @@ export default function LuxuryIvoryTheme({ profile, links }: Props) {
                 )}
                 <h1
                   className="text-center"
-                  style={{ color: '#1a1208', fontSize: 14, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: 12 }}
+                  style={{ color: '#1a1208', fontSize: 14, fontWeight: 600, letterSpacing: '0.3em', marginBottom: 12 }}
                 >
                   {profile.display_name ?? 'No Name'}
                 </h1>

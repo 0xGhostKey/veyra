@@ -74,16 +74,11 @@ export default function LinkCard({ link, onEdit, onDelete, onToggleActive, dragH
               : 'text-gray-600 hover:bg-white/5'
           }`}
         >
-          {link.is_active ? (
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.003 10.003 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.003 10.003 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41Z" />
-              <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-            </svg>
-          ) : (
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" clipRule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.003 10.003 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.003 10.003 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41Z M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-            </svg>
-          )}
+          <svg className="w-4 h-4" viewBox="0 0 20 20">
+            <path fill="currentColor" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.003 10.003 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.003 10.003 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41Z" />
+            <circle cx="10" cy="10" r="2.8" fill="#000" />
+            <circle cx="10" cy="10" r="1.1" fill="currentColor" />
+          </svg>
         </button>
 
         <button
