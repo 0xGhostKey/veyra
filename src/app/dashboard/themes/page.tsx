@@ -7,13 +7,16 @@ import { createClient } from '@/lib/supabase'
 import ThemeCard from '@/components/ThemeCard'
 import { THEMES } from '@/themes'
 
-type Tab = 'free' | 'neon' | 'luxury'
+type Tab = 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome'
 
 function tabForTheme(themeId: string): Tab {
   const theme = THEMES.find((t) => t.id === themeId)
   if (!theme || theme.series === 'free') return 'free'
   if (theme.series === 'neon') return 'neon'
-  return 'luxury'
+  if (theme.series === 'luxury') return 'luxury'
+  if (theme.series === 'sakura') return 'sakura'
+  if (theme.series === 'chrome') return 'chrome'
+  return 'free'
 }
 
 export default function ThemesPage() {
@@ -114,6 +117,8 @@ export default function ThemesPage() {
   const freeThemes = THEMES.filter((t) => t.series === 'free')
   const neonThemes = THEMES.filter((t) => t.series === 'neon')
   const luxuryThemes = THEMES.filter((t) => t.series === 'luxury')
+  const sakuraThemes = THEMES.filter((t) => t.series === 'sakura')
+  const chromeThemes = THEMES.filter((t) => t.series === 'chrome')
 
   const currentThemeName = THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme
 
@@ -121,6 +126,8 @@ export default function ThemesPage() {
     { key: 'free', label: '無料' },
     { key: 'neon', label: 'Neon' },
     { key: 'luxury', label: 'Luxury' },
+    { key: 'sakura', label: 'Sakura' },
+    { key: 'chrome', label: 'Chrome' },
   ]
 
   const makeSeriesProgress = (themes: typeof THEMES) =>
@@ -173,12 +180,12 @@ export default function ThemesPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6">
+        <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
+              className={`flex-none px-3 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 whitespace-nowrap ${
                 activeTab === tab.key
                   ? 'bg-white/10 text-white'
                   : 'text-gray-500 hover:text-gray-300'
@@ -325,6 +332,106 @@ export default function ThemesPage() {
 
             <div className="flex flex-col gap-3">
               {luxuryProgress.map((item, idx) => (
+                <ThemeCard
+                  key={item.theme.id}
+                  theme={item.theme}
+                  isSelected={selectedTheme === item.theme.id}
+                  isPurchased={item.isOwned}
+                  isPrerequisiteLocked={item.isPrerequisiteLocked}
+                  prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)}
+                  stepNumber={idx + 1}
+                  onSelect={handleSelectTheme}
+                  onPurchase={handlePurchaseTheme}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SAKURA tab */}
+        {activeTab === 'sakura' && (
+          <div>
+            <div className="flex items-start mb-6 px-1">
+              {makeSeriesProgress(sakuraThemes).map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#e87ca8]' : 'text-gray-600'}`}>
+                      STEP {idx + 1}
+                    </span>
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${item.isOwned ? 'bg-[#e87ca8] border-[#e87ca8]' : 'bg-transparent border-white/20'}`}>
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>
+                      {item.theme.name}
+                    </span>
+                  </div>
+                  {idx < sakuraThemes.length - 1 && (
+                    <div className={`flex-1 h-px mt-[30px] mx-1 ${item.isOwned ? 'bg-[#e87ca8]/40' : 'bg-white/10'}`} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥500 — 順番に解除していくシリーズ</p>
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(sakuraThemes).map((item, idx) => (
+                <ThemeCard
+                  key={item.theme.id}
+                  theme={item.theme}
+                  isSelected={selectedTheme === item.theme.id}
+                  isPurchased={item.isOwned}
+                  isPrerequisiteLocked={item.isPrerequisiteLocked}
+                  prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)}
+                  stepNumber={idx + 1}
+                  onSelect={handleSelectTheme}
+                  onPurchase={handlePurchaseTheme}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CHROME tab */}
+        {activeTab === 'chrome' && (
+          <div>
+            <div className="flex items-start mb-6 px-1">
+              {makeSeriesProgress(chromeThemes).map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#b8bec8]' : 'text-gray-600'}`}>
+                      STEP {idx + 1}
+                    </span>
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${item.isOwned ? 'bg-[#b8bec8] border-[#b8bec8]' : 'bg-transparent border-white/20'}`}>
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>
+                      {item.theme.name}
+                    </span>
+                  </div>
+                  {idx < chromeThemes.length - 1 && (
+                    <div className={`flex-1 h-px mt-[30px] mx-1 ${item.isOwned ? 'bg-[#b8bec8]/40' : 'bg-white/10'}`} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥500 — 順番に解除していくシリーズ</p>
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(chromeThemes).map((item, idx) => (
                 <ThemeCard
                   key={item.theme.id}
                   theme={item.theme}

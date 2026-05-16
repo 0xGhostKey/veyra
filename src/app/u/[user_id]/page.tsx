@@ -9,6 +9,12 @@ import LuxuryIvoryTheme from '@/themes/luxury_ivory'
 import NeonGlowTheme from '@/themes/neon_glow'
 import NeonAmberTheme from '@/themes/neon_amber'
 import NeonVioletTheme from '@/themes/neon_violet'
+import SakuraWhiteTheme from '@/themes/sakura_white'
+import SakuraDuskTheme from '@/themes/sakura_dusk'
+import SakuraMatchaTheme from '@/themes/sakura_matcha'
+import ChromeSilverTheme from '@/themes/chrome_silver'
+import ChromePlatinumTheme from '@/themes/chrome_platinum'
+import ChromeVoidTheme from '@/themes/chrome_void'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -83,6 +89,12 @@ const THEME_BODY_CSS: Record<string, string> = {
   neon_glow: `html, body { background-color: #0d0d0d !important; }`,
   neon_amber: `html, body { background-color: #0a0800 !important; }`,
   neon_violet: `html, body { background-color: #050510 !important; }`,
+  sakura_white: `html, body { background-color: #fdf6f8 !important; }`,
+  sakura_dusk: `html, body { background-color: #13090d !important; }`,
+  sakura_matcha: `html, body { background-color: #0a100a !important; }`,
+  chrome_silver: `html, body { background-color: #0e0f11 !important; }`,
+  chrome_platinum: `html, body { background-color: #08090c !important; }`,
+  chrome_void: `html, body { background-color: #03040a !important; }`,
 }
 
 function ThemeRenderer({
@@ -117,6 +129,18 @@ function ThemeRenderer({
             return <NeonAmberTheme profile={profile} links={links} />
           case 'neon_violet':
             return <NeonVioletTheme profile={profile} links={links} />
+          case 'sakura_white':
+            return <SakuraWhiteTheme profile={profile} links={links} />
+          case 'sakura_dusk':
+            return <SakuraDuskTheme profile={profile} links={links} />
+          case 'sakura_matcha':
+            return <SakuraMatchaTheme profile={profile} links={links} />
+          case 'chrome_silver':
+            return <ChromeSilverTheme profile={profile} links={links} />
+          case 'chrome_platinum':
+            return <ChromePlatinumTheme profile={profile} links={links} />
+          case 'chrome_void':
+            return <ChromeVoidTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }
