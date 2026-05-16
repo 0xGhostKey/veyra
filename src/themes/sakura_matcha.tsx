@@ -54,9 +54,12 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
       <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
         {PETALS.map((p, i) => (
           <div key={i} style={{ position: 'absolute', top: p.top, right: '-15px', animation: `sakuraPetal ${p.dur}s ease-in-out ${p.delay}s infinite` }}>
-            <svg width={p.size} height={Math.round(p.size * 0.65)} viewBox="0 0 20 13">
-              <ellipse cx="10" cy="6.5" rx="10" ry="6" fill="#f080b0" fillOpacity={p.op} />
-              <path d="M10,0.5 L10,12.5" stroke="rgba(255,255,255,0.25)" strokeWidth="0.7" />
+            <svg width={p.size} height={Math.round(p.size * 1.4)} viewBox="0 0 20 28">
+              <path
+                d="M10,6 C9,2.5 6.5,0.5 4,1.5 C1.5,2.5 0.5,6.5 0.5,11 C0.5,17 3.5,23 10,26.5 C16.5,23 19.5,17 19.5,11 C19.5,6.5 18.5,2.5 16,1.5 C13.5,0.5 11,2.5 10,6 Z"
+                fill="#f080b0" fillOpacity={p.op}
+              />
+              <path d="M10,6 Q10.6,16 10,26.5" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" fill="none" />
             </svg>
           </div>
         ))}

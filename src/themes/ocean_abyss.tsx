@@ -36,7 +36,7 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#020c14' }}>
+    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#020c14', overflowX: 'hidden' }}>
       <style>{`
         html, body { background-color: #020c14 !important; }
         @keyframes oceanWave {
@@ -85,7 +85,9 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
           )}
         </div>
 
-        <AnimatedWave color="#00d4ff" />
+        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+          <AnimatedWave color="#00d4ff" />
+        </div>
 
         <div className="mt-4">
           <MixedLinks
@@ -111,7 +113,9 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
           <GallerySection photos={galleryPhotos} />
         </div>
 
-        <AnimatedWave color="#00d4ff" />
+        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+          <AnimatedWave color="#00d4ff" />
+        </div>
 
         {!profile.logo_removed && (
           <div className="flex justify-center mt-4">

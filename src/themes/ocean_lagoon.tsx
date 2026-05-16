@@ -36,7 +36,7 @@ export default function OceanLagoonTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#02100e' }}>
+    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#02100e', overflowX: 'hidden' }}>
       <style>{`
         html, body { background-color: #02100e !important; }
         @keyframes oceanWave {
@@ -85,7 +85,9 @@ export default function OceanLagoonTheme({ profile, links }: Props) {
           )}
         </div>
 
-        <AnimatedWave color="#40e0b0" />
+        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+          <AnimatedWave color="#40e0b0" />
+        </div>
 
         <div className="mt-4">
           <MixedLinks
@@ -111,7 +113,9 @@ export default function OceanLagoonTheme({ profile, links }: Props) {
           <GallerySection photos={galleryPhotos} />
         </div>
 
-        <AnimatedWave color="#40e0b0" />
+        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+          <AnimatedWave color="#40e0b0" />
+        </div>
 
         {!profile.logo_removed && (
           <div className="flex justify-center mt-4">
