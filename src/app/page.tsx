@@ -14,6 +14,8 @@ const CAROUSEL_AVATARS = [
   { initial: 'H', name: '@hana_shop',   color: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
   { initial: 'A', name: '@aki_style',   color: 'linear-gradient(135deg, #a78bfa, #7c3aed)' },
   { initial: 'T', name: '@tao_brand',   color: 'linear-gradient(135deg, #c0c8d8, #607080)' },
+  { initial: 'N', name: '@nao_photo',   color: 'linear-gradient(135deg, #f97316, #ef4444)' },
+  { initial: 'J', name: '@jun_style',   color: 'linear-gradient(135deg, #2dd4bf, #0891b2)' },
 ]
 
 // Matches actual themes in src/themes/index.ts
@@ -199,10 +201,10 @@ export default function HomePage() {
       <style>{`
         @keyframes carousel-scroll {
           0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.333%); }
         }
         .animate-carousel {
-          animation: carousel-scroll 26s linear infinite;
+          animation: carousel-scroll 32s linear infinite;
         }
         .animate-carousel:hover {
           animation-play-state: paused;
@@ -275,7 +277,7 @@ export default function HomePage() {
           <div className="absolute inset-y-0 left-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #0a0a0a, transparent)' }} />
           <div className="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #0a0a0a, transparent)' }} />
           <div className="flex gap-6 animate-carousel w-max">
-            {[...CAROUSEL_AVATARS, ...CAROUSEL_AVATARS].map((a, i) => (
+            {[...CAROUSEL_AVATARS, ...CAROUSEL_AVATARS, ...CAROUSEL_AVATARS].map((a, i) => (
               <div key={i} className="flex flex-col items-center gap-2 flex-none">
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center text-[18px] font-bold text-white/90 shadow-lg border border-white/10"
