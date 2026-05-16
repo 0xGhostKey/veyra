@@ -352,7 +352,7 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500">好みのスタイルを見つけてください。</p>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pl-6 pr-6 pb-4 theme-card-scroll">
+        <div className="flex gap-4 overflow-x-auto pl-10 pr-6 pb-4 theme-card-scroll">
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}

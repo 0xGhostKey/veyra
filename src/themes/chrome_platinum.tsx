@@ -11,30 +11,30 @@ type Props = {
 function HexCell({ size, color, opacity }: { size: number; color: string; opacity: number }) {
   const pts = [0, 60, 120, 180, 240, 300].map((deg) => {
     const r = (deg - 30) * Math.PI / 180
-    return `${size / 2 + (size / 2 - 1) * Math.cos(r)},${size / 2 + (size / 2 - 1) * Math.sin(r)}`
+    return `${size / 2 + (size / 2 - 1.5) * Math.cos(r)},${size / 2 + (size / 2 - 1.5) * Math.sin(r)}`
   }).join(' ')
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block' }}>
-      <polygon points={pts} fill="none" stroke={color} strokeWidth="0.8" strokeOpacity={opacity} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', filter: `drop-shadow(0 0 4px ${color})` }}>
+      <polygon points={pts} fill={color} fillOpacity={opacity * 0.15} stroke={color} strokeWidth="1.2" strokeOpacity={opacity} />
     </svg>
   )
 }
 
 const HEXES = [
-  { left: '4%',  dur: 22, delay: 0,    size: 18, op: 0.6,  drift: 14  },
-  { left: '10%', dur: 28, delay: 6,    size: 12, op: 0.4,  drift: -12 },
-  { left: '17%', dur: 17, delay: 2.5,  size: 22, op: 0.7,  drift: 18  },
-  { left: '24%', dur: 25, delay: 9,    size: 14, op: 0.5,  drift: -16 },
-  { left: '32%', dur: 19, delay: 4,    size: 20, op: 0.65, drift: 12  },
-  { left: '40%', dur: 30, delay: 12,   size: 10, op: 0.35, drift: -20 },
-  { left: '47%', dur: 16, delay: 1.5,  size: 24, op: 0.75, drift: 16  },
-  { left: '55%', dur: 23, delay: 7.5,  size: 12, op: 0.55, drift: -10 },
-  { left: '63%', dur: 18, delay: 5,    size: 18, op: 0.65, drift: 20  },
-  { left: '70%', dur: 26, delay: 10,   size: 10, op: 0.45, drift: -14 },
-  { left: '77%', dur: 20, delay: 3,    size: 16, op: 0.6,  drift: 12  },
-  { left: '84%', dur: 29, delay: 8,    size: 20, op: 0.5,  drift: -18 },
-  { left: '90%', dur: 17, delay: 13,   size: 14, op: 0.7,  drift: 14  },
-  { left: '96%', dur: 24, delay: 6.5,  size: 10, op: 0.55, drift: -12 },
+  { left: '4%',  dur: 22, delay: 0,    size: 22, op: 0.75, drift: 14  },
+  { left: '10%', dur: 28, delay: 6,    size: 16, op: 0.55, drift: -12 },
+  { left: '17%', dur: 17, delay: 2.5,  size: 26, op: 0.85, drift: 18  },
+  { left: '24%', dur: 25, delay: 9,    size: 18, op: 0.65, drift: -16 },
+  { left: '32%', dur: 19, delay: 4,    size: 24, op: 0.8,  drift: 12  },
+  { left: '40%', dur: 30, delay: 12,   size: 14, op: 0.5,  drift: -20 },
+  { left: '47%', dur: 16, delay: 1.5,  size: 28, op: 0.9,  drift: 16  },
+  { left: '55%', dur: 23, delay: 7.5,  size: 16, op: 0.7,  drift: -10 },
+  { left: '63%', dur: 18, delay: 5,    size: 22, op: 0.8,  drift: 20  },
+  { left: '70%', dur: 26, delay: 10,   size: 14, op: 0.6,  drift: -14 },
+  { left: '77%', dur: 20, delay: 3,    size: 20, op: 0.75, drift: 12  },
+  { left: '84%', dur: 29, delay: 8,    size: 24, op: 0.65, drift: -18 },
+  { left: '90%', dur: 17, delay: 13,   size: 18, op: 0.85, drift: 14  },
+  { left: '96%', dur: 24, delay: 6.5,  size: 14, op: 0.7,  drift: -12 },
 ]
 
 export default function ChromePlatinumTheme({ profile, links }: Props) {
@@ -51,12 +51,6 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
           8%   { opacity: 1; }
           90%  { opacity: 1; }
           100% { transform: translateY(-60px) translateX(var(--drift)) rotate(60deg); opacity: 0; }
-        }
-        @keyframes scanPlatinum {
-          0%   { top: -2px; opacity: 0; }
-          3%   { opacity: 1; }
-          97%  { opacity: 0.8; }
-          100% { top: 100vh; opacity: 0; }
         }
         @keyframes orbitPlatinum {
           from { transform: rotate(0deg); }
@@ -88,19 +82,6 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
             <HexCell size={h.size} color={accent} opacity={h.op} />
           </div>
         ))}
-
-        {/* Scan line */}
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            height: 2,
-            background: `linear-gradient(to right, transparent, ${accent}80, ${accent}, ${accent}80, transparent)`,
-            boxShadow: `0 0 14px ${accent}, 0 0 35px ${accent}50`,
-            animation: 'scanPlatinum 6s linear 2s infinite',
-          }}
-        />
       </div>
 
       <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#08090c', overflowX: 'hidden' }}>
@@ -119,77 +100,37 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
                   <circle cx="60" cy="60" r="56" fill="none" stroke={accent} strokeWidth="0.6" strokeDasharray="3 8" strokeOpacity="0.25" />
                 </svg>
               </div>
-
               {profile.avatar_url ? (
-                <div
-                  className="absolute inset-0 p-px rounded-full"
-                  style={{
-                    background: `linear-gradient(135deg, #dce4ec, #808090, #dce4ec)`,
-                    animation: 'platinumShimmer 3s ease-in-out infinite',
-                  }}
-                >
+                <div className="absolute inset-0 p-px rounded-full" style={{ background: `linear-gradient(135deg, #dce4ec, #808090, #dce4ec)`, animation: 'platinumShimmer 3s ease-in-out infinite' }}>
                   <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
-                <div
-                  className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #0f1014, #141620)',
-                    border: `1px solid #404860`,
-                    animation: 'platinumShimmer 3s ease-in-out infinite',
-                  }}
-                >
-                  <span className="text-3xl font-bold" style={{ color: accent }}>
-                    {(profile.display_name ?? 'U')[0].toUpperCase()}
-                  </span>
+                <div className="absolute inset-0 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0f1014, #141620)', border: `1px solid #404860`, animation: 'platinumShimmer 3s ease-in-out infinite' }}>
+                  <span className="text-3xl font-bold" style={{ color: accent }}>{(profile.display_name ?? 'U')[0].toUpperCase()}</span>
                 </div>
               )}
             </div>
-
-            <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#eef2f6' }}>
-              {profile.display_name ?? 'No Name'}
-            </h1>
+            <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#eef2f6' }}>{profile.display_name ?? 'No Name'}</h1>
             <div className="w-12 h-px mb-3" style={{ background: `linear-gradient(90deg, #505870, #c0c8d8, #505870)` }} />
-            {profile.bio && (
-              <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#607080' }}>
-                {profile.bio}
-              </p>
-            )}
+            {profile.bio && <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#607080' }}>{profile.bio}</p>}
           </div>
 
           <MixedLinks
             links={activeLinks}
             gap="gap-3"
             renderTextLink={(link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
                 className="group block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, #0f1014, #141620)',
-                  border: `1px solid rgba(220,228,236,0.15)`,
-                  color: accent,
-                }}
+                style={{ background: 'linear-gradient(135deg, #0f1014, #141620)', border: `1px solid rgba(220,228,236,0.15)`, color: accent }}
               >
-                <span
-                  className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-                  style={{ background: `linear-gradient(90deg, transparent, rgba(220,228,236,0.08), transparent)` }}
-                />
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" style={{ background: `linear-gradient(90deg, transparent, rgba(220,228,236,0.08), transparent)` }} />
                 <span className="relative">{link.title}</span>
               </a>
             )}
           />
           <GallerySection photos={galleryPhotos} />
-
           <div className="h-px mt-10 mb-6" style={{ background: `linear-gradient(90deg, transparent, #b0bac4, transparent)` }} />
-
-          {!profile.logo_removed && (
-            <div className="flex justify-center">
-              <Logo dark />
-            </div>
-          )}
+          {!profile.logo_removed && <div className="flex justify-center"><Logo dark /></div>}
         </div>
       </div>
     </>
