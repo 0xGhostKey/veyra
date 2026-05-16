@@ -12,6 +12,7 @@ export default function GallerySection({ photos }: Props) {
   const [dragY, setDragY] = useState(0)
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
+  const swipeAxis = useRef<'x' | 'y' | null>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
 
   // Prevent body scroll while lightbox is open
@@ -36,13 +37,22 @@ export default function GallerySection({ photos }: Props) {
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
     touchStartY.current = e.touches[0].clientY
+    swipeAxis.current = null
     setDragY(0)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return
+    if (touchStartX.current === null || touchStartY.current === null) return
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current)
     const dy = e.touches[0].clientY - touchStartY.current
-    if (dy > 0) setDragY(dy)
+
+    // Lock axis after 6px of movement to prevent diagonal drift
+    if (!swipeAxis.current) {
+      if (Math.max(dx, Math.abs(dy)) < 6) return
+      swipeAxis.current = dx > Math.abs(dy) ? 'x' : 'y'
+    }
+
+    if (swipeAxis.current === 'y' && dy > 0) setDragY(dy)
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -51,21 +61,25 @@ export default function GallerySection({ photos }: Props) {
     const dx = touchStartX.current - e.changedTouches[0].clientX
     const dy = e.changedTouches[0].clientY - (touchStartY.current ?? 0)
 
-    // Swipe down to close
-    if (dy > 80 && Math.abs(dy) > Math.abs(dx)) {
+    // Swipe down to close (only if y-axis was locked)
+    if (swipeAxis.current === 'y' && dy > 80) {
       setDragY(0)
       setLightboxIndex(null)
+      swipeAxis.current = null
+      touchStartX.current = null
+      touchStartY.current = null
       return
     }
 
     setDragY(0)
 
-    // Horizontal swipe to change image
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+    // Horizontal swipe to change image (only if x-axis was locked)
+    if (swipeAxis.current === 'x' && Math.abs(dx) > 40) {
       if (dx > 0 && lightboxIndex < photos.length - 1) setLightboxIndex(lightboxIndex + 1)
       if (dx < 0 && lightboxIndex > 0) setLightboxIndex(lightboxIndex - 1)
     }
 
+    swipeAxis.current = null
     touchStartX.current = null
     touchStartY.current = null
   }

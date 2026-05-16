@@ -352,7 +352,8 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500">好みのスタイルを見つけてください。</p>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pl-10 pr-6 pb-4 theme-card-scroll">
+        <div className="flex gap-4 overflow-x-auto pb-4 theme-card-scroll">
+          <div className="flex-none w-10" aria-hidden="true" />
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
@@ -410,6 +411,7 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+          <div className="flex-none w-6" aria-hidden="true" />
         </div>
 
         <div className="px-5 mt-3 max-w-lg mx-auto">

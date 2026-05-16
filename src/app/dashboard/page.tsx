@@ -90,8 +90,9 @@ export default function DashboardPage() {
 
   const handleAddLink = async () => {
     if (!profile || !editingLink) return
-    setSaving(true)
     const currentTextLinks = links.filter(l => l.link_type === 'text')
+    if (currentTextLinks.length >= 10) return
+    setSaving(true)
     const { data, error } = await supabase.from('links').insert({
       profile_id: profile.id, title: editingLink.title, url: editingLink.url,
       link_type: 'text', link_size: 'small', sort_order: currentTextLinks.length, is_active: true,
@@ -317,14 +318,21 @@ export default function DashboardPage() {
         {/* ── Links ── */}
         <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
           <div className="flex items-center justify-between mb-5">
-            <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase">リンク</p>
-            <button
-              onClick={() => { setEditingLink({ id: null, title: '', url: '' }); setShowLinkForm(true) }}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
-            >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-              追加
-            </button>
+            <div className="flex items-center gap-2">
+              <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase">リンク</p>
+              <span className="text-[10px] text-gray-600">{links.filter(l => l.link_type === 'text').length}/10</span>
+            </div>
+            {links.filter(l => l.link_type === 'text').length < 10 ? (
+              <button
+                onClick={() => { setEditingLink({ id: null, title: '', url: '' }); setShowLinkForm(true) }}
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-white/8 hover:bg-white/15 rounded-lg text-[11px] font-medium text-gray-400 transition-colors"
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                追加
+              </button>
+            ) : (
+              <span className="text-[10px] text-gray-600">上限 10 個</span>
+            )}
           </div>
 
           {/* Text link form */}
