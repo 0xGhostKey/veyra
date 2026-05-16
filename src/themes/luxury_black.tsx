@@ -13,64 +13,90 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center py-12 px-4">
-      <div className="w-full max-w-md">
-        <div className="h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mb-8 opacity-60" />
+    <div className="min-h-screen flex flex-col items-center py-16 px-4" style={{ background: '#0a0a0a' }}>
+      <style>{`html, body { background-color: #0a0a0a !important; }`}</style>
+      <div className="w-full max-w-sm">
+        {/* Outer frame */}
+        <div style={{ border: '1px solid rgba(212,175,55,0.22)', padding: '2px' }}>
+          <div style={{ border: '1px solid rgba(212,175,55,0.08)', padding: '40px 28px' }}>
 
-        <div className="flex flex-col items-center mb-10">
-          {profile.avatar_url ? (
-            <div className="p-1 rounded-full bg-gradient-to-br from-[#d4af37] via-[#e8cc6a] to-[#b8962c] mb-4">
-              <img
-                src={profile.avatar_url}
-                alt={profile.display_name ?? 'avatar'}
-                className="w-24 h-24 rounded-full object-cover"
-              />
+            {/* Top ornamental divider */}
+            <div className="flex items-center gap-3 mb-10">
+              <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.35)' }} />
+              <span style={{ color: '#d4af37', fontSize: 9, letterSpacing: '0.3em' }}>◆</span>
+              <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.35)' }} />
             </div>
-          ) : (
-            <div className="p-1 rounded-full bg-gradient-to-br from-[#d4af37] via-[#e8cc6a] to-[#b8962c] mb-4">
-              <div className="w-24 h-24 rounded-full bg-[#111] flex items-center justify-center">
-                <span className="text-3xl text-[#d4af37]">
-                  {(profile.display_name ?? 'U')[0].toUpperCase()}
-                </span>
+
+            {/* Profile */}
+            <div className="flex flex-col items-center mb-10">
+              {profile.avatar_url ? (
+                <div className="mb-6" style={{ border: '1px solid rgba(212,175,55,0.45)', padding: '3px' }}>
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.display_name ?? 'avatar'}
+                    className="w-24 h-24 object-cover block"
+                  />
+                </div>
+              ) : (
+                <div
+                  className="flex items-center justify-center mb-6"
+                  style={{
+                    width: 96, height: 96,
+                    border: '1px solid rgba(212,175,55,0.45)',
+                    background: '#111',
+                  }}
+                >
+                  <span style={{ color: '#d4af37', fontSize: 30 }}>
+                    {(profile.display_name ?? 'U')[0].toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <h1
+                className="text-center"
+                style={{ color: '#f0e8d0', fontSize: 14, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: 12 }}
+              >
+                {profile.display_name ?? 'No Name'}
+              </h1>
+              <div style={{ width: 28, height: 1, background: 'rgba(212,175,55,0.5)', marginBottom: 12 }} />
+              {profile.bio && (
+                <p className="text-center" style={{ color: 'rgba(212,175,55,0.45)', fontSize: 11, lineHeight: 1.9, letterSpacing: '0.04em', maxWidth: 200 }}>
+                  {profile.bio}
+                </p>
+              )}
+            </div>
+
+            {/* Links */}
+            <MixedLinks
+              links={activeLinks}
+              gap="gap-2.5"
+              renderTextLink={(link) => (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block w-full px-5 py-3.5 text-center text-[12px] font-medium tracking-widest transition-all duration-300 border border-[#d4af37]/25 text-white/70 hover:border-[#d4af37]/60 hover:text-white hover:bg-[#d4af37]/5"
+                >
+                  {link.title}
+                </a>
+              )}
+            />
+            <GallerySection photos={galleryPhotos} />
+
+            {/* Bottom ornamental divider */}
+            <div className="flex items-center gap-3 mt-10">
+              <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.35)' }} />
+              <span style={{ color: '#d4af37', fontSize: 9, letterSpacing: '0.3em' }}>◆</span>
+              <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.35)' }} />
+            </div>
+
+            {!profile.logo_removed && (
+              <div className="flex justify-center mt-6">
+                <Logo dark gold />
               </div>
-            </div>
-          )}
-          <h1 className="text-2xl font-bold text-white tracking-widest mb-2">
-            {profile.display_name ?? 'No Name'}
-          </h1>
-          <div className="w-12 h-px bg-[#d4af37] mb-3" />
-          {profile.bio && (
-            <p className="text-gray-400 text-sm text-center leading-relaxed max-w-xs">
-              {profile.bio}
-            </p>
-          )}
-        </div>
-
-        <MixedLinks
-          links={activeLinks}
-          gap="gap-4"
-          renderTextLink={(link) => (
-            <a
-              key={link.id}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block w-full px-6 py-4 bg-[#111111] border border-[#d4af37]/30 rounded-2xl text-center text-white font-medium tracking-wider hover:border-[#d4af37] hover:bg-[#1a1a1a] transition-all duration-300 relative overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#d4af37]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <span className="relative">{link.title}</span>
-            </a>
-          )}
-        />
-        <GallerySection photos={galleryPhotos} />
-
-        <div className="h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mt-10 mb-6 opacity-60" />
-
-        {!profile.logo_removed && (
-          <div className="flex justify-center">
-            <Logo dark gold />
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

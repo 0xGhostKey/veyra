@@ -15,64 +15,89 @@ export default function LuxuryIvoryTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`html, body { background-color: #f8f5ef !important; }`}</style>
-      <div className="min-h-screen bg-[#f8f5ef] flex flex-col items-center py-12 px-4">
-        <div className="w-full max-w-md">
-          <div className="h-px bg-gradient-to-r from-transparent via-[#a07840] to-transparent mb-8 opacity-40" />
+      <div className="min-h-screen flex flex-col items-center py-16 px-4" style={{ background: '#f8f5ef' }}>
+        <div className="w-full max-w-sm">
+          {/* Outer frame */}
+          <div style={{ border: '1px solid rgba(160,120,64,0.3)', padding: '2px' }}>
+            <div style={{ border: '1px solid rgba(160,120,64,0.12)', padding: '40px 28px' }}>
 
-          <div className="flex flex-col items-center mb-10">
-            {profile.avatar_url ? (
-              <div className="p-1 rounded-full bg-gradient-to-br from-[#a07840] via-[#c49a58] to-[#7a5c2c] mb-4">
-                <img
-                  src={profile.avatar_url}
-                  alt={profile.display_name ?? 'avatar'}
-                  className="w-24 h-24 rounded-full object-cover"
-                />
+              {/* Top ornamental divider */}
+              <div className="flex items-center gap-3 mb-10">
+                <div className="flex-1 h-px" style={{ background: 'rgba(160,120,64,0.4)' }} />
+                <span style={{ color: '#a07840', fontSize: 9, letterSpacing: '0.3em' }}>◆</span>
+                <div className="flex-1 h-px" style={{ background: 'rgba(160,120,64,0.4)' }} />
               </div>
-            ) : (
-              <div className="p-1 rounded-full bg-gradient-to-br from-[#a07840] via-[#c49a58] to-[#7a5c2c] mb-4">
-                <div className="w-24 h-24 rounded-full bg-[#ede8de] flex items-center justify-center">
-                  <span className="text-3xl text-[#a07840]">
-                    {(profile.display_name ?? 'U')[0].toUpperCase()}
-                  </span>
+
+              {/* Profile */}
+              <div className="flex flex-col items-center mb-10">
+                {profile.avatar_url ? (
+                  <div className="mb-6" style={{ border: '1px solid rgba(160,120,64,0.5)', padding: '3px' }}>
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.display_name ?? 'avatar'}
+                      className="w-24 h-24 object-cover block"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="flex items-center justify-center mb-6"
+                    style={{
+                      width: 96, height: 96,
+                      border: '1px solid rgba(160,120,64,0.5)',
+                      background: '#ede8de',
+                    }}
+                  >
+                    <span style={{ color: '#a07840', fontSize: 30 }}>
+                      {(profile.display_name ?? 'U')[0].toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                <h1
+                  className="text-center"
+                  style={{ color: '#1a1208', fontSize: 14, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: 12 }}
+                >
+                  {profile.display_name ?? 'No Name'}
+                </h1>
+                <div style={{ width: 28, height: 1, background: 'rgba(160,120,64,0.5)', marginBottom: 12 }} />
+                {profile.bio && (
+                  <p className="text-center" style={{ color: 'rgba(160,120,64,0.65)', fontSize: 11, lineHeight: 1.9, letterSpacing: '0.04em', maxWidth: 200 }}>
+                    {profile.bio}
+                  </p>
+                )}
+              </div>
+
+              {/* Links */}
+              <MixedLinks
+                links={activeLinks}
+                gap="gap-2.5"
+                renderTextLink={(link) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block w-full px-5 py-3.5 text-center text-[12px] font-medium tracking-widest transition-all duration-300 border border-[#a07840]/25 text-[#1a1208]/70 hover:border-[#a07840]/60 hover:text-[#1a1208] hover:bg-[#a07840]/5"
+                  >
+                    {link.title}
+                  </a>
+                )}
+              />
+              <GallerySection photos={galleryPhotos} />
+
+              {/* Bottom ornamental divider */}
+              <div className="flex items-center gap-3 mt-10">
+                <div className="flex-1 h-px" style={{ background: 'rgba(160,120,64,0.4)' }} />
+                <span style={{ color: '#a07840', fontSize: 9, letterSpacing: '0.3em' }}>◆</span>
+                <div className="flex-1 h-px" style={{ background: 'rgba(160,120,64,0.4)' }} />
+              </div>
+
+              {!profile.logo_removed && (
+                <div className="flex justify-center mt-6">
+                  <Logo />
                 </div>
-              </div>
-            )}
-            <h1 className="text-2xl font-bold text-[#1a1208] tracking-widest mb-2">
-              {profile.display_name ?? 'No Name'}
-            </h1>
-            <div className="w-12 h-px bg-[#a07840] mb-3" />
-            {profile.bio && (
-              <p className="text-[#7a6a50] text-sm text-center leading-relaxed max-w-xs">
-                {profile.bio}
-              </p>
-            )}
-          </div>
-
-          <MixedLinks
-            links={activeLinks}
-            gap="gap-4"
-            renderTextLink={(link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block w-full px-6 py-4 bg-white border border-[#a07840]/25 rounded-2xl text-center text-[#1a1208] font-medium tracking-wider hover:border-[#a07840] hover:bg-[#fdf9f2] transition-all duration-300 relative overflow-hidden shadow-sm"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#a07840]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <span className="relative">{link.title}</span>
-              </a>
-            )}
-          />
-          <GallerySection photos={galleryPhotos} />
-
-          <div className="h-px bg-gradient-to-r from-transparent via-[#a07840] to-transparent mt-10 mb-6 opacity-40" />
-
-          {!profile.logo_removed && (
-            <div className="flex justify-center">
-              <Logo />
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>

@@ -20,7 +20,7 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
           {profile.avatar_url ? (
             <div
               className="p-0.5 rounded-full mb-4"
-              style={{ background: 'linear-gradient(135deg, #7ab87a, #4a8050)' }}
+              style={{ background: 'linear-gradient(135deg, #f080b0, #c04080)' }}
             >
               <img
                 src={profile.avatar_url}
@@ -31,25 +31,25 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
           ) : (
             <div
               className="p-0.5 rounded-full mb-4"
-              style={{ background: 'linear-gradient(135deg, #7ab87a, #4a8050)' }}
+              style={{ background: 'linear-gradient(135deg, #f080b0, #c04080)' }}
             >
               <div className="w-24 h-24 rounded-full flex items-center justify-center" style={{ background: '#0f180f' }}>
-                <span className="text-3xl font-bold" style={{ color: '#7ab87a' }}>
+                <span className="text-3xl font-bold" style={{ color: '#f080b0' }}>
                   {(profile.display_name ?? 'U')[0].toUpperCase()}
                 </span>
               </div>
             </div>
           )}
-          <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#d0e8d0' }}>
+          <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#fce4f0' }}>
             {profile.display_name ?? 'No Name'}
           </h1>
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-px" style={{ background: '#7ab87a' }} />
-            <span style={{ color: '#7ab87a', fontSize: 14 }}>✿</span>
-            <div className="w-8 h-px" style={{ background: '#7ab87a' }} />
+            <div className="w-8 h-px" style={{ background: '#f080b0' }} />
+            <span style={{ color: '#f080b0', fontSize: 14 }}>✿</span>
+            <div className="w-8 h-px" style={{ background: '#f080b0' }} />
           </div>
           {profile.bio && (
-            <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#708870' }}>
+            <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#a06080' }}>
               {profile.bio}
             </p>
           )}
@@ -67,9 +67,9 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
               className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 hover:scale-[1.01]"
               style={{
                 background: '#0f180f',
-                border: '1px solid rgba(122, 184, 122, 0.3)',
-                color: '#7ab87a',
-                boxShadow: '0 2px 12px rgba(122, 184, 122, 0.08)',
+                border: '1px solid rgba(240, 128, 176, 0.3)',
+                color: '#f080b0',
+                boxShadow: '0 2px 12px rgba(240, 128, 176, 0.08)',
               }}
             >
               {link.title}
