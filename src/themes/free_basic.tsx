@@ -57,11 +57,9 @@ export default function FreeBasicTheme({ profile, links }: Props) {
         />
         <GallerySection photos={galleryPhotos} />
 
-        {!profile.logo_removed && (
-          <div className="mt-12 flex justify-center">
+                  <div className="mt-12 flex justify-center">
             <Logo />
           </div>
-        )}
       </div>
     </div>
   )

@@ -39,7 +39,6 @@ export default function DashboardPage() {
   const [bio, setBio] = useState('')
   const [editingLink, setEditingLink] = useState<EditingLink | null>(null)
   const [showLinkForm, setShowLinkForm] = useState(false)
-  const [hasPurchasedLogoRemove, setHasPurchasedLogoRemove] = useState(false)
   const [saved, setSaved] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
@@ -74,12 +73,6 @@ export default function DashboardPage() {
       if (profileData) {
         const { data: linksData } = await supabase.from('links').select('*').eq('profile_id', profileData.id).order('sort_order', { ascending: true })
         setLinks(linksData ?? [])
-      }
-      if (profileData?.role === 'admin') {
-        setHasPurchasedLogoRemove(true)
-      } else {
-        const { data: purchaseData } = await supabase.from('purchases').select('id').eq('user_id', user.id).eq('item_type', 'logo_remove').eq('status', 'paid').single()
-        setHasPurchasedLogoRemove(!!purchaseData)
       }
     } catch (e) { console.error('fetchData error:', e) }
     finally { setLoading(false) }
@@ -198,15 +191,6 @@ export default function DashboardPage() {
     if (!profile) return
     navigator.clipboard.writeText(`${window.location.origin}/u/${profile.user_id}`)
     setUrlCopied(true); setTimeout(() => setUrlCopied(false), 2000)
-  }
-
-  const handlePurchaseLogoRemove = async () => {
-    const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_LOGO_REMOVE
-    if (!priceId) { alert('この購入機能は現在設定中です。'); return }
-    const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ item_type: 'logo_remove', item_id: 'logo_remove', price_id: priceId }) })
-    const json = await res.json()
-    if (json.url) window.location.href = json.url
-    else alert(json.error ?? '決済ページへの遷移に失敗しました。')
   }
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -478,23 +462,6 @@ export default function DashboardPage() {
             </DndContext>
           )}
         </section>
-
-        {/* Logo removal */}
-        {!hasPurchasedLogoRemove && !profile?.logo_removed && (
-          <section className="rounded-3xl border border-[#d4af37]/20 p-5" style={{ background: 'linear-gradient(160deg, #131008, #0a0a0a)' }}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[9px] font-bold text-[#d4af37] tracking-[0.15em] uppercase mb-1">Premium</p>
-                <h3 className="font-bold text-[14px] mb-0.5">Veyra ロゴを非表示に</h3>
-                <p className="text-[12px] text-gray-500">買い切り ¥300</p>
-              </div>
-              <button onClick={handlePurchaseLogoRemove}
-                className="flex-none px-4 py-2.5 bg-[#d4af37] text-black text-[12px] font-bold rounded-xl hover:bg-[#e8cc6a] active:scale-[0.97] transition-all">
-                購入する
-              </button>
-            </div>
-          </section>
-        )}
 
       </main>
     </div>

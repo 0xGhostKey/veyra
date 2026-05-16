@@ -117,11 +117,9 @@ export default function OceanArcticTheme({ profile, links }: Props) {
           <AnimatedWave color="#80c8f8" />
         </div>
 
-        {!profile.logo_removed && (
-          <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mt-4">
             <Logo dark />
           </div>
-        )}
       </div>
     </div>
   )

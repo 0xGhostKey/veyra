@@ -149,11 +149,9 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
                 <div className="flex-1 h-px" style={{ background: 'rgba(212,175,55,0.35)' }} />
               </div>
 
-              {!profile.logo_removed && (
-                <div className="flex justify-center mt-6">
+                              <div className="flex justify-center mt-6">
                   <Logo dark gold />
                 </div>
-              )}
             </div>
           </div>
         </div>

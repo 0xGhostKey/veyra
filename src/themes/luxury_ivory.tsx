@@ -149,11 +149,9 @@ export default function LuxuryIvoryTheme({ profile, links }: Props) {
                 <div className="flex-1 h-px" style={{ background: 'rgba(160,120,64,0.4)' }} />
               </div>
 
-              {!profile.logo_removed && (
-                <div className="flex justify-center mt-6">
+                              <div className="flex justify-center mt-6">
                   <Logo />
                 </div>
-              )}
             </div>
           </div>
         </div>

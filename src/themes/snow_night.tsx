@@ -196,11 +196,9 @@ export default function SnowNightTheme({ profile, links }: Props) {
           <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, #a8d4ff)' }} />
         </div>
 
-        {!profile.logo_removed && (
-          <div className="mt-6 flex justify-center">
+                  <div className="mt-6 flex justify-center">
             <Logo dark />
           </div>
-        )}
       </div>
     </div>
   )

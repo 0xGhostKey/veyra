@@ -152,11 +152,9 @@ export default function NeonVioletTheme({ profile, links }: Props) {
           />
           <GallerySection photos={galleryPhotos} />
 
-          {!profile.logo_removed && (
-            <div className="mt-10 flex justify-center">
+                      <div className="mt-10 flex justify-center">
               <Logo dark />
             </div>
-          )}
         </div>
       </div>
     </>

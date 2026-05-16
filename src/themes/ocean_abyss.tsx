@@ -117,11 +117,9 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
           <AnimatedWave color="#00d4ff" />
         </div>
 
-        {!profile.logo_removed && (
-          <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mt-4">
             <Logo dark />
           </div>
-        )}
       </div>
     </div>
   )

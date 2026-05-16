@@ -199,11 +199,9 @@ export default function SnowPowderTheme({ profile, links }: Props) {
           <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, #5080d0)' }} />
         </div>
 
-        {!profile.logo_removed && (
-          <div className="mt-6 flex justify-center">
+                  <div className="mt-6 flex justify-center">
             <Logo />
           </div>
-        )}
       </div>
     </div>
   )
