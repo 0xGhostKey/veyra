@@ -16,6 +16,9 @@ import ChromeSilverTheme from '@/themes/chrome_silver'
 import ChromeGoldTheme from '@/themes/chrome_gold'
 import ChromePlatinumTheme from '@/themes/chrome_platinum'
 import ChromeVoidTheme from '@/themes/chrome_void'
+import OceanAbyssTheme from '@/themes/ocean_abyss'
+import OceanLagoonTheme from '@/themes/ocean_lagoon'
+import OceanArcticTheme from '@/themes/ocean_arctic'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -97,6 +100,9 @@ const THEME_BODY_CSS: Record<string, string> = {
   chrome_gold: `html, body { background-color: #0c0a00 !important; }`,
   chrome_platinum: `html, body { background-color: #08090c !important; }`,
   chrome_void: `html, body { background-color: #03040a !important; }`,
+  ocean_abyss: `html, body { background-color: #020c14 !important; }`,
+  ocean_lagoon: `html, body { background-color: #02100e !important; }`,
+  ocean_arctic: `html, body { background-color: #04080e !important; }`,
 }
 
 function ThemeRenderer({
@@ -145,6 +151,12 @@ function ThemeRenderer({
             return <ChromePlatinumTheme profile={profile} links={links} />
           case 'chrome_void':
             return <ChromeVoidTheme profile={profile} links={links} />
+          case 'ocean_abyss':
+            return <OceanAbyssTheme profile={profile} links={links} />
+          case 'ocean_lagoon':
+            return <OceanLagoonTheme profile={profile} links={links} />
+          case 'ocean_arctic':
+            return <OceanArcticTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }

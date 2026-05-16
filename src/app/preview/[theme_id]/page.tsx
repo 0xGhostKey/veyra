@@ -15,6 +15,9 @@ import ChromeSilverTheme from '@/themes/chrome_silver'
 import ChromeGoldTheme from '@/themes/chrome_gold'
 import ChromePlatinumTheme from '@/themes/chrome_platinum'
 import ChromeVoidTheme from '@/themes/chrome_void'
+import OceanAbyssTheme from '@/themes/ocean_abyss'
+import OceanLagoonTheme from '@/themes/ocean_lagoon'
+import OceanArcticTheme from '@/themes/ocean_arctic'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -56,6 +59,9 @@ const THEME_BODY_CSS: Record<string, string> = {
   chrome_gold: `html, body { background-color: #0c0a00 !important; }`,
   chrome_platinum: `html, body { background-color: #08090c !important; }`,
   chrome_void: `html, body { background-color: #03040a !important; }`,
+  ocean_abyss: `html, body { background-color: #020c14 !important; }`,
+  ocean_lagoon: `html, body { background-color: #02100e !important; }`,
+  ocean_arctic: `html, body { background-color: #04080e !important; }`,
 }
 
 export default async function ThemePreviewPage({ params }: Props) {
@@ -111,6 +117,15 @@ export default async function ThemePreviewPage({ params }: Props) {
       break
     case 'chrome_void':
       content = <ChromeVoidTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'ocean_abyss':
+      content = <OceanAbyssTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'ocean_lagoon':
+      content = <OceanLagoonTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
+      break
+    case 'ocean_arctic':
+      content = <OceanArcticTheme profile={DUMMY_PROFILE} links={DUMMY_LINKS} />
       break
     default:
       notFound()

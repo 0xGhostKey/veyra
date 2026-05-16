@@ -188,6 +188,45 @@ export const THEMES: ThemeDefinition[] = [
   },
 ]
 
+  // ── Ocean series ──
+  {
+    id: 'ocean_abyss',
+    name: 'Ocean Abyss',
+    description: '深海の暗黒×バイオルミネッセントシアンの幻想テーマ',
+    price: 500,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_OCEAN_ABYSS ?? null,
+    previewColors: ['#020c14', '#00d4ff', '#003870'],
+    series: 'ocean',
+    prerequisiteId: null,
+  },
+  {
+    id: 'ocean_lagoon',
+    name: 'Ocean Lagoon',
+    description: 'トロピカルラグーン×エメラルドターコイズのリゾートテーマ',
+    price: 500,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_OCEAN_LAGOON ?? null,
+    previewColors: ['#02100e', '#40e0b0', '#0a6050'],
+    series: 'ocean',
+    prerequisiteId: 'ocean_abyss',
+  },
+  {
+    id: 'ocean_arctic',
+    name: 'Ocean Arctic',
+    description: '北極海の静寂×氷晶ブルーの澄んだテーマ',
+    price: 500,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_OCEAN_ARCTIC ?? null,
+    previewColors: ['#04080e', '#a0d8f8', '#2050a0'],
+    series: 'ocean',
+    prerequisiteId: 'ocean_lagoon',
+  },
+]
+
 export function getThemeById(id: string): ThemeDefinition | undefined {
   return THEMES.find((t) => t.id === id)
 }
