@@ -246,7 +246,7 @@ export const THEMES: ThemeDefinition[] = [
     isFree: false,
     isAnimated: true,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SNOW_AURORA ?? null,
-    previewColors: ['#030d09', '#80ffcc', '#b070ff'],
+    previewColors: ['#08060f', '#80ffcc', '#b070ff'],
     series: 'snow',
     prerequisiteId: 'snow_night',
   },

@@ -51,9 +51,9 @@ export default function SnowAuroraTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#030d09', overflowX: 'hidden' }}>
+    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#08060f', overflowX: 'hidden' }}>
       <style>{`
-        html, body { background-color: #030d09 !important; }
+        html, body { background-color: #08060f !important; }
         @keyframes snowFall {
           0%   { transform: translateY(-30px) rotate(0deg);   opacity: 0; }
           7%   { opacity: 1; }
@@ -72,18 +72,7 @@ export default function SnowAuroraTheme({ profile, links }: Props) {
           0%, 100% { transform: translateY(0px) rotate(0deg);  opacity: 0.4; }
           50%       { transform: translateY(-6px) rotate(20deg); opacity: 0.65; }
         }
-        @keyframes auroraShift {
-          0%, 100% { opacity: 0.06; }
-          50%       { opacity: 0.11; }
-        }
       `}</style>
-
-      {/* Aurora overlay */}
-      <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: 'radial-gradient(ellipse 90% 45% at 15% 25%, rgba(60,255,160,1) 0%, transparent 70%), radial-gradient(ellipse 70% 40% at 85% 35%, rgba(160,60,255,1) 0%, transparent 70%)',
-        animation: 'auroraShift 8s ease-in-out infinite',
-      }} />
 
       {/* Falling snowflakes */}
       <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>

@@ -66,7 +66,7 @@ const THEME_BODY_CSS: Record<string, string> = {
   ocean_lagoon: `html, body { background-color: #02100e !important; }`,
   ocean_arctic: `html, body { background-color: #04080e !important; }`,
   snow_night:   `html, body { background-color: #020615 !important; }`,
-  snow_aurora:  `html, body { background-color: #030d09 !important; }`,
+  snow_aurora:  `html, body { background-color: #08060f !important; }`,
   snow_powder:  `html, body { background-color: #f0f5ff !important; }`,
 }
 
