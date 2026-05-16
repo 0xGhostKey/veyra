@@ -8,17 +8,26 @@ type Props = {
   links: Link[]
 }
 
-function WaveDiv({ color }: { color: string }) {
+function AnimatedWave({ color }: { color: string }) {
+  const back = 'M0,30 C16,10 34,50 50,30 C66,10 84,50 100,30 L100,50 L0,50 Z'
+  const front = 'M0,36 C20,16 30,54 50,36 C70,16 80,54 100,36 L100,50 L0,50 Z'
   return (
-    <svg viewBox="0 0 300 14" className="w-full" style={{ height: 14, display: 'block' }}>
-      <path
-        d="M0,7 C50,1 100,13 150,7 C200,1 250,13 300,7"
-        stroke={color}
-        strokeWidth="1.2"
-        fill="none"
-        strokeOpacity="0.45"
-      />
-    </svg>
+    <div style={{ overflow: 'hidden', width: '100%', height: 50, position: 'relative' }}>
+      <div style={{ display: 'flex', width: '200%', height: '100%', position: 'absolute', inset: 0, animation: 'oceanWave 12s linear infinite' }}>
+        {[0, 1].map((i) => (
+          <svg key={i} viewBox="0 0 100 50" preserveAspectRatio="none" style={{ flex: '0 0 50%', height: '100%' }}>
+            <path d={back} fill={color} fillOpacity="0.13" />
+          </svg>
+        ))}
+      </div>
+      <div style={{ display: 'flex', width: '200%', height: '100%', position: 'absolute', inset: 0, animation: 'oceanWave 7s linear infinite reverse' }}>
+        {[0, 1].map((i) => (
+          <svg key={i} viewBox="0 0 100 50" preserveAspectRatio="none" style={{ flex: '0 0 50%', height: '100%' }}>
+            <path d={front} fill={color} fillOpacity="0.24" />
+          </svg>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -28,23 +37,29 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#020c14' }}>
-      <style>{`html, body { background-color: #020c14 !important; }`}</style>
+      <style>{`
+        html, body { background-color: #020c14 !important; }
+        @keyframes oceanWave {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes oceanRipple {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.22), 0 0 0 7px rgba(0,212,255,0.07); }
+          50%       { box-shadow: 0 0 0 10px rgba(0,212,255,0.04), 0 0 0 20px rgba(0,212,255,0); }
+        }
+      `}</style>
       <div className="w-full max-w-md">
 
-        <div className="flex flex-col items-center mb-10">
+        <div className="flex flex-col items-center mb-6">
           {profile.avatar_url ? (
             <div
               className="p-px rounded-full mb-6"
               style={{
                 background: 'linear-gradient(135deg, #00d4ff, #003870, #00d4ff)',
-                boxShadow: '0 0 0 5px rgba(0,212,255,0.07), 0 0 0 10px rgba(0,212,255,0.03)',
+                animation: 'oceanRipple 3s ease-in-out infinite',
               }}
             >
-              <img
-                src={profile.avatar_url}
-                alt={profile.display_name ?? 'avatar'}
-                className="w-24 h-24 rounded-full object-cover"
-              />
+              <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-24 h-24 rounded-full object-cover" />
             </div>
           ) : (
             <div
@@ -52,7 +67,7 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
               style={{
                 background: '#010a10',
                 border: '1px solid rgba(0,212,255,0.3)',
-                boxShadow: '0 0 0 5px rgba(0,212,255,0.07), 0 0 0 10px rgba(0,212,255,0.03)',
+                animation: 'oceanRipple 3s ease-in-out infinite',
               }}
             >
               <span className="text-3xl font-bold" style={{ color: '#00d4ff' }}>
@@ -60,15 +75,9 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
               </span>
             </div>
           )}
-
           <h1 className="text-2xl font-bold tracking-widest mb-3" style={{ color: '#a0e8ff' }}>
             {profile.display_name ?? 'No Name'}
           </h1>
-
-          <div className="w-full max-w-[180px] mb-3">
-            <WaveDiv color="#00d4ff" />
-          </div>
-
           {profile.bio && (
             <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#2a6880' }}>
               {profile.bio}
@@ -76,34 +85,36 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
           )}
         </div>
 
-        <MixedLinks
-          links={activeLinks}
-          gap="gap-3"
-          renderTextLink={(link) => (
-            <a
-              key={link.id}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 hover:scale-[1.01]"
-              style={{
-                background: 'linear-gradient(180deg, rgba(0,212,255,0.08) 0%, rgba(0,30,80,0.4) 100%)',
-                border: '1px solid rgba(0,212,255,0.18)',
-                color: '#80e8ff',
-              }}
-            >
-              {link.title}
-            </a>
-          )}
-        />
-        <GallerySection photos={galleryPhotos} />
+        <AnimatedWave color="#00d4ff" />
 
-        <div className="w-full mt-10 mb-6">
-          <WaveDiv color="#00d4ff" />
+        <div className="mt-4">
+          <MixedLinks
+            links={activeLinks}
+            gap="gap-3"
+            renderTextLink={(link) => (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 hover:scale-[1.01]"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(0,212,255,0.08) 0%, rgba(0,30,80,0.4) 100%)',
+                  border: '1px solid rgba(0,212,255,0.18)',
+                  color: '#80e8ff',
+                }}
+              >
+                {link.title}
+              </a>
+            )}
+          />
+          <GallerySection photos={galleryPhotos} />
         </div>
 
+        <AnimatedWave color="#00d4ff" />
+
         {!profile.logo_removed && (
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4">
             <Logo dark />
           </div>
         )}
