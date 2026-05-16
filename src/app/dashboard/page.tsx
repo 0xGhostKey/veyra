@@ -16,6 +16,7 @@ import {
 import {
   SortableContext,
   verticalListSortingStrategy,
+  rectSortingStrategy,
   arrayMove,
   useSortable,
 } from '@dnd-kit/sortable'
@@ -181,14 +182,15 @@ export default function DashboardPage() {
     if (!error) setLinks(links.filter(l => l.id !== linkId))
   }
 
-  const handleGalleryMove = async (linkId: string, direction: 'up' | 'down') => {
+  const handleGalleryDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
     const galleryPhotos = links.filter(l => l.link_type === 'gallery')
-    const idx = galleryPhotos.findIndex(l => l.id === linkId)
-    const newIdx = direction === 'up' ? idx - 1 : idx + 1
-    if (newIdx < 0 || newIdx >= galleryPhotos.length) return
-    const reordered = [...galleryPhotos];
-    [reordered[idx], reordered[newIdx]] = [reordered[newIdx], reordered[idx]]
-    setLinks(links.map(l => { if (l.link_type !== 'gallery') return l; return { ...l, sort_order: reordered.findIndex(r => r.id === l.id) } }))
+    const oldIdx = galleryPhotos.findIndex(l => l.id === active.id)
+    const newIdx = galleryPhotos.findIndex(l => l.id === over.id)
+    const reordered = arrayMove(galleryPhotos, oldIdx, newIdx)
+    const otherLinks = links.filter(l => l.link_type !== 'gallery')
+    setLinks([...otherLinks, ...reordered.map((l, i) => ({ ...l, sort_order: i }))])
     await Promise.all(reordered.map((l, i) => supabase.from('links').update({ sort_order: i }).eq('id', l.id)))
   }
 
@@ -460,33 +462,19 @@ export default function DashboardPage() {
                 className="text-[13px] text-[#d4af37] hover:text-[#e8cc6a] transition-colors">+ 写真を追加する</button>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-2">
-              {galleryPhotos.map((photo, idx) => (
-                <div key={photo.id} className="relative group">
-                  <div className="rounded-xl overflow-hidden [transform:translateZ(0)]" style={{ aspectRatio: '5/7' }}>
-                    <img src={photo.image_url!} alt="" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="absolute inset-0 rounded-xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
-                    <div className="flex gap-1">
-                      <button onClick={() => handleGalleryMove(photo.id, 'up')} disabled={idx === 0}
-                        className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 disabled:opacity-30 transition-colors">
-                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                      </button>
-                      <button onClick={() => handleGalleryMove(photo.id, 'down')} disabled={idx === galleryPhotos.length - 1}
-                        className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 disabled:opacity-30 transition-colors">
-                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                      </button>
-                    </div>
-                    <button onClick={() => handleDeleteGalleryPhoto(photo.id)}
-                      className="w-7 h-7 bg-red-500/50 rounded-lg flex items-center justify-center hover:bg-red-500/80 transition-colors">
-                      <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                      </svg>
-                    </button>
-                  </div>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleGalleryDragEnd}>
+              <SortableContext items={galleryPhotos.map(p => p.id)} strategy={rectSortingStrategy}>
+                <div className="grid grid-cols-3 gap-2">
+                  {galleryPhotos.map((photo) => (
+                    <SortableGalleryCell
+                      key={photo.id}
+                      photo={photo}
+                      onDelete={handleDeleteGalleryPhoto}
+                    />
+                  ))}
                 </div>
-              ))}
-            </div>
+              </SortableContext>
+            </DndContext>
           )}
         </section>
 
@@ -508,6 +496,52 @@ export default function DashboardPage() {
         )}
 
       </main>
+    </div>
+  )
+}
+
+// ── Sortable gallery cell ──
+
+function SortableGalleryCell({
+  photo,
+  onDelete,
+}: {
+  photo: { id: string; image_url: string | null }
+  onDelete: (id: string) => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: photo.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 50 : undefined,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative group">
+      <div className="rounded-xl overflow-hidden [transform:translateZ(0)]" style={{ aspectRatio: '5/7' }}>
+        <img src={photo.image_url!} alt="" className="w-full h-full object-cover" />
+      </div>
+      {/* drag handle — long-press on mobile, hover on desktop */}
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute top-1.5 left-1.5 w-6 h-6 bg-black/50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing touch-none"
+      >
+        <svg className="w-3.5 h-3.5 text-white/70" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M7 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+        </svg>
+      </div>
+      {/* delete button */}
+      <button
+        onClick={() => onDelete(photo.id)}
+        className="absolute top-1.5 right-1.5 w-6 h-6 bg-black/50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/80 transition-all"
+      >
+        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+      </button>
     </div>
   )
 }
