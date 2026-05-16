@@ -31,6 +31,22 @@ function Snowflake({ size, color, opacity }: { size: number; color: string; opac
   )
 }
 
+// Faint star dots for depth
+const STARS = [
+  { left: '6%',  top: '5%',  r: 1.0, color: '#90ffd8' },
+  { left: '17%', top: '2%',  r: 0.7, color: '#c0a0ff' },
+  { left: '29%', top: '12%', r: 1.2, color: '#90ffd8' },
+  { left: '48%', top: '4%',  r: 0.9, color: '#c0a0ff' },
+  { left: '63%', top: '9%',  r: 1.1, color: '#90ffd8' },
+  { left: '78%', top: '3%',  r: 0.8, color: '#c0a0ff' },
+  { left: '90%', top: '15%', r: 1.0, color: '#90ffd8' },
+  { left: '38%', top: '20%', r: 0.7, color: '#c0a0ff' },
+  { left: '12%', top: '28%', r: 0.9, color: '#90ffd8' },
+  { left: '72%', top: '25%', r: 1.1, color: '#c0a0ff' },
+  { left: '55%', top: '33%', r: 0.8, color: '#90ffd8' },
+  { left: '24%', top: '42%', r: 0.6, color: '#c0a0ff' },
+]
+
 const FLAKES = [
   { left: '3%',  size: 12, dur: 10,  delay: 0,   op: 0.6  },
   { left: '11%', size: 8,  dur: 14,  delay: 2,   op: 0.45 },
@@ -73,6 +89,17 @@ export default function SnowAuroraTheme({ profile, links }: Props) {
           50%       { transform: translateY(-6px) rotate(20deg); opacity: 0.65; }
         }
       `}</style>
+
+      {/* Star layer */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        {STARS.map((s, i) => (
+          <div key={i} style={{
+            position: 'absolute', left: s.left, top: s.top,
+            width: s.r * 2, height: s.r * 2, borderRadius: '50%',
+            background: s.color, opacity: 0.4,
+          }} />
+        ))}
+      </div>
 
       {/* Falling snowflakes */}
       <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>

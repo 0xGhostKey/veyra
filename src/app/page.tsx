@@ -360,7 +360,7 @@ export default function HomePage() {
             >
               {/* Card body */}
               <div
-                className="h-[220px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
+                className="w-full h-[220px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
                 style={{ background: theme.bg }}
               >
                 {'topDecor' in theme && theme.topDecor && (

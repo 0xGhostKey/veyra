@@ -8,33 +8,35 @@ type Props = {
   links: Link[]
 }
 
-function HexCell({ size, color, opacity }: { size: number; color: string; opacity: number }) {
+function HexCell({ size, color }: { size: number; color: string }) {
   const pts = [0, 60, 120, 180, 240, 300].map((deg) => {
     const r = (deg - 30) * Math.PI / 180
     return `${size / 2 + (size / 2 - 1.5) * Math.cos(r)},${size / 2 + (size / 2 - 1.5) * Math.sin(r)}`
   }).join(' ')
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', filter: `drop-shadow(0 0 5px ${color})` }}>
-      <polygon points={pts} fill={color} fillOpacity={opacity * 0.18} stroke={color} strokeWidth="1.3" strokeOpacity={opacity} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', filter: `drop-shadow(0 0 4px ${color})` }}>
+      <polygon points={pts} fill={color} fillOpacity={0.14} stroke={color} strokeWidth="1.2" strokeOpacity={1} />
     </svg>
   )
 }
 
 const HEXES = [
-  { left: '1%',  dur: 21, delay: 0,    size: 24, op: 0.8,  drift: 16  },
-  { left: '7%',  dur: 27, delay: 5.5,  size: 16, op: 0.6,  drift: -14 },
-  { left: '14%', dur: 18, delay: 2,    size: 28, op: 0.9,  drift: 20  },
-  { left: '21%', dur: 25, delay: 9.5,  size: 18, op: 0.7,  drift: -18 },
-  { left: '28%', dur: 20, delay: 4.5,  size: 26, op: 0.85, drift: 14  },
-  { left: '36%', dur: 30, delay: 13,   size: 14, op: 0.55, drift: -22 },
-  { left: '43%', dur: 17, delay: 1,    size: 30, op: 0.95, drift: 18  },
-  { left: '51%', dur: 23, delay: 8,    size: 18, op: 0.75, drift: -12 },
-  { left: '59%', dur: 19, delay: 5,    size: 24, op: 0.85, drift: 22  },
-  { left: '66%', dur: 26, delay: 11,   size: 16, op: 0.65, drift: -16 },
-  { left: '73%', dur: 21, delay: 3.5,  size: 22, op: 0.8,  drift: 14  },
-  { left: '80%', dur: 28, delay: 8.5,  size: 26, op: 0.7,  drift: -20 },
-  { left: '87%', dur: 18, delay: 14,   size: 18, op: 0.9,  drift: 16  },
-  { left: '94%', dur: 24, delay: 7,    size: 14, op: 0.75, drift: -14 },
+  { left: '2%',  top: '6%',  size: 28, dur: 5.5, delay: 0   },
+  { left: '12%', top: '22%', size: 20, dur: 6.8, delay: 1.6 },
+  { left: '5%',  top: '56%', size: 24, dur: 4.8, delay: 3.3 },
+  { left: '18%', top: '74%', size: 18, dur: 7.5, delay: 0.8 },
+  { left: '29%', top: '11%', size: 32, dur: 5.3, delay: 2.4 },
+  { left: '37%', top: '42%', size: 22, dur: 4.3, delay: 5.0 },
+  { left: '45%', top: '80%', size: 26, dur: 6.8, delay: 1.8 },
+  { left: '53%', top: '7%',  size: 20, dur: 5.2, delay: 3.6 },
+  { left: '61%', top: '35%', size: 34, dur: 8.0, delay: 0.9 },
+  { left: '67%', top: '62%', size: 22, dur: 4.7, delay: 2.7 },
+  { left: '75%', top: '19%', size: 26, dur: 6.3, delay: 1.5 },
+  { left: '82%', top: '49%', size: 18, dur: 5.8, delay: 4.3 },
+  { left: '87%', top: '77%', size: 30, dur: 5.0, delay: 0.4 },
+  { left: '93%', top: '29%', size: 20, dur: 7.2, delay: 2.9 },
+  { left: '23%', top: '91%', size: 24, dur: 5.4, delay: 5.7 },
+  { left: '71%', top: '91%', size: 22, dur: 6.7, delay: 3.9 },
 ]
 
 export default function ChromeVoidTheme({ profile, links }: Props) {
@@ -47,11 +49,9 @@ export default function ChromeVoidTheme({ profile, links }: Props) {
     <>
       <style>{`
         html, body { background-color: #03040a !important; }
-        @keyframes hexRiseVoid {
-          0%   { transform: translateY(105vh) translateX(0px) rotate(0deg); opacity: 0; }
-          8%   { opacity: 1; }
-          90%  { opacity: 1; }
-          100% { transform: translateY(-60px) translateX(var(--drift)) rotate(60deg); opacity: 0; }
+        @keyframes hexPulseVoid {
+          0%, 100% { opacity: 0; }
+          35%, 65%  { opacity: 0.7; }
         }
         @keyframes orbitVoid {
           from { transform: rotate(0deg); }
@@ -67,20 +67,19 @@ export default function ChromeVoidTheme({ profile, links }: Props) {
         }
       `}</style>
 
-      {/* Floating hex cells */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+      {/* Pulsing hex grid */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         {HEXES.map((h, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              bottom: '-60px',
               left: h.left,
-              '--drift': `${h.drift}px`,
-              animation: `hexRiseVoid ${h.dur}s linear ${h.delay}s infinite`,
-            } as React.CSSProperties}
+              top: h.top,
+              animation: `hexPulseVoid ${h.dur}s ease-in-out ${h.delay}s infinite`,
+            }}
           >
-            <HexCell size={h.size} color={accentBright} opacity={h.op} />
+            <HexCell size={h.size} color={accentBright} />
           </div>
         ))}
       </div>

@@ -31,6 +31,22 @@ function Snowflake({ size, color, opacity }: { size: number; color: string; opac
   )
 }
 
+// Faint star dots for depth (darker on light bg)
+const STARS = [
+  { left: '5%',  top: '6%',  r: 1.1 },
+  { left: '16%', top: '2%',  r: 0.8 },
+  { left: '28%', top: '13%', r: 1.2 },
+  { left: '47%', top: '5%',  r: 0.9 },
+  { left: '61%', top: '10%', r: 1.0 },
+  { left: '77%', top: '3%',  r: 0.7 },
+  { left: '89%', top: '16%', r: 1.1 },
+  { left: '36%', top: '21%', r: 0.8 },
+  { left: '11%', top: '29%', r: 0.9 },
+  { left: '70%', top: '26%', r: 1.0 },
+  { left: '53%', top: '34%', r: 0.7 },
+  { left: '22%', top: '43%', r: 0.6 },
+]
+
 const FLAKES = [
   { left: '4%',  size: 13, dur: 10,  delay: 0,   op: 0.55 },
   { left: '13%', size: 8,  dur: 14,  delay: 2,   op: 0.4  },
@@ -74,8 +90,19 @@ export default function SnowPowderTheme({ profile, links }: Props) {
         }
       `}</style>
 
+      {/* Star layer */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        {STARS.map((s, i) => (
+          <div key={i} style={{
+            position: 'absolute', left: s.left, top: s.top,
+            width: s.r * 2, height: s.r * 2, borderRadius: '50%',
+            background: '#3060c0', opacity: 0.3,
+          }} />
+        ))}
+      </div>
+
       {/* Falling snowflakes */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
         {FLAKES.map((f, i) => (
           <div key={i} style={{
             position: 'absolute', top: '-30px', left: f.left,
@@ -87,7 +114,7 @@ export default function SnowPowderTheme({ profile, links }: Props) {
         ))}
       </div>
 
-      <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 2 }}>
 
         {/* Top decorative snowflake */}
         <div className="flex justify-center mb-6" style={{ animation: 'topFlakeFloat 5s ease-in-out infinite' }}>
