@@ -22,6 +22,15 @@ import OceanArcticTheme from '@/themes/ocean_arctic'
 import SnowNightTheme from '@/themes/snow_night'
 import SnowAuroraTheme from '@/themes/snow_aurora'
 import SnowPowderTheme from '@/themes/snow_powder'
+import EmberRedTheme from '@/themes/ember_red'
+import EmberAshTheme from '@/themes/ember_ash'
+import EmberGoldTheme from '@/themes/ember_gold'
+import BotanicalMossTheme from '@/themes/botanical_moss'
+import BotanicalIvoryTheme from '@/themes/botanical_ivory'
+import BotanicalEarthTheme from '@/themes/botanical_earth'
+import GlitchGreenTheme from '@/themes/glitch_green'
+import GlitchWhiteTheme from '@/themes/glitch_white'
+import GlitchRedTheme from '@/themes/glitch_red'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -106,9 +115,18 @@ const THEME_BODY_CSS: Record<string, string> = {
   ocean_abyss: `html, body { background-color: #020c14 !important; }`,
   ocean_lagoon: `html, body { background-color: #02100e !important; }`,
   ocean_arctic: `html, body { background-color: #04080e !important; }`,
-  snow_night:   `html, body { background-color: #020615 !important; }`,
-  snow_aurora:  `html, body { background-color: #08060f !important; }`,
-  snow_powder:  `html, body { background-color: #f0f5ff !important; }`,
+  snow_night:       `html, body { background-color: #020615 !important; }`,
+  snow_aurora:      `html, body { background-color: #08060f !important; }`,
+  snow_powder:      `html, body { background-color: #f0f5ff !important; }`,
+  ember_red:        `html, body { background-color: #0f0300 !important; }`,
+  ember_ash:        `html, body { background-color: #111010 !important; }`,
+  ember_gold:       `html, body { background-color: #0c0700 !important; }`,
+  botanical_moss:   `html, body { background-color: #080c05 !important; }`,
+  botanical_ivory:  `html, body { background-color: #f5f0e8 !important; }`,
+  botanical_earth:  `html, body { background-color: #1a1008 !important; }`,
+  glitch_green:     `html, body { background-color: #000800 !important; }`,
+  glitch_white:     `html, body { background-color: #0a0a0a !important; }`,
+  glitch_red:       `html, body { background-color: #080000 !important; }`,
 }
 
 function ThemeRenderer({
@@ -169,6 +187,24 @@ function ThemeRenderer({
             return <SnowAuroraTheme profile={profile} links={links} />
           case 'snow_powder':
             return <SnowPowderTheme profile={profile} links={links} />
+          case 'ember_red':
+            return <EmberRedTheme profile={profile} links={links} />
+          case 'ember_ash':
+            return <EmberAshTheme profile={profile} links={links} />
+          case 'ember_gold':
+            return <EmberGoldTheme profile={profile} links={links} />
+          case 'botanical_moss':
+            return <BotanicalMossTheme profile={profile} links={links} />
+          case 'botanical_ivory':
+            return <BotanicalIvoryTheme profile={profile} links={links} />
+          case 'botanical_earth':
+            return <BotanicalEarthTheme profile={profile} links={links} />
+          case 'glitch_green':
+            return <GlitchGreenTheme profile={profile} links={links} />
+          case 'glitch_white':
+            return <GlitchWhiteTheme profile={profile} links={links} />
+          case 'glitch_red':
+            return <GlitchRedTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }

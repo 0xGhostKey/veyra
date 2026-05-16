@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase'
 import ThemeCard from '@/components/ThemeCard'
 import { THEMES } from '@/themes'
 
-type Tab = 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow'
+type Tab = 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow' | 'ember' | 'botanical' | 'glitch'
 
 function tabForTheme(themeId: string): Tab {
   const theme = THEMES.find((t) => t.id === themeId)
@@ -18,6 +18,9 @@ function tabForTheme(themeId: string): Tab {
   if (theme.series === 'chrome') return 'chrome'
   if (theme.series === 'ocean') return 'ocean'
   if (theme.series === 'snow') return 'snow'
+  if (theme.series === 'ember') return 'ember'
+  if (theme.series === 'botanical') return 'botanical'
+  if (theme.series === 'glitch') return 'glitch'
   return 'free'
 }
 
@@ -116,13 +119,16 @@ export default function ThemesPage() {
     )
   }
 
-  const freeThemes = THEMES.filter((t) => t.series === 'free')
-  const neonThemes = THEMES.filter((t) => t.series === 'neon')
-  const luxuryThemes = THEMES.filter((t) => t.series === 'luxury')
-  const sakuraThemes = THEMES.filter((t) => t.series === 'sakura')
-  const chromeThemes = THEMES.filter((t) => t.series === 'chrome')
-  const oceanThemes = THEMES.filter((t) => t.series === 'ocean')
-  const snowThemes  = THEMES.filter((t) => t.series === 'snow')
+  const freeThemes     = THEMES.filter((t) => t.series === 'free')
+  const neonThemes     = THEMES.filter((t) => t.series === 'neon')
+  const luxuryThemes   = THEMES.filter((t) => t.series === 'luxury')
+  const sakuraThemes   = THEMES.filter((t) => t.series === 'sakura')
+  const chromeThemes   = THEMES.filter((t) => t.series === 'chrome')
+  const oceanThemes    = THEMES.filter((t) => t.series === 'ocean')
+  const snowThemes     = THEMES.filter((t) => t.series === 'snow')
+  const emberThemes    = THEMES.filter((t) => t.series === 'ember')
+  const botanicalThemes= THEMES.filter((t) => t.series === 'botanical')
+  const glitchThemes   = THEMES.filter((t) => t.series === 'glitch')
 
   const currentThemeName = THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme
 
@@ -132,8 +138,11 @@ export default function ThemesPage() {
     { key: 'luxury', label: 'Luxury' },
     { key: 'sakura', label: 'Sakura' },
     { key: 'chrome', label: 'Chrome' },
-    { key: 'ocean',  label: 'Ocean'  },
-    { key: 'snow',   label: 'Snow'   },
+    { key: 'ocean',    label: 'Ocean'    },
+    { key: 'snow',     label: 'Snow'     },
+    { key: 'ember',    label: 'Ember'    },
+    { key: 'botanical',label: 'Botanical'},
+    { key: 'glitch',   label: 'Glitch'   },
   ]
 
   const makeSeriesProgress = (themes: typeof THEMES) =>
@@ -552,6 +561,103 @@ export default function ThemesPage() {
             </div>
           </div>
         )}
+
+        {/* EMBER tab */}
+        {activeTab === 'ember' && (
+          <div>
+            <div className="flex items-start mb-6 px-1">
+              {makeSeriesProgress(emberThemes).map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#ff7700]' : 'text-gray-600'}`}>STEP {idx + 1}</span>
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${item.isOwned ? 'bg-[#ff7700] border-[#ff7700]' : 'bg-transparent border-white/20'}`}>
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>{item.theme.name}</span>
+                  </div>
+                  {idx < emberThemes.length - 1 && (
+                    <div className={`flex-1 h-px mt-[30px] mx-1 ${item.isOwned ? 'bg-[#ff7700]/40' : 'bg-white/10'}`} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(emberThemes).map((item, idx) => (
+                <ThemeCard key={item.theme.id} theme={item.theme} isSelected={selectedTheme === item.theme.id} isPurchased={item.isOwned} isPrerequisiteLocked={item.isPrerequisiteLocked} prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)} stepNumber={idx + 1} onSelect={handleSelectTheme} onPurchase={handlePurchaseTheme} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* BOTANICAL tab */}
+        {activeTab === 'botanical' && (
+          <div>
+            <div className="flex items-start mb-6 px-1">
+              {makeSeriesProgress(botanicalThemes).map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#7ec850]' : 'text-gray-600'}`}>STEP {idx + 1}</span>
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${item.isOwned ? 'bg-[#7ec850] border-[#7ec850]' : 'bg-transparent border-white/20'}`}>
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>{item.theme.name}</span>
+                  </div>
+                  {idx < botanicalThemes.length - 1 && (
+                    <div className={`flex-1 h-px mt-[30px] mx-1 ${item.isOwned ? 'bg-[#7ec850]/40' : 'bg-white/10'}`} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(botanicalThemes).map((item, idx) => (
+                <ThemeCard key={item.theme.id} theme={item.theme} isSelected={selectedTheme === item.theme.id} isPurchased={item.isOwned} isPrerequisiteLocked={item.isPrerequisiteLocked} prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)} stepNumber={idx + 1} onSelect={handleSelectTheme} onPurchase={handlePurchaseTheme} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* GLITCH tab */}
+        {activeTab === 'glitch' && (
+          <div>
+            <div className="flex items-start mb-6 px-1">
+              {makeSeriesProgress(glitchThemes).map((item, idx) => (
+                <Fragment key={item.theme.id}>
+                  <div className="flex flex-col items-center gap-1.5 flex-none">
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#00ff41]' : 'text-gray-600'}`}>STEP {idx + 1}</span>
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${item.isOwned ? 'bg-[#00ff41] border-[#00ff41]' : 'bg-transparent border-white/20'}`}>
+                      {item.isOwned ? (
+                        <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-white/30" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center w-[64px] leading-tight ${item.isOwned ? 'text-white' : 'text-gray-600'}`}>{item.theme.name}</span>
+                  </div>
+                  {idx < glitchThemes.length - 1 && (
+                    <div className={`flex-1 h-px mt-[30px] mx-1 ${item.isOwned ? 'bg-[#00ff41]/40' : 'bg-white/10'}`} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(glitchThemes).map((item, idx) => (
+                <ThemeCard key={item.theme.id} theme={item.theme} isSelected={selectedTheme === item.theme.id} isPurchased={item.isOwned} isPrerequisiteLocked={item.isPrerequisiteLocked} prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)} stepNumber={idx + 1} onSelect={handleSelectTheme} onPurchase={handlePurchaseTheme} />
+              ))}
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   )
