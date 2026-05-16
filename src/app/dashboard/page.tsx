@@ -549,8 +549,8 @@ function SortableGalleryCell({
         >
           <svg className="w-3 h-3 text-white" viewBox="0 0 20 20">
             <path fill="currentColor" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.003 10.003 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.003 10.003 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41Z" />
-            <circle cx="10" cy="10" r="2.8" fill="#000" />
-            <circle cx="10" cy="10" r="1.1" fill="currentColor" />
+            <circle cx="10" cy="10" r="3.3" fill="#000" />
+            <circle cx="10" cy="10" r="1.3" fill="currentColor" />
           </svg>
         </button>
         <button
