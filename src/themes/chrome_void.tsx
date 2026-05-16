@@ -16,14 +16,16 @@ export default function ChromeVoidTheme({ profile, links }: Props) {
     <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#03040a' }}>
       <style>{`html, body { background-color: #03040a !important; }`}</style>
       <div className="w-full max-w-md">
+        <div
+          className="h-px mb-8"
+          style={{ background: 'linear-gradient(90deg, transparent, #4090e0, transparent)' }}
+        />
+
         <div className="flex flex-col items-center mb-10">
           {profile.avatar_url ? (
             <div
               className="p-px rounded-full mb-4"
-              style={{
-                background: 'linear-gradient(135deg, #80b8f0, #2060b0, #80b8f0)',
-                boxShadow: '0 0 28px rgba(64, 144, 224, 0.4)',
-              }}
+              style={{ background: 'linear-gradient(135deg, #80b8f0, #2060b0, #80b8f0)' }}
             >
               <img
                 src={profile.avatar_url}
@@ -35,31 +37,21 @@ export default function ChromeVoidTheme({ profile, links }: Props) {
             <div
               className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
               style={{
-                background: '#060810',
-                border: '1px solid rgba(64, 144, 224, 0.4)',
-                boxShadow: '0 0 20px rgba(64, 144, 224, 0.15), inset 0 0 20px rgba(64, 144, 224, 0.05)',
+                background: 'linear-gradient(135deg, #060810, #0c1020)',
+                border: '1px solid rgba(64, 144, 224, 0.3)',
               }}
             >
-              <span
-                className="text-3xl font-bold"
-                style={{ color: '#80b8f0', textShadow: '0 0 12px rgba(64, 144, 224, 0.8)' }}
-              >
+              <span className="text-3xl font-bold" style={{ color: '#80b8f0' }}>
                 {(profile.display_name ?? 'U')[0].toUpperCase()}
               </span>
             </div>
           )}
-          <h1
-            className="text-2xl font-bold tracking-widest mb-2"
-            style={{ color: '#c0d8f0', textShadow: '0 0 16px rgba(64, 144, 224, 0.4)' }}
-          >
+          <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#c0d8f0' }}>
             {profile.display_name ?? 'No Name'}
           </h1>
           <div
-            className="w-16 h-px mb-3"
-            style={{
-              background: 'linear-gradient(90deg, transparent, #4090e0, transparent)',
-              boxShadow: '0 0 8px rgba(64, 144, 224, 0.6)',
-            }}
+            className="w-12 h-px mb-3"
+            style={{ background: 'linear-gradient(90deg, #2060b0, #80b8f0, #2060b0)' }}
           />
           {profile.bio && (
             <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#4870a0' }}>
@@ -77,22 +69,30 @@ export default function ChromeVoidTheme({ profile, links }: Props) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300"
+              className="group block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
               style={{
-                background: '#060810',
+                background: 'linear-gradient(135deg, #060810, #0c1020)',
                 border: '1px solid rgba(64, 144, 224, 0.25)',
                 color: '#80b8f0',
-                boxShadow: '0 0 12px rgba(64, 144, 224, 0.06)',
               }}
             >
-              {link.title}
+              <span
+                className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(64,144,224,0.08), transparent)' }}
+              />
+              <span className="relative">{link.title}</span>
             </a>
           )}
         />
         <GallerySection photos={galleryPhotos} />
 
+        <div
+          className="h-px mt-10 mb-6"
+          style={{ background: 'linear-gradient(90deg, transparent, #4090e0, transparent)' }}
+        />
+
         {!profile.logo_removed && (
-          <div className="mt-10 flex justify-center">
+          <div className="flex justify-center">
             <Logo dark />
           </div>
         )}
