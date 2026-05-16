@@ -8,117 +8,148 @@ type Props = {
   links: Link[]
 }
 
-function PrismShard({ color, opacity, skew }: { color: string; opacity: number; skew: number }) {
+function HexCell({ size, color, opacity }: { size: number; color: string; opacity: number }) {
+  const pts = [0, 60, 120, 180, 240, 300].map((deg) => {
+    const r = (deg - 30) * Math.PI / 180
+    return `${size / 2 + (size / 2 - 1) * Math.cos(r)},${size / 2 + (size / 2 - 1) * Math.sin(r)}`
+  }).join(' ')
   return (
-    <svg width="6" height="18" viewBox="0 0 6 18" style={{ display: 'block' }}>
-      <polygon points={`${skew},0 6,0 ${6 - skew},18 0,18`} fill={color} fillOpacity={opacity} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block' }}>
+      <polygon points={pts} fill="none" stroke={color} strokeWidth="0.8" strokeOpacity={opacity} />
     </svg>
   )
 }
 
-const SHARDS = [
-  { left: '4%',  dur: 16, delay: 0,    op: 0.65, drift: 16,  rot: 130, skew: 1 },
-  { left: '9%',  dur: 21, delay: 2.8,  op: 0.5,  drift: -22, rot: 200, skew: 2 },
-  { left: '15%', dur: 13, delay: 1.4,  op: 0.75, drift: 24,  rot: 95,  skew: 1 },
-  { left: '20%', dur: 19, delay: 6.2,  op: 0.55, drift: -14, rot: 155, skew: 2 },
-  { left: '26%', dur: 11, delay: 3.6,  op: 0.7,  drift: 20,  rot: 180, skew: 1 },
-  { left: '31%', dur: 22, delay: 8,    op: 0.4,  drift: -26, rot: 115, skew: 2 },
-  { left: '37%', dur: 17, delay: 0.4,  op: 0.6,  drift: 28,  rot: 245, skew: 1 },
-  { left: '42%', dur: 15, delay: 9.8,  op: 0.8,  drift: -18, rot: 75,  skew: 2 },
-  { left: '48%', dur: 20, delay: 4.6,  op: 0.55, drift: 22,  rot: 165, skew: 1 },
-  { left: '53%', dur: 12, delay: 2,    op: 0.7,  drift: -24, rot: 125, skew: 2 },
-  { left: '59%', dur: 18, delay: 7,    op: 0.6,  drift: 18,  rot: 195, skew: 1 },
-  { left: '64%', dur: 16, delay: 3.4,  op: 0.75, drift: -20, rot: 105, skew: 2 },
-  { left: '70%', dur: 13, delay: 9,    op: 0.5,  drift: 26,  rot: 175, skew: 1 },
-  { left: '75%', dur: 21, delay: 0.8,  op: 0.65, drift: -16, rot: 140, skew: 2 },
-  { left: '81%', dur: 15, delay: 5.2,  op: 0.8,  drift: 20,  rot: 220, skew: 1 },
-  { left: '86%', dur: 19, delay: 12,   op: 0.5,  drift: -28, rot: 90,  skew: 2 },
-  { left: '91%', dur: 17, delay: 7.4,  op: 0.7,  drift: 24,  rot: 180, skew: 1 },
-  { left: '96%', dur: 13, delay: 4,    op: 0.85, drift: -22, rot: 115, skew: 2 },
+const HEXES = [
+  { left: '4%',  dur: 22, delay: 0,    size: 18, op: 0.6,  drift: 14  },
+  { left: '10%', dur: 28, delay: 6,    size: 12, op: 0.4,  drift: -12 },
+  { left: '17%', dur: 17, delay: 2.5,  size: 22, op: 0.7,  drift: 18  },
+  { left: '24%', dur: 25, delay: 9,    size: 14, op: 0.5,  drift: -16 },
+  { left: '32%', dur: 19, delay: 4,    size: 20, op: 0.65, drift: 12  },
+  { left: '40%', dur: 30, delay: 12,   size: 10, op: 0.35, drift: -20 },
+  { left: '47%', dur: 16, delay: 1.5,  size: 24, op: 0.75, drift: 16  },
+  { left: '55%', dur: 23, delay: 7.5,  size: 12, op: 0.55, drift: -10 },
+  { left: '63%', dur: 18, delay: 5,    size: 18, op: 0.65, drift: 20  },
+  { left: '70%', dur: 26, delay: 10,   size: 10, op: 0.45, drift: -14 },
+  { left: '77%', dur: 20, delay: 3,    size: 16, op: 0.6,  drift: 12  },
+  { left: '84%', dur: 29, delay: 8,    size: 20, op: 0.5,  drift: -18 },
+  { left: '90%', dur: 17, delay: 13,   size: 14, op: 0.7,  drift: 14  },
+  { left: '96%', dur: 24, delay: 6.5,  size: 10, op: 0.55, drift: -12 },
 ]
 
 export default function ChromePlatinumTheme({ profile, links }: Props) {
   const activeLinks = links.filter((l) => l.link_type === 'text')
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
+  const accent = '#dce4ec'
 
   return (
     <>
       <style>{`
         html, body { background-color: #08090c !important; }
-        @keyframes shardDriftPlatinum {
-          0%   { transform: translateY(-30px) translateX(0px) rotate(0deg); opacity: 0; }
+        @keyframes hexRisePlatinum {
+          0%   { transform: translateY(105vh) translateX(0px) rotate(0deg); opacity: 0; }
           8%   { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translateY(105vh) translateX(var(--drift)) rotate(var(--rot)); opacity: 0; }
+          90%  { opacity: 1; }
+          100% { transform: translateY(-60px) translateX(var(--drift)) rotate(60deg); opacity: 0; }
+        }
+        @keyframes scanPlatinum {
+          0%   { top: -2px; opacity: 0; }
+          3%   { opacity: 1; }
+          97%  { opacity: 0.8; }
+          100% { top: 100vh; opacity: 0; }
+        }
+        @keyframes orbitPlatinum {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes orbitRevPlatinum {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(-360deg); }
         }
         @keyframes platinumShimmer {
-          0%, 100% { box-shadow: 0 0 12px rgba(220,228,236,0.25), 0 0 35px rgba(220,228,236,0.08); }
-          50%       { box-shadow: 0 0 24px rgba(220,228,236,0.5), 0 0 60px rgba(220,228,236,0.2), 0 0 90px rgba(220,228,236,0.08); }
+          0%, 100% { box-shadow: 0 0 14px rgba(220,228,236,0.3), 0 0 40px rgba(220,228,236,0.1); }
+          50%       { box-shadow: 0 0 28px rgba(220,228,236,0.6), 0 0 70px rgba(220,228,236,0.22); }
         }
       `}</style>
 
-      {/* Prism shards overlay */}
+      {/* Floating hex cells */}
       <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
-        {SHARDS.map((s, i) => (
+        {HEXES.map((h, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              top: '-30px',
-              left: s.left,
-              '--drift': `${s.drift}px`,
-              '--rot': `${s.rot}deg`,
-              animation: `shardDriftPlatinum ${s.dur}s ease-in-out ${s.delay}s infinite`,
+              bottom: '-60px',
+              left: h.left,
+              '--drift': `${h.drift}px`,
+              animation: `hexRisePlatinum ${h.dur}s linear ${h.delay}s infinite`,
             } as React.CSSProperties}
           >
-            <PrismShard color="#dce4ec" opacity={s.op} skew={s.skew} />
+            <HexCell size={h.size} color={accent} opacity={h.op} />
           </div>
         ))}
+
+        {/* Scan line */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            height: 2,
+            background: `linear-gradient(to right, transparent, ${accent}80, ${accent}, ${accent}80, transparent)`,
+            boxShadow: `0 0 14px ${accent}, 0 0 35px ${accent}50`,
+            animation: 'scanPlatinum 6s linear 2s infinite',
+          }}
+        />
       </div>
 
       <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#08090c', overflowX: 'hidden' }}>
         <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
-          <div
-            className="h-px mb-8"
-            style={{ background: 'linear-gradient(90deg, transparent, #b0bac4, transparent)' }}
-          />
+          <div className="h-px mb-8" style={{ background: `linear-gradient(90deg, transparent, #b0bac4, transparent)` }} />
 
           <div className="flex flex-col items-center mb-10">
-            {profile.avatar_url ? (
-              <div
-                className="p-px rounded-full mb-4"
-                style={{
-                  background: 'linear-gradient(135deg, #dce4ec, #808090, #dce4ec)',
-                  animation: 'platinumShimmer 3s ease-in-out infinite',
-                }}
-              >
-                <img
-                  src={profile.avatar_url}
-                  alt={profile.display_name ?? 'avatar'}
-                  className="w-24 h-24 rounded-full object-cover"
-                />
+            <div className="relative mb-4" style={{ width: 112, height: 112 }}>
+              <div style={{ position: 'absolute', inset: -10, animation: 'orbitPlatinum 8s linear infinite' }}>
+                <svg width="100%" height="100%" viewBox="0 0 132 132">
+                  <circle cx="66" cy="66" r="60" fill="none" stroke={accent} strokeWidth="0.8" strokeDasharray="6 5" strokeOpacity="0.4" />
+                </svg>
               </div>
-            ) : (
-              <div
-                className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
-                style={{
-                  background: 'linear-gradient(135deg, #0f1014, #141620)',
-                  border: '1px solid #404860',
-                  animation: 'platinumShimmer 3s ease-in-out infinite',
-                }}
-              >
-                <span className="text-3xl font-bold" style={{ color: '#dce4ec' }}>
-                  {(profile.display_name ?? 'U')[0].toUpperCase()}
-                </span>
+              <div style={{ position: 'absolute', inset: -4, animation: 'orbitRevPlatinum 5s linear infinite' }}>
+                <svg width="100%" height="100%" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="56" fill="none" stroke={accent} strokeWidth="0.6" strokeDasharray="3 8" strokeOpacity="0.25" />
+                </svg>
               </div>
-            )}
+
+              {profile.avatar_url ? (
+                <div
+                  className="absolute inset-0 p-px rounded-full"
+                  style={{
+                    background: `linear-gradient(135deg, #dce4ec, #808090, #dce4ec)`,
+                    animation: 'platinumShimmer 3s ease-in-out infinite',
+                  }}
+                >
+                  <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
+                </div>
+              ) : (
+                <div
+                  className="absolute inset-0 rounded-full flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #0f1014, #141620)',
+                    border: `1px solid #404860`,
+                    animation: 'platinumShimmer 3s ease-in-out infinite',
+                  }}
+                >
+                  <span className="text-3xl font-bold" style={{ color: accent }}>
+                    {(profile.display_name ?? 'U')[0].toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
+
             <h1 className="text-2xl font-bold tracking-widest mb-2" style={{ color: '#eef2f6' }}>
               {profile.display_name ?? 'No Name'}
             </h1>
-            <div
-              className="w-12 h-px mb-3"
-              style={{ background: 'linear-gradient(90deg, #505870, #c0c8d8, #505870)' }}
-            />
+            <div className="w-12 h-px mb-3" style={{ background: `linear-gradient(90deg, #505870, #c0c8d8, #505870)` }} />
             {profile.bio && (
               <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#607080' }}>
                 {profile.bio}
@@ -138,13 +169,13 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
                 className="group block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #0f1014, #141620)',
-                  border: '1px solid rgba(220,228,236,0.15)',
-                  color: '#dce4ec',
+                  border: `1px solid rgba(220,228,236,0.15)`,
+                  color: accent,
                 }}
               >
                 <span
                   className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(220,228,236,0.08), transparent)' }}
+                  style={{ background: `linear-gradient(90deg, transparent, rgba(220,228,236,0.08), transparent)` }}
                 />
                 <span className="relative">{link.title}</span>
               </a>
@@ -152,10 +183,7 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
           />
           <GallerySection photos={galleryPhotos} />
 
-          <div
-            className="h-px mt-10 mb-6"
-            style={{ background: 'linear-gradient(90deg, transparent, #b0bac4, transparent)' }}
-          />
+          <div className="h-px mt-10 mb-6" style={{ background: `linear-gradient(90deg, transparent, #b0bac4, transparent)` }} />
 
           {!profile.logo_removed && (
             <div className="flex justify-center">

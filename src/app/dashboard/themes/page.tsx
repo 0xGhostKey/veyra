@@ -265,7 +265,7 @@ export default function ThemesPage() {
 
             {/* Series description */}
             <p className="text-[12px] text-gray-600 mb-4 text-center">
-              各ステップ ¥500 — 順番に解除していくシリーズ
+              各ステップ ¥300 — 順番に解除していくシリーズ
             </p>
 
             {/* Neon theme cards */}
@@ -333,7 +333,7 @@ export default function ThemesPage() {
             </div>
 
             <p className="text-[12px] text-gray-600 mb-4 text-center">
-              各ステップ ¥500 — 順番に解除していくシリーズ
+              各ステップ ¥300 — 順番に解除していくシリーズ
             </p>
 
             <div className="flex flex-col gap-3">
@@ -385,7 +385,7 @@ export default function ThemesPage() {
                 </Fragment>
               ))}
             </div>
-            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥500 — 順番に解除していくシリーズ</p>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
             <div className="flex flex-col gap-3">
               {makeSeriesProgress(sakuraThemes).map((item, idx) => (
                 <ThemeCard
@@ -435,7 +435,7 @@ export default function ThemesPage() {
                 </Fragment>
               ))}
             </div>
-            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥500 — 順番に解除していくシリーズ</p>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
             <div className="flex flex-col gap-3">
               {makeSeriesProgress(chromeThemes).map((item, idx) => (
                 <ThemeCard
@@ -484,7 +484,7 @@ export default function ThemesPage() {
                 </Fragment>
               ))}
             </div>
-            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥600 — 順番に解除していくシリーズ</p>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
             <div className="flex flex-col gap-3">
               {makeSeriesProgress(snowThemes).map((item, idx) => (
                 <ThemeCard
@@ -534,7 +534,7 @@ export default function ThemesPage() {
                 </Fragment>
               ))}
             </div>
-            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥500 — 順番に解除していくシリーズ</p>
+            <p className="text-[12px] text-gray-600 mb-4 text-center">各ステップ ¥300 — 順番に解除していくシリーズ</p>
             <div className="flex flex-col gap-3">
               {makeSeriesProgress(oceanThemes).map((item, idx) => (
                 <ThemeCard
