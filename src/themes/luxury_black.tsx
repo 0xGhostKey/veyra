@@ -13,7 +13,7 @@ export default function LuxuryBlackTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-16 px-4" style={{ background: '#0a0a0a' }}>
+    <div className="min-h-screen flex flex-col items-center pt-8 pb-16 px-4" style={{ background: '#0a0a0a' }}>
       <style>{`html, body { background-color: #0a0a0a !important; }`}</style>
       <div className="w-full max-w-sm">
         {/* Outer frame */}

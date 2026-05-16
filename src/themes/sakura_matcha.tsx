@@ -13,8 +13,8 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
   const galleryPhotos = links.filter((l) => l.link_type === 'gallery')
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#0a100a' }}>
-      <style>{`html, body { background-color: #0a100a !important; }`}</style>
+    <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#0d2010' }}>
+      <style>{`html, body { background-color: #0d2010 !important; }`}</style>
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-10">
           {profile.avatar_url ? (
@@ -33,7 +33,7 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
               className="p-0.5 rounded-full mb-4"
               style={{ background: 'linear-gradient(135deg, #f080b0, #c04080)' }}
             >
-              <div className="w-24 h-24 rounded-full flex items-center justify-center" style={{ background: '#0f180f' }}>
+              <div className="w-24 h-24 rounded-full flex items-center justify-center" style={{ background: '#0a1808' }}>
                 <span className="text-3xl font-bold" style={{ color: '#f080b0' }}>
                   {(profile.display_name ?? 'U')[0].toUpperCase()}
                 </span>
@@ -66,7 +66,7 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
               rel="noopener noreferrer"
               className="block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 hover:scale-[1.01]"
               style={{
-                background: '#0f180f',
+                background: '#0a1808',
                 border: '1px solid rgba(240, 128, 176, 0.3)',
                 color: '#f080b0',
                 boxShadow: '0 2px 12px rgba(240, 128, 176, 0.08)',

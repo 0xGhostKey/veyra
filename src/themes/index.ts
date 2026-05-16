@@ -151,6 +151,18 @@ export const THEMES: ThemeDefinition[] = [
     prerequisiteId: null,
   },
   {
+    id: 'chrome_gold',
+    name: 'Chrome Gold',
+    description: 'ディープブラック×バーニッシュゴールドの金属光沢テーマ',
+    price: 500,
+    isFree: false,
+    isAnimated: false,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CHROME_GOLD ?? null,
+    previewColors: ['#0c0a00', '#c8a830', '#e8d060'],
+    series: 'chrome',
+    prerequisiteId: 'chrome_silver',
+  },
+  {
     id: 'chrome_platinum',
     name: 'Chrome Platinum',
     description: 'ディープブラック×プラチナホワイトの純粋な金属感',
@@ -160,7 +172,7 @@ export const THEMES: ThemeDefinition[] = [
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_CHROME_PLATINUM ?? null,
     previewColors: ['#08090c', '#dce4ec', '#8090a0'],
     series: 'chrome',
-    prerequisiteId: 'chrome_silver',
+    prerequisiteId: 'chrome_gold',
   },
   {
     id: 'chrome_void',

@@ -15,7 +15,7 @@ export default function LuxuryIvoryTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`html, body { background-color: #f8f5ef !important; }`}</style>
-      <div className="min-h-screen flex flex-col items-center py-16 px-4" style={{ background: '#f8f5ef' }}>
+      <div className="min-h-screen flex flex-col items-center pt-8 pb-16 px-4" style={{ background: '#f8f5ef' }}>
         <div className="w-full max-w-sm">
           {/* Outer frame */}
           <div style={{ border: '1px solid rgba(160,120,64,0.3)', padding: '2px' }}>

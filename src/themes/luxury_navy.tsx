@@ -15,7 +15,7 @@ export default function LuxuryNavyTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`html, body { background-color: #0a0f1e !important; }`}</style>
-      <div className="min-h-screen flex flex-col items-center py-16 px-4" style={{ background: '#0a0f1e' }}>
+      <div className="min-h-screen flex flex-col items-center pt-8 pb-16 px-4" style={{ background: '#0a0f1e' }}>
         <div className="w-full max-w-sm">
           {/* Outer frame */}
           <div style={{ border: '1px solid rgba(200,169,110,0.22)', padding: '2px' }}>

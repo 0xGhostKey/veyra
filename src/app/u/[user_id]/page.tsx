@@ -13,6 +13,7 @@ import SakuraWhiteTheme from '@/themes/sakura_white'
 import SakuraDuskTheme from '@/themes/sakura_dusk'
 import SakuraMatchaTheme from '@/themes/sakura_matcha'
 import ChromeSilverTheme from '@/themes/chrome_silver'
+import ChromeGoldTheme from '@/themes/chrome_gold'
 import ChromePlatinumTheme from '@/themes/chrome_platinum'
 import ChromeVoidTheme from '@/themes/chrome_void'
 import type { Profile, Link } from '@/types'
@@ -93,6 +94,7 @@ const THEME_BODY_CSS: Record<string, string> = {
   sakura_dusk: `html, body { background-color: #13090d !important; }`,
   sakura_matcha: `html, body { background-color: #0a100a !important; }`,
   chrome_silver: `html, body { background-color: #0e0f11 !important; }`,
+  chrome_gold: `html, body { background-color: #0c0a00 !important; }`,
   chrome_platinum: `html, body { background-color: #08090c !important; }`,
   chrome_void: `html, body { background-color: #03040a !important; }`,
 }
@@ -137,6 +139,8 @@ function ThemeRenderer({
             return <SakuraMatchaTheme profile={profile} links={links} />
           case 'chrome_silver':
             return <ChromeSilverTheme profile={profile} links={links} />
+          case 'chrome_gold':
+            return <ChromeGoldTheme profile={profile} links={links} />
           case 'chrome_platinum':
             return <ChromePlatinumTheme profile={profile} links={links} />
           case 'chrome_void':
