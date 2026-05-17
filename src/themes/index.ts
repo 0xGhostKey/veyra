@@ -339,6 +339,20 @@ export const THEMES: ThemeDefinition[] = [
     prerequisiteId: 'glitch_white',
   },
 
+  // ── Premium standalone ──
+  {
+    id: 'premium_aura',
+    name: 'Aura',
+    description: '虹色のプリズム光輪が回転する、唯一無二のプレミアムテーマ',
+    price: 3000,
+    isFree: false,
+    isAnimated: true,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PREMIUM_AURA ?? null,
+    previewColors: ['#030308', '#ff0080', '#8800ff', '#00ffcc'],
+    series: 'premium',
+    prerequisiteId: null,
+  },
+
   // ── Snow series ──
   {
     id: 'snow_night',

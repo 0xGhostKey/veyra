@@ -58,6 +58,6 @@ export type ThemeDefinition = {
   isAnimated: boolean
   stripePriceId: string | null
   previewColors: string[]
-  series: 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow' | 'ember' | 'botanical' | 'glitch'
+  series: 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow' | 'ember' | 'botanical' | 'glitch' | 'premium'
   prerequisiteId: string | null
 }

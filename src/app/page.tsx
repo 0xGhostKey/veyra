@@ -18,7 +18,6 @@ const CAROUSEL_AVATARS = [
   { initial: 'J', name: '@jun_style',   color: 'linear-gradient(135deg, #2dd4bf, #0891b2)' },
 ]
 
-// Matches actual themes in src/themes/index.ts
 const THEME_PREVIEWS = [
   {
     id: 'sakura_white',
@@ -69,6 +68,23 @@ const THEME_PREVIEWS = [
     linkBg: 'rgba(199,125,255,0.06)',
     linkText: 'rgba(199,125,255,0.9)',
     cardBg: '#0d0014',
+    light: false,
+  },
+  {
+    id: 'premium_aura',
+    name: 'Aura',
+    series: 'Premium',
+    badge: '✦',
+    accent: '#c000ff',
+    bg: '#030308',
+    avatarBg: 'conic-gradient(from 30deg, #ff0080, #8800ff, #0055ff, #00ffcc, #ffcc00)',
+    avatarBorder: 'transparent',
+    textColor: 'rgba(255,255,255,0.95)',
+    subColor: 'rgba(255,255,255,0.4)',
+    linkBorder: 'rgba(255,255,255,0.09)',
+    linkBg: 'rgba(255,255,255,0.04)',
+    linkText: 'rgba(255,255,255,0.85)',
+    cardBg: '#080810',
     light: false,
   },
   {
@@ -212,40 +228,41 @@ const THEME_PREVIEWS = [
 
 const USE_CASES = [
   {
-    icon: '🔗',
+    num: '01',
     title: 'リンクをまとめたい',
     desc: 'Instagram・X・LINE・連絡先…バラバラなリンクをひとつのページに。SNSのプロフィールに貼るだけで完成。',
   },
   {
-    icon: '🎨',
+    num: '02',
     title: 'おしゃれなページを持ちたい',
     desc: '桜・海・ネオン・クロームなど、テーマを選ぶだけでデザインが完成。自分のスタイルに合った見た目に。',
   },
   {
-    icon: '💼',
+    num: '03',
     title: '仕事・副業に使いたい',
     desc: 'ポートフォリオ・問い合わせ先・予約ページをひとまとめにして、そのまま名刺代わりに。',
   },
 ]
 
 const SERIES = [
-  { name: 'Sakura',   desc: '桜・花びらアニメ',  colors: ['#fdf6f8', '#e87ca8', '#0d2010'] },
-  { name: 'Ocean',    desc: '海・波アニメ',       colors: ['#04080e', '#40e0c0', '#a0d8f8'] },
-  { name: 'Neon',     desc: 'サイバー・発光',     colors: ['#08000f', '#c77dff', '#ffb300'] },
-  { name: 'Chrome',   desc: 'メタリック',         colors: ['#060810', '#b0bcd0', '#c8a830'] },
-  { name: 'Luxury',   desc: '上品・エレガント',   colors: ['#f8f5ef', '#0a0a0a', '#0d1428'] },
-  { name: 'Ember',    desc: '炎・火花アニメ',     colors: ['#0f0300', '#ff4400', '#ffd060'] },
-  { name: 'Botanical',desc: '植物・葉っぱアニメ', colors: ['#080c05', '#7ec850', '#f5f0e8'] },
-  { name: 'Glitch',   desc: 'デジタルノイズ',     colors: ['#000800', '#00ff41', '#ff0020'] },
+  { name: 'Sakura',    desc: '桜・花びらアニメ',   color: '#e87ca8' },
+  { name: 'Ocean',     desc: '海・波アニメ',        color: '#40e0c0' },
+  { name: 'Neon',      desc: 'サイバー・発光',      color: '#c77dff' },
+  { name: 'Chrome',    desc: 'メタリック',           color: '#b0bcd0' },
+  { name: 'Luxury',    desc: '上品・エレガント',    color: '#d4af37' },
+  { name: 'Snow',      desc: '雪・結晶アニメ',      color: '#a8d4ff' },
+  { name: 'Ember',     desc: '炎・火花アニメ',      color: '#ff6600' },
+  { name: 'Botanical', desc: '植物・葉っぱアニメ',  color: '#7ec850' },
+  { name: 'Glitch',    desc: 'デジタルノイズ',      color: '#00ff41' },
 ]
 
 const FEATURES = [
-  { icon: '🎨', title: '豊富なテーマ',       desc: 'シリーズ続々追加中。気分やブランドに合ったデザインを選べます。' },
-  { icon: '✦',  title: 'アニメーション対応', desc: '花びら・波など、動くテーマで個性を際立たせます。' },
-  { icon: '🔗', title: 'リンクをまとめる',   desc: 'SNS・サイト・ECなどのリンクをひとつのページに集約。' },
-  { icon: '🖼', title: '画像ギャラリー',     desc: '写真をそのままリンクに。ビジュアルで訴求できます。' },
-  { icon: '💳', title: '買い切り課金',       desc: '月額ゼロ。一度買えばずっと使えます。' },
-  { icon: '📱', title: 'スマホ最適化',       desc: 'どのデバイスでも美しく表示されます。' },
+  { title: '豊富なテーマ',       desc: 'シリーズ続々追加中。気分やブランドに合ったデザインを選べます。' },
+  { title: 'アニメーション対応', desc: '花びら・波など、動くテーマで個性を際立たせます。' },
+  { title: 'リンクをまとめる',   desc: 'SNS・サイト・ECなどのリンクをひとつのページに集約。' },
+  { title: '画像ギャラリー',     desc: '写真をそのままリンクに。ビジュアルで訴求できます。' },
+  { title: '買い切り課金',       desc: '月額ゼロ。一度買えばずっと使えます。' },
+  { title: 'スマホ最適化',       desc: 'どのデバイスでも美しく表示されます。' },
 ]
 
 export default function HomePage() {
@@ -270,6 +287,8 @@ export default function HomePage() {
         .theme-card-scroll > * {
           scroll-snap-align: start;
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── Nav ── */}
@@ -299,8 +318,18 @@ export default function HomePage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="px-5 pt-16 pb-6 text-center">
-        <div className="max-w-md mx-auto">
+      <section className="relative px-5 pt-16 pb-6 text-center overflow-hidden">
+        {/* Ambient glow */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+          style={{
+            width: 600, height: 280,
+            background: 'radial-gradient(ellipse at center top, rgba(168,85,247,0.10) 0%, rgba(99,102,241,0.05) 45%, transparent 70%)',
+            filter: 'blur(30px)',
+          }}
+        />
+
+        <div className="max-w-md mx-auto relative">
           <h1 className="text-[2.8rem] leading-[1.15] font-bold mb-5 tracking-tight">
             あなたらしさを、
             <br />
@@ -354,9 +383,9 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500 text-center mb-10">クリエイターから普通の人まで、リンクをまとめたい人なら誰でも。</p>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {USE_CASES.map(({ icon, title, desc }) => (
-              <div key={title} className="rounded-2xl border border-white/8 bg-white/[0.03] p-5">
-                <div className="text-[26px] mb-4">{icon}</div>
+            {USE_CASES.map(({ num, title, desc }) => (
+              <div key={num} className="rounded-2xl border border-white/8 bg-white/[0.03] p-5">
+                <div className="text-[10px] font-bold tracking-[0.2em] text-gray-700 mb-4">{num}</div>
                 <h3 className="font-bold text-[15px] mb-2">{title}</h3>
                 <p className="text-[13px] text-gray-500 leading-relaxed">{desc}</p>
               </div>
@@ -372,28 +401,32 @@ export default function HomePage() {
           <h2 className="text-[24px] font-bold text-center mb-2">テーマはシリーズ展開</h2>
           <p className="text-[13px] text-gray-500 text-center mb-8">各シリーズに複数のテーマ。続々追加中です。</p>
 
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-            {SERIES.map(({ name, desc, colors }) => (
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {SERIES.map(({ name, desc, color }) => (
               <div
                 key={name}
-                className="flex items-center gap-4 rounded-2xl border border-white/6 bg-white/[0.02] px-5 py-4"
+                className="flex items-center gap-4 rounded-xl border border-white/6 bg-white/[0.02] px-5 py-3.5 relative overflow-hidden"
               >
-                {/* Mini color swatches */}
-                <div className="flex gap-1 flex-none">
-                  {colors.map((c) => (
-                    <div
-                      key={c}
-                      className="w-5 h-5 rounded-full border border-white/10 flex-none"
-                      style={{ background: c }}
-                    />
-                  ))}
-                </div>
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}80, transparent)` }} />
+                <div className="w-1 h-7 rounded-full flex-none" style={{ background: color }} />
                 <div>
-                  <div className="text-[14px] font-bold">{name}</div>
-                  <div className="text-[12px] text-gray-500">{desc}</div>
+                  <div className="text-[13px] font-semibold">{name}</div>
+                  <div className="text-[11px] text-gray-600">{desc}</div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Premium callout */}
+          <div className="mt-2 rounded-xl p-px" style={{ background: 'linear-gradient(135deg, #ff008080, #8800ff80, #0055ff80, #00ffcc80)' }}>
+            <div className="flex items-center gap-4 rounded-[11px] px-5 py-3.5 relative overflow-hidden" style={{ background: '#0a0a12' }}>
+              <div className="w-1 h-7 rounded-full flex-none" style={{ background: 'linear-gradient(to bottom, #ff0080, #8800ff, #00ffcc)' }} />
+              <div className="flex-1">
+                <div className="text-[13px] font-semibold">Premium</div>
+                <div className="text-[11px] text-gray-600">シリーズ外の限定テーマ · ¥3,000</div>
+              </div>
+              <span className="text-[10px] font-bold tracking-widest text-gray-600">✦</span>
+            </div>
           </div>
         </div>
       </section>
@@ -406,7 +439,7 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500">好みのスタイルを見つけてください。</p>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4 theme-card-scroll">
+        <div className="flex gap-4 overflow-x-auto pb-4 theme-card-scroll no-scrollbar">
           <div className="flex-none w-5" aria-hidden="true" />
           {THEME_PREVIEWS.map((theme) => (
             <div
@@ -486,9 +519,9 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500 text-center mb-10">必要なものが、すべて揃っています</p>
 
           <div className="grid grid-cols-2 gap-3">
-            {FEATURES.map(({ icon, title, desc }) => (
+            {FEATURES.map(({ title, desc }) => (
               <div key={title} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                <div className="text-[22px] mb-3">{icon}</div>
+                <div className="w-5 h-px mb-4" style={{ background: 'rgba(255,255,255,0.15)' }} />
                 <h3 className="font-bold text-[13px] mb-1">{title}</h3>
                 <p className="text-[12px] text-gray-500 leading-relaxed">{desc}</p>
               </div>
@@ -560,21 +593,20 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Theme purchase */}
+            {/* Theme series */}
             <div className="rounded-3xl border border-white/10 p-6 bg-white/[0.03]">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-base font-bold">テーマ購入</h3>
+                <h3 className="text-base font-bold">テーマシリーズ</h3>
                 <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/8 text-gray-400 font-bold tracking-wide">買い切り</span>
               </div>
               <p className="text-[36px] font-bold tracking-tight mb-0.5">
-                ¥300<span className="text-base text-gray-500 font-normal">〜</span>
+                ¥300<span className="text-base text-gray-500 font-normal"> / 件</span>
               </p>
               <p className="text-[11px] text-gray-600 mb-6">テーマごとに一括購入。月額費用なし。</p>
               <ul className="space-y-3 text-[13px] text-gray-400 mb-6">
                 {[
                   '好きなテーマを選んで購入',
-                  'Sakura / Ocean / Neon / Chrome / Luxury',
-                  'ロゴ削除オプションあり',
+                  'Sakura / Ocean / Neon / Chrome / Luxury / Ember / Botanical / Glitch など',
                   '一度買えばずっと使える',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2.5">
@@ -589,6 +621,40 @@ export default function HomePage() {
               >
                 テーマを選ぶ
               </Link>
+            </div>
+
+            {/* Premium */}
+            <div className="rounded-3xl p-px" style={{ background: 'linear-gradient(135deg, #ff0080, #8800ff, #0055ff, #00ffcc)' }}>
+              <div className="rounded-[23px] p-6" style={{ background: '#08080f' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-base font-bold">プレミアムテーマ</h3>
+                  <span className="text-[9px] px-2 py-0.5 rounded-full font-bold tracking-wide" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>限定</span>
+                </div>
+                <p className="text-[36px] font-bold tracking-tight mb-0.5">
+                  ¥3,000<span className="text-base font-normal" style={{ color: 'rgba(255,255,255,0.35)' }}> / 件</span>
+                </p>
+                <p className="text-[11px] mb-6" style={{ color: 'rgba(255,255,255,0.35)' }}>シリーズに縛られない、一点ものの体験。</p>
+                <ul className="space-y-3 text-[13px] mb-6" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  {[
+                    'プリズム光輪・フルカラーアニメ',
+                    'どのシリーズにもない独自ビジュアル',
+                    '一度買えばずっと使える',
+                    '新テーマ随時追加予定',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2.5">
+                      <span className="flex-none w-4 h-4 rounded-full flex items-center justify-center text-[9px]" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}>✦</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/signup"
+                  className="block w-full py-3.5 text-center font-bold rounded-2xl text-[13px] text-black hover:opacity-90 active:scale-[0.98] transition-all"
+                  style={{ background: 'linear-gradient(135deg, #ff0080, #8800ff, #0055ff, #00ffcc)' }}
+                >
+                  テーマを見る
+                </Link>
+              </div>
             </div>
           </div>
         </div>

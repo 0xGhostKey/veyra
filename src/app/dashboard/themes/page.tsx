@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase'
 import ThemeCard from '@/components/ThemeCard'
 import { THEMES } from '@/themes'
 
-type Tab = 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow' | 'ember' | 'botanical' | 'glitch'
+type Tab = 'free' | 'neon' | 'luxury' | 'sakura' | 'chrome' | 'ocean' | 'snow' | 'ember' | 'botanical' | 'glitch' | 'premium'
 
 function tabForTheme(themeId: string): Tab {
   const theme = THEMES.find((t) => t.id === themeId)
@@ -21,6 +21,7 @@ function tabForTheme(themeId: string): Tab {
   if (theme.series === 'ember') return 'ember'
   if (theme.series === 'botanical') return 'botanical'
   if (theme.series === 'glitch') return 'glitch'
+  if (theme.series === 'premium') return 'premium'
   return 'free'
 }
 
@@ -129,6 +130,7 @@ export default function ThemesPage() {
   const emberThemes    = THEMES.filter((t) => t.series === 'ember')
   const botanicalThemes= THEMES.filter((t) => t.series === 'botanical')
   const glitchThemes   = THEMES.filter((t) => t.series === 'glitch')
+  const premiumThemes  = THEMES.filter((t) => t.series === 'premium')
 
   const currentThemeName = THEMES.find((t) => t.id === selectedTheme)?.name ?? selectedTheme
 
@@ -143,6 +145,7 @@ export default function ThemesPage() {
     { key: 'ember',    label: 'Ember'    },
     { key: 'botanical',label: 'Botanical'},
     { key: 'glitch',   label: 'Glitch'   },
+    { key: 'premium',  label: '✦ Premium' },
   ]
 
   const makeSeriesProgress = (themes: typeof THEMES) =>
@@ -653,6 +656,37 @@ export default function ThemesPage() {
             <div className="flex flex-col gap-3">
               {makeSeriesProgress(glitchThemes).map((item, idx) => (
                 <ThemeCard key={item.theme.id} theme={item.theme} isSelected={selectedTheme === item.theme.id} isPurchased={item.isOwned} isPrerequisiteLocked={item.isPrerequisiteLocked} prerequisiteName={getPrerequisiteName(item.theme.prerequisiteId)} stepNumber={idx + 1} onSelect={handleSelectTheme} onPurchase={handlePurchaseTheme} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* PREMIUM tab */}
+        {activeTab === 'premium' && (
+          <div>
+            {/* Premium header */}
+            <div className="rounded-2xl p-px mb-6" style={{ background: 'linear-gradient(135deg, #ff0080, #8800ff, #0055ff, #00ffcc)' }}>
+              <div className="rounded-[15px] px-5 py-4" style={{ background: '#08080f' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[11px] font-bold tracking-widest" style={{ color: 'rgba(255,255,255,0.4)' }}>PREMIUM EXCLUSIVE</span>
+                </div>
+                <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                  シリーズに縛られない、一点ものの体験。買い切り ¥3,000
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {makeSeriesProgress(premiumThemes).map((item) => (
+                <ThemeCard
+                  key={item.theme.id}
+                  theme={item.theme}
+                  isSelected={selectedTheme === item.theme.id}
+                  isPurchased={item.isOwned}
+                  isPrerequisiteLocked={false}
+                  onSelect={handleSelectTheme}
+                  onPurchase={handlePurchaseTheme}
+                />
               ))}
             </div>
           </div>

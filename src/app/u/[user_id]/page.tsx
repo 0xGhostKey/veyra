@@ -31,6 +31,7 @@ import BotanicalEarthTheme from '@/themes/botanical_earth'
 import GlitchGreenTheme from '@/themes/glitch_green'
 import GlitchWhiteTheme from '@/themes/glitch_white'
 import GlitchRedTheme from '@/themes/glitch_red'
+import PremiumAuraTheme from '@/themes/premium_aura'
 import type { Profile, Link } from '@/types'
 
 type Props = {
@@ -127,6 +128,7 @@ const THEME_BODY_CSS: Record<string, string> = {
   glitch_green:     `html, body { background-color: #000800 !important; }`,
   glitch_white:     `html, body { background-color: #0a0a0a !important; }`,
   glitch_red:       `html, body { background-color: #080000 !important; }`,
+  premium_aura:     `html, body { background-color: #030308 !important; }`,
 }
 
 function ThemeRenderer({
@@ -205,6 +207,8 @@ function ThemeRenderer({
             return <GlitchWhiteTheme profile={profile} links={links} />
           case 'glitch_red':
             return <GlitchRedTheme profile={profile} links={links} />
+          case 'premium_aura':
+            return <PremiumAuraTheme profile={profile} links={links} />
           default:
             return <FreeBasicTheme profile={profile} links={links} />
         }
