@@ -6,30 +6,38 @@ import MixedLinks from '@/components/MixedLinks'
 type Props = { profile: Profile; links: Link[] }
 
 const SPARKS = [
-  { left: '3%',  size: 5, dur: 3.8, delay: 0,    color: '#ff3300' },
-  { left: '7%',  size: 7, dur: 4.5, delay: 0.5,  color: '#ff6600' },
-  { left: '11%', size: 4, dur: 3.5, delay: 1.3,  color: '#ff3300' },
-  { left: '15%', size: 8, dur: 5.0, delay: 0.2,  color: '#ff6600' },
-  { left: '19%', size: 5, dur: 4.6, delay: 2.1,  color: '#ff3300' },
-  { left: '23%', size: 6, dur: 3.9, delay: 0.8,  color: '#ff6600' },
-  { left: '27%', size: 9, dur: 4.8, delay: 3.4,  color: '#ff3300' },
-  { left: '31%', size: 4, dur: 3.3, delay: 1.6,  color: '#ff6600' },
-  { left: '35%', size: 7, dur: 5.2, delay: 0.4,  color: '#ff3300' },
-  { left: '39%', size: 5, dur: 4.1, delay: 4.0,  color: '#ff6600' },
-  { left: '43%', size: 8, dur: 3.7, delay: 2.5,  color: '#ff3300' },
-  { left: '47%', size: 6, dur: 4.9, delay: 0.9,  color: '#ff6600' },
-  { left: '51%', size: 4, dur: 3.4, delay: 3.8,  color: '#ff3300' },
-  { left: '55%', size: 9, dur: 5.1, delay: 1.1,  color: '#ff6600' },
-  { left: '59%', size: 5, dur: 4.3, delay: 0.3,  color: '#ff3300' },
-  { left: '63%', size: 7, dur: 3.6, delay: 5.2,  color: '#ff6600' },
-  { left: '67%', size: 4, dur: 4.7, delay: 2.0,  color: '#ff3300' },
-  { left: '71%', size: 8, dur: 5.4, delay: 0.6,  color: '#ff6600' },
-  { left: '75%', size: 6, dur: 3.8, delay: 3.1,  color: '#ff3300' },
-  { left: '79%', size: 9, dur: 4.5, delay: 1.4,  color: '#ff6600' },
-  { left: '83%', size: 5, dur: 3.2, delay: 4.7,  color: '#ff3300' },
-  { left: '87%', size: 7, dur: 5.0, delay: 0.7,  color: '#ff6600' },
-  { left: '91%', size: 4, dur: 4.2, delay: 2.8,  color: '#ff3300' },
-  { left: '95%', size: 6, dur: 3.6, delay: 6.0,  color: '#ff6600' },
+  { left: '3%',  size: 8,  dur: 3.8, delay: 0,    color: '#ff3300' },
+  { left: '7%',  size: 11, dur: 4.5, delay: 0.5,  color: '#ff6600' },
+  { left: '11%', size: 6,  dur: 3.5, delay: 1.3,  color: '#ff3300' },
+  { left: '15%', size: 13, dur: 5.0, delay: 0.2,  color: '#ff6600' },
+  { left: '19%', size: 8,  dur: 4.6, delay: 2.1,  color: '#ff3300' },
+  { left: '23%', size: 10, dur: 3.9, delay: 0.8,  color: '#ff6600' },
+  { left: '27%', size: 14, dur: 4.8, delay: 3.4,  color: '#ff3300' },
+  { left: '31%', size: 7,  dur: 3.3, delay: 1.6,  color: '#ff6600' },
+  { left: '35%', size: 11, dur: 5.2, delay: 0.4,  color: '#ff3300' },
+  { left: '39%', size: 9,  dur: 4.1, delay: 4.0,  color: '#ff6600' },
+  { left: '43%', size: 12, dur: 3.7, delay: 2.5,  color: '#ff3300' },
+  { left: '47%', size: 8,  dur: 4.9, delay: 0.9,  color: '#ff6600' },
+  { left: '51%', size: 6,  dur: 3.4, delay: 3.8,  color: '#ff3300' },
+  { left: '55%', size: 14, dur: 5.1, delay: 1.1,  color: '#ff6600' },
+  { left: '59%', size: 9,  dur: 4.3, delay: 0.3,  color: '#ff3300' },
+  { left: '63%', size: 11, dur: 3.6, delay: 5.2,  color: '#ff6600' },
+  { left: '67%', size: 7,  dur: 4.7, delay: 2.0,  color: '#ff3300' },
+  { left: '71%', size: 13, dur: 5.4, delay: 0.6,  color: '#ff6600' },
+  { left: '75%', size: 8,  dur: 3.8, delay: 3.1,  color: '#ff3300' },
+  { left: '79%', size: 12, dur: 4.5, delay: 1.4,  color: '#ff6600' },
+  { left: '83%', size: 9,  dur: 3.2, delay: 4.7,  color: '#ff3300' },
+  { left: '87%', size: 11, dur: 5.0, delay: 0.7,  color: '#ff6600' },
+  { left: '91%', size: 6,  dur: 4.2, delay: 2.8,  color: '#ff3300' },
+  { left: '95%', size: 10, dur: 3.6, delay: 6.0,  color: '#ff6600' },
+  { left: '5%',  size: 10, dur: 4.8, delay: 5.1,  color: '#ff6600' },
+  { left: '13%', size: 7,  dur: 3.3, delay: 7.3,  color: '#ff3300' },
+  { left: '29%', size: 12, dur: 5.5, delay: 4.3,  color: '#ff6600' },
+  { left: '41%', size: 8,  dur: 4.0, delay: 6.9,  color: '#ff3300' },
+  { left: '53%', size: 14, dur: 3.9, delay: 8.1,  color: '#ff6600' },
+  { left: '65%', size: 9,  dur: 4.6, delay: 3.6,  color: '#ff3300' },
+  { left: '77%', size: 11, dur: 3.4, delay: 7.5,  color: '#ff6600' },
+  { left: '93%', size: 7,  dur: 5.2, delay: 5.8,  color: '#ff3300' },
 ]
 
 export default function EmberRedTheme({ profile, links }: Props) {
@@ -39,22 +47,40 @@ export default function EmberRedTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`
-        html, body { background-color: #0f0300 !important; }
+        html, body { background-color: #050100 !important; }
         @keyframes sparkRise {
           0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-          8%   { opacity: 0.95; }
-          35%  { transform: translateY(-35vh) translateX(9px) scale(0.85); opacity: 0.72; }
-          65%  { transform: translateY(-68vh) translateX(-7px) scale(0.6); opacity: 0.36; }
-          100% { transform: translateY(-108vh) translateX(5px) scale(0.3); opacity: 0; }
+          5%   { opacity: 1; }
+          40%  { transform: translateY(-38vh) translateX(8px) scale(0.82); opacity: 0.85; }
+          70%  { transform: translateY(-72vh) translateX(-6px) scale(0.55); opacity: 0.42; }
+          100% { transform: translateY(-108vh) translateX(4px) scale(0.2); opacity: 0; }
         }
-        @keyframes emberGlow {
+        @keyframes avatarGlow {
           0%, 100% { box-shadow: 0 0 22px rgba(255,68,0,0.55); }
-          50%       { box-shadow: 0 0 44px rgba(255,119,0,0.95), 0 0 75px rgba(255,68,0,0.4); }
+          50%       { box-shadow: 0 0 48px rgba(255,119,0,0.95), 0 0 85px rgba(255,68,0,0.38); }
+        }
+        @keyframes heatPulse {
+          0%, 100% { opacity: 0.55; }
+          50%       { opacity: 0.92; }
         }
       `}</style>
 
+      {/* Bottom heat glow — radiates warmth from below */}
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, height: '40%',
+        background: 'radial-gradient(ellipse 100% 100% at 50% 100%, rgba(255,55,0,0.30) 0%, rgba(255,20,0,0.13) 45%, transparent 75%)',
+        pointerEvents: 'none', zIndex: 0,
+        animation: 'heatPulse 3.5s ease-in-out infinite',
+      }} />
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, height: '18%',
+        background: 'radial-gradient(ellipse 65% 100% at 50% 100%, rgba(255,120,0,0.24) 0%, transparent 100%)',
+        pointerEvents: 'none', zIndex: 0,
+        animation: 'heatPulse 2.2s ease-in-out infinite',
+      }} />
+
       {/* Spark overlay */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
         {SPARKS.map((s, i) => (
           <div
             key={i}
@@ -65,7 +91,8 @@ export default function EmberRedTheme({ profile, links }: Props) {
               width: s.size,
               height: s.size,
               borderRadius: '50%',
-              background: `radial-gradient(circle, ${s.color} 0%, ${s.color}aa 35%, transparent 70%)`,
+              background: s.color,
+              boxShadow: `0 0 ${s.size * 2}px ${s.color}, 0 0 ${s.size * 4}px ${s.color}66`,
               animation: `sparkRise ${s.dur}s ease-out ${s.delay}s infinite`,
               animationFillMode: 'backwards',
             }}
@@ -73,23 +100,23 @@ export default function EmberRedTheme({ profile, links }: Props) {
         ))}
       </div>
 
-      <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#0f0300', overflowX: 'hidden' }}>
-        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, transparent, #ff4400, transparent)' }} />
+      <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: 'radial-gradient(ellipse 150% 80% at 50% 100%, #200900 0%, #0f0300 45%, #050100 100%)', overflowX: 'hidden' }}>
+        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,80,0,0.55), transparent)' }} />
 
           <div className="flex flex-col items-center mb-10">
             <div className="relative mb-4" style={{ width: 96, height: 96 }}>
               {profile.avatar_url ? (
                 <div
                   className="absolute inset-0 p-px rounded-full"
-                  style={{ background: 'linear-gradient(135deg, #ff7700, #cc2200)', animation: 'emberGlow 2.5s ease-in-out infinite' }}
+                  style={{ background: 'linear-gradient(135deg, #ff7700, #cc2200)', animation: 'avatarGlow 2.5s ease-in-out infinite' }}
                 >
                   <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
                 <div
                   className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{ background: '#1a0800', border: '1px solid rgba(255,68,0,0.4)', animation: 'emberGlow 2.5s ease-in-out infinite' }}
+                  style={{ background: '#1a0800', border: '1px solid rgba(255,68,0,0.4)', animation: 'avatarGlow 2.5s ease-in-out infinite' }}
                 >
                   <span className="text-3xl font-bold" style={{ color: '#ff7700' }}>
                     {(profile.display_name ?? 'U')[0].toUpperCase()}
@@ -133,7 +160,7 @@ export default function EmberRedTheme({ profile, links }: Props) {
             )}
           />
           <GallerySection photos={galleryPhotos} />
-          <div className="h-px mt-10 mb-6" style={{ background: 'linear-gradient(90deg, transparent, #ff4400, transparent)' }} />
+          <div className="h-px mt-10 mb-6" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,80,0,0.55), transparent)' }} />
           <div className="flex justify-center">
             <Logo dark />
           </div>

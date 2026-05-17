@@ -24,7 +24,6 @@ function Leaf({ size, color, opacity }: { size: number; color: string; opacity: 
   )
 }
 
-// Leaf path for branch decoration (centered at 0,0, tip pointing up, ~13px tall, ~7px wide)
 function BranchLeaf({ color, opacity }: { color: string; opacity: number }) {
   return (
     <>
@@ -39,18 +38,22 @@ function BranchLeaf({ color, opacity }: { color: string; opacity: number }) {
 }
 
 const LEAVES = [
-  { left: '4%',  size: 26, dur: 9.0,  delay: 0,    opacity: 0.80 },
-  { left: '11%', size: 20, dur: 8.0,  delay: 1.8,  opacity: 0.70 },
-  { left: '18%', size: 30, dur: 11.5, delay: 0.4,  opacity: 0.75 },
-  { left: '25%', size: 22, dur: 8.5,  delay: 3.2,  opacity: 0.65 },
-  { left: '32%', size: 28, dur: 12.0, delay: 1.0,  opacity: 0.82 },
-  { left: '40%', size: 18, dur: 7.5,  delay: 5.5,  opacity: 0.72 },
-  { left: '48%', size: 24, dur: 10.0, delay: 0.7,  opacity: 0.78 },
-  { left: '56%', size: 32, dur: 9.0,  delay: 4.1,  opacity: 0.68 },
-  { left: '64%', size: 20, dur: 13.0, delay: 2.3,  opacity: 0.75 },
-  { left: '72%', size: 26, dur: 8.2,  delay: 0.5,  opacity: 0.80 },
-  { left: '80%', size: 22, dur: 10.5, delay: 6.8,  opacity: 0.70 },
-  { left: '88%', size: 18, dur: 11.5, delay: 3.6,  opacity: 0.76 },
+  { left: '2%',  size: 42, dur: 9.0,  delay: 0,    opacity: 0.90 },
+  { left: '8%',  size: 35, dur: 7.5,  delay: 2.2,  opacity: 0.82 },
+  { left: '14%', size: 50, dur: 11.0, delay: 0.7,  opacity: 0.95 },
+  { left: '20%', size: 38, dur: 8.8,  delay: 4.1,  opacity: 0.78 },
+  { left: '27%', size: 45, dur: 10.5, delay: 1.4,  opacity: 0.88 },
+  { left: '33%', size: 32, dur: 9.2,  delay: 6.3,  opacity: 0.80 },
+  { left: '40%', size: 55, dur: 12.0, delay: 0.3,  opacity: 0.92 },
+  { left: '47%', size: 40, dur: 8.0,  delay: 3.8,  opacity: 0.85 },
+  { left: '54%', size: 30, dur: 11.5, delay: 5.5,  opacity: 0.75 },
+  { left: '61%', size: 48, dur: 9.8,  delay: 1.0,  opacity: 0.90 },
+  { left: '68%', size: 36, dur: 7.8,  delay: 7.2,  opacity: 0.82 },
+  { left: '75%', size: 44, dur: 10.2, delay: 2.6,  opacity: 0.88 },
+  { left: '82%', size: 32, dur: 9.5,  delay: 4.9,  opacity: 0.78 },
+  { left: '88%', size: 50, dur: 11.8, delay: 0.8,  opacity: 0.92 },
+  { left: '93%', size: 38, dur: 8.5,  delay: 6.1,  opacity: 0.80 },
+  { left: '97%', size: 42, dur: 10.0, delay: 3.3,  opacity: 0.86 },
 ]
 
 const C = '#7ec850'
@@ -62,30 +65,44 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`
-        html, body { background-color: #080c05 !important; }
+        html, body { background-color: #070b04 !important; }
         @keyframes leafFall {
-          0%   { transform: translateY(-30px) translateX(0) rotate(-15deg); opacity: 0; }
-          8%   { opacity: 1; }
-          25%  { transform: translateY(24vh) translateX(22px) rotate(12deg); }
-          50%  { transform: translateY(52vh) translateX(-12px) rotate(-6deg); }
-          75%  { transform: translateY(78vh) translateX(18px) rotate(26deg); opacity: 0.65; }
-          100% { transform: translateY(110vh) translateX(5px) rotate(50deg); opacity: 0; }
+          0%   { transform: translateY(-50px) translateX(0) rotate(-20deg); opacity: 0; }
+          6%   { opacity: 1; }
+          25%  { transform: translateY(22vh) translateX(28px) rotate(15deg); }
+          50%  { transform: translateY(50vh) translateX(-18px) rotate(-8deg); }
+          75%  { transform: translateY(78vh) translateX(24px) rotate(32deg); opacity: 0.60; }
+          100% { transform: translateY(115vh) translateX(8px) rotate(55deg); opacity: 0; }
         }
-        @keyframes mossGlow {
+        @keyframes avatarGlow {
           0%, 100% { box-shadow: 0 0 22px rgba(126,200,80,0.42); }
-          50%       { box-shadow: 0 0 40px rgba(160,232,112,0.75), 0 0 66px rgba(126,200,80,0.28); }
+          50%       { box-shadow: 0 0 48px rgba(160,232,112,0.82), 0 0 75px rgba(126,200,80,0.28); }
         }
       `}</style>
 
+      {/* Top atmospheric fade */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, height: '22%',
+        background: 'linear-gradient(to bottom, #070b04 0%, transparent 100%)',
+        pointerEvents: 'none', zIndex: 0,
+      }} />
+      {/* Bottom atmospheric fade */}
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, height: '18%',
+        background: 'linear-gradient(to top, #070b04 0%, transparent 100%)',
+        pointerEvents: 'none', zIndex: 0,
+      }} />
+
       {/* Leaf particle overlay */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
         {LEAVES.map((l, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              top: '-30px',
+              top: '-50px',
               left: l.left,
+              filter: `drop-shadow(0 0 4px ${C}55)`,
               animation: `leafFall ${l.dur}s ease-in ${l.delay}s infinite`,
               animationFillMode: 'backwards',
             }}
@@ -95,61 +112,63 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
         ))}
       </div>
 
-      <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#080c05', overflowX: 'hidden' }}>
-        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: 'radial-gradient(ellipse 120% 70% at 50% 30%, #0e1c09 0%, #080c05 55%, #040703 100%)', overflowX: 'hidden' }}>
+        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 2 }}>
 
           {/* Branch decoration — header */}
           <div className="flex justify-center mb-6">
-            <svg width="240" height="48" viewBox="0 0 240 48">
-              {/* Main branch */}
-              <line x1="12" y1="24" x2="228" y2="24" stroke={C} strokeWidth="0.9" strokeOpacity="0.38" />
-              {/* Pair 1 @ x=48 — up */}
-              <g transform="translate(48,24)">
-                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.38} /></g>
-                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.32} /></g>
+            <svg width="320" height="72" viewBox="0 0 320 72">
+              <path d="M8 36 C55 30 100 42 130 36 C155 31 165 41 190 36 C220 31 260 42 312 36"
+                stroke={C} strokeWidth="1.2" strokeOpacity="0.44" fill="none"/>
+              <g transform="translate(55,36)">
+                <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.44} /></g>
+                <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.38} /></g>
               </g>
-              {/* Pair 2 @ x=92 — down */}
-              <g transform="translate(92,24)">
-                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.28} /></g>
-                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.24} /></g>
+              <g transform="translate(105,36)">
+                <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.28} /></g>
               </g>
-              {/* Center dot */}
-              <circle cx="120" cy="24" r="2.2" fill={C} fillOpacity="0.45" />
-              {/* Pair 3 @ x=148 — down (mirror of 2) */}
-              <g transform="translate(148,24)">
-                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.24} /></g>
-                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.28} /></g>
+              <g transform="translate(160,36)">
+                <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.52" />
+                <line x1="0" y1="0" x2="0" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.30" />
+                <g transform="translate(0,-18) rotate(0)"><BranchLeaf color={C} opacity={0.40} /></g>
+                <line x1="0" y1="0" x2="-6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.24" />
+                <g transform="translate(-6,-16) rotate(22)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <line x1="0" y1="0" x2="6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.24" />
+                <g transform="translate(6,-16) rotate(-22)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
-              {/* Pair 4 @ x=192 — up (mirror of 1) */}
-              <g transform="translate(192,24)">
-                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.32} /></g>
-                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.38} /></g>
+              <g transform="translate(215,36)">
+                <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.28} /></g>
+                <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.32} /></g>
+              </g>
+              <g transform="translate(265,36)">
+                <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.38} /></g>
+                <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.44} /></g>
               </g>
             </svg>
           </div>
 
-          {/* Avatar section */}
           <div className="flex flex-col items-center mb-10">
             <div className="relative mb-4" style={{ width: 96, height: 96 }}>
               {profile.avatar_url ? (
                 <div
                   className="absolute inset-0 p-px rounded-full"
-                  style={{ background: 'linear-gradient(135deg, #a0e870, #3a8020)', animation: 'mossGlow 2.8s ease-in-out infinite' }}
+                  style={{ background: 'linear-gradient(135deg, #a0e870, #3a8020)', animation: 'avatarGlow 2.8s ease-in-out infinite' }}
                 >
                   <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
                 <div
                   className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{ background: '#0d1408', border: '1px solid rgba(126,200,80,0.4)', animation: 'mossGlow 2.8s ease-in-out infinite' }}
+                  style={{ background: '#0d1408', border: '1px solid rgba(126,200,80,0.4)', animation: 'avatarGlow 2.8s ease-in-out infinite' }}
                 >
                   <span className="text-3xl font-bold" style={{ color: '#a0e870' }}>
                     {(profile.display_name ?? 'U')[0].toUpperCase()}
@@ -196,32 +215,41 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
 
           {/* Branch decoration — footer (inverted) */}
           <div className="flex justify-center mt-10 mb-6">
-            <svg width="240" height="48" viewBox="0 0 240 48">
-              <line x1="12" y1="24" x2="228" y2="24" stroke={C} strokeWidth="0.9" strokeOpacity="0.38" />
-              <g transform="translate(48,24)">
-                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.38} /></g>
-                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.32} /></g>
+            <svg width="320" height="72" viewBox="0 0 320 72">
+              <path d="M8 36 C55 42 100 30 130 36 C155 41 165 31 190 36 C220 41 260 30 312 36"
+                stroke={C} strokeWidth="1.2" strokeOpacity="0.44" fill="none"/>
+              <g transform="translate(55,36)">
+                <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.44} /></g>
+                <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.38} /></g>
               </g>
-              <g transform="translate(92,24)">
-                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.28} /></g>
-                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.24} /></g>
+              <g transform="translate(105,36)">
+                <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.28} /></g>
               </g>
-              <circle cx="120" cy="24" r="2.2" fill={C} fillOpacity="0.45" />
-              <g transform="translate(148,24)">
-                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.24} /></g>
-                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
-                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.28} /></g>
+              <g transform="translate(160,36)">
+                <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.52" />
+                <line x1="0" y1="0" x2="0" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.30" />
+                <g transform="translate(0,18) rotate(180)"><BranchLeaf color={C} opacity={0.40} /></g>
+                <line x1="0" y1="0" x2="-6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.24" />
+                <g transform="translate(-6,16) rotate(158)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <line x1="0" y1="0" x2="6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.24" />
+                <g transform="translate(6,16) rotate(-158)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
-              <g transform="translate(192,24)">
-                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.32} /></g>
-                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
-                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.38} /></g>
+              <g transform="translate(215,36)">
+                <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.28} /></g>
+                <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.28" />
+                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.32} /></g>
+              </g>
+              <g transform="translate(265,36)">
+                <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.38} /></g>
+                <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.32" />
+                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.44} /></g>
               </g>
             </svg>
           </div>
