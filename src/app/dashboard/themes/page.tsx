@@ -235,13 +235,13 @@ export default function ThemesPage() {
               {neonProgress.map((item, idx) => (
                 <Fragment key={item.theme.id}>
                   <div className="flex flex-col items-center gap-1.5 flex-none">
-                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#d4af37]' : 'text-gray-600'}`}>
+                    <span className={`text-[9px] font-bold tracking-widest ${item.isOwned ? 'text-[#ff00ff]' : 'text-gray-600'}`}>
                       STEP {idx + 1}
                     </span>
                     <div
                       className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
                         item.isOwned
-                          ? 'bg-[#d4af37] border-[#d4af37]'
+                          ? 'bg-[#ff00ff] border-[#ff00ff]'
                           : selectedTheme === item.theme.id
                           ? 'bg-white/10 border-white/40'
                           : 'bg-transparent border-white/20'
@@ -264,7 +264,7 @@ export default function ThemesPage() {
                   {idx < neonProgress.length - 1 && (
                     <div
                       className={`flex-1 h-px mt-[30px] mx-1 ${
-                        item.isOwned ? 'bg-[#d4af37]/40' : 'bg-white/10'
+                        item.isOwned ? 'bg-[#ff00ff]/40' : 'bg-white/10'
                       }`}
                     />
                   )}

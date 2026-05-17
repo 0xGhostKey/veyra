@@ -16,7 +16,7 @@ function SakuraFlower({ size, color, opacity = 1 }: { size: number; color: strin
         <g key={deg} transform={`rotate(${deg}, 10, 10)`}>
           {/* Petal: curves to left/right tip, then L commands make a sharp V-notch at outer tip */}
           <path
-            d="M10,10 C7.5,9 5.5,6 9.5,2.5 L10,4.5 L10.5,2.5 C14.5,6 12.5,9 10,10 Z"
+            d="M10,10 C8,9 6.5,6 9.5,2.5 L10,6 L10.5,2.5 C13.5,6 12,9 10,10 Z"
             fill={color}
             fillOpacity={opacity}
           />
