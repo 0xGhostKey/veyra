@@ -38,22 +38,22 @@ function BranchLeaf({ color, opacity }: { color: string; opacity: number }) {
 }
 
 const LEAVES = [
-  { left: '2%',  size: 42, dur: 9.0,  delay: 0,    opacity: 0.38 },
-  { left: '8%',  size: 35, dur: 7.5,  delay: 2.2,  opacity: 0.32 },
-  { left: '14%', size: 50, dur: 11.0, delay: 0.7,  opacity: 0.42 },
-  { left: '20%', size: 38, dur: 8.8,  delay: 4.1,  opacity: 0.28 },
-  { left: '27%', size: 45, dur: 10.5, delay: 1.4,  opacity: 0.36 },
-  { left: '33%', size: 32, dur: 9.2,  delay: 6.3,  opacity: 0.30 },
-  { left: '40%', size: 55, dur: 12.0, delay: 0.3,  opacity: 0.40 },
-  { left: '47%', size: 40, dur: 8.0,  delay: 3.8,  opacity: 0.34 },
-  { left: '54%', size: 30, dur: 11.5, delay: 5.5,  opacity: 0.26 },
-  { left: '61%', size: 48, dur: 9.8,  delay: 1.0,  opacity: 0.38 },
-  { left: '68%', size: 36, dur: 7.8,  delay: 7.2,  opacity: 0.32 },
-  { left: '75%', size: 44, dur: 10.2, delay: 2.6,  opacity: 0.36 },
-  { left: '82%', size: 32, dur: 9.5,  delay: 4.9,  opacity: 0.28 },
-  { left: '88%', size: 50, dur: 11.8, delay: 0.8,  opacity: 0.40 },
-  { left: '93%', size: 38, dur: 8.5,  delay: 6.1,  opacity: 0.32 },
-  { left: '97%', size: 42, dur: 10.0, delay: 3.3,  opacity: 0.36 },
+  { left: '2%',  size: 27, dur: 9.0,  delay: 0,    opacity: 0.28 },
+  { left: '8%',  size: 23, dur: 7.5,  delay: 2.2,  opacity: 0.24 },
+  { left: '14%', size: 33, dur: 11.0, delay: 0.7,  opacity: 0.30 },
+  { left: '20%', size: 25, dur: 8.8,  delay: 4.1,  opacity: 0.22 },
+  { left: '27%', size: 29, dur: 10.5, delay: 1.4,  opacity: 0.26 },
+  { left: '33%', size: 21, dur: 9.2,  delay: 6.3,  opacity: 0.24 },
+  { left: '40%', size: 36, dur: 12.0, delay: 0.3,  opacity: 0.28 },
+  { left: '47%', size: 26, dur: 8.0,  delay: 3.8,  opacity: 0.26 },
+  { left: '54%', size: 20, dur: 11.5, delay: 5.5,  opacity: 0.20 },
+  { left: '61%', size: 31, dur: 9.8,  delay: 1.0,  opacity: 0.28 },
+  { left: '68%', size: 23, dur: 7.8,  delay: 7.2,  opacity: 0.24 },
+  { left: '75%', size: 29, dur: 10.2, delay: 2.6,  opacity: 0.26 },
+  { left: '82%', size: 21, dur: 9.5,  delay: 4.9,  opacity: 0.22 },
+  { left: '88%', size: 33, dur: 11.8, delay: 0.8,  opacity: 0.28 },
+  { left: '93%', size: 25, dur: 8.5,  delay: 6.1,  opacity: 0.24 },
+  { left: '97%', size: 27, dur: 10.0, delay: 3.3,  opacity: 0.26 },
 ]
 
 const C = '#5a8040'
@@ -122,36 +122,36 @@ export default function BotanicalIvoryTheme({ profile, links }: Props) {
                 stroke={C} strokeWidth="1.2" strokeOpacity="0.36" fill="none"/>
               <g transform="translate(55,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.36} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
               <g transform="translate(105,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.24} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.20} /></g>
               </g>
               <g transform="translate(160,36)">
                 <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.40" />
                 <line x1="0" y1="0" x2="0" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.24" />
                 <g transform="translate(0,-18) rotate(0)"><BranchLeaf color={C} opacity={0.32} /></g>
                 <line x1="0" y1="0" x2="-6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(-6,-16) rotate(22)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(-6,-16) rotate(-37)"><BranchLeaf color={C} opacity={0.22} /></g>
                 <line x1="0" y1="0" x2="6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(6,-16) rotate(-22)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(6,-16) rotate(37)"><BranchLeaf color={C} opacity={0.22} /></g>
               </g>
               <g transform="translate(215,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.20} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.24} /></g>
               </g>
               <g transform="translate(265,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.30} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.36} /></g>
               </g>
             </svg>
           </div>
@@ -220,36 +220,36 @@ export default function BotanicalIvoryTheme({ profile, links }: Props) {
                 stroke={C} strokeWidth="1.2" strokeOpacity="0.36" fill="none"/>
               <g transform="translate(55,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.36} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
               <g transform="translate(105,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.24} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.20} /></g>
               </g>
               <g transform="translate(160,36)">
                 <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.40" />
                 <line x1="0" y1="0" x2="0" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.24" />
                 <g transform="translate(0,18) rotate(180)"><BranchLeaf color={C} opacity={0.32} /></g>
                 <line x1="0" y1="0" x2="-6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(-6,16) rotate(158)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(-6,16) rotate(-143)"><BranchLeaf color={C} opacity={0.22} /></g>
                 <line x1="0" y1="0" x2="6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(6,16) rotate(-158)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(6,16) rotate(143)"><BranchLeaf color={C} opacity={0.22} /></g>
               </g>
               <g transform="translate(215,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,-18) rotate(20)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.20} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,-18) rotate(-20)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.24} /></g>
               </g>
               <g transform="translate(265,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,18) rotate(160)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.30} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,18) rotate(-160)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.36} /></g>
               </g>
             </svg>
           </div>
