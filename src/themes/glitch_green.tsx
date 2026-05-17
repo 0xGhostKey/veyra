@@ -40,17 +40,26 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
           91% { text-shadow: none; transform: translateX(1px); }
           92% { transform: translateX(0); }
         }
+        @keyframes cursorBlink {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
       `}</style>
 
+      {/* Scanlines overlay */}
+      <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,65,0.03) 3px, rgba(0,255,65,0.03) 4px)',
+      }} />
+
       {/* Glitch bar overlay */}
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
         {BARS.map((b, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              left: 0,
-              right: 0,
+              left: 0, right: 0,
               top: b.top,
               height: b.height,
               background: '#00ff41',
@@ -63,35 +72,29 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
       </div>
 
       <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#000800', overflowX: 'hidden' }}>
-        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
-          {/* Top divider */}
+        <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 2 }}>
           <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,65,0.4), transparent)' }} />
 
-          {/* Avatar section */}
           <div className="flex flex-col items-center mb-10">
+            {/* Avatar with corner bracket decorations */}
             <div className="relative mb-4" style={{ width: 96, height: 96 }}>
+              {/* Corner brackets */}
+              <div style={{ position: 'absolute', top: -6, left: -6, width: 14, height: 14, borderTop: '2px solid #00ff41', borderLeft: '2px solid #00ff41' }} />
+              <div style={{ position: 'absolute', top: -6, right: -6, width: 14, height: 14, borderTop: '2px solid #00ff41', borderRight: '2px solid #00ff41' }} />
+              <div style={{ position: 'absolute', bottom: -6, left: -6, width: 14, height: 14, borderBottom: '2px solid #00ff41', borderLeft: '2px solid #00ff41' }} />
+              <div style={{ position: 'absolute', bottom: -6, right: -6, width: 14, height: 14, borderBottom: '2px solid #00ff41', borderRight: '2px solid #00ff41' }} />
+
               {profile.avatar_url ? (
                 <div
                   className="absolute inset-0 rounded-full"
-                  style={{
-                    border: '2px solid #00ff41',
-                    boxShadow: '0 0 15px rgba(0,255,65,0.4)',
-                  }}
+                  style={{ border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}
                 >
-                  <img
-                    src={profile.avatar_url}
-                    alt={profile.display_name ?? 'avatar'}
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                  <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
                 <div
                   className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{
-                    background: '#001500',
-                    border: '2px solid #00ff41',
-                    boxShadow: '0 0 15px rgba(0,255,65,0.4)',
-                  }}
+                  style={{ background: '#001500', border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}
                 >
                   <span className="text-3xl font-bold" style={{ color: '#00ff41' }}>
                     {(profile.display_name ?? 'U')[0].toUpperCase()}
@@ -99,18 +102,19 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
                 </div>
               )}
             </div>
+
             <h1
-              className="text-2xl font-bold tracking-widest mb-2"
-              style={{
-                color: '#00ff41',
-                animation: 'glitchText 6s ease infinite',
-              }}
+              className="text-2xl font-bold tracking-widest mb-1"
+              style={{ color: '#00ff41', fontFamily: 'monospace', animation: 'glitchText 6s ease infinite' }}
             >
               {profile.display_name ?? 'No Name'}
             </h1>
-            <div className="w-12 h-px mb-3" style={{ background: 'rgba(0,255,65,0.3)' }} />
+            {/* Blinking cursor */}
+            <span style={{ color: '#00ff41', fontFamily: 'monospace', fontSize: '1.2rem', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
+
+            <div className="w-12 h-px mb-3 mt-2" style={{ background: 'rgba(0,255,65,0.3)' }} />
             {profile.bio && (
-              <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#008020' }}>
+              <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#008020', fontFamily: 'monospace' }}>
                 {profile.bio}
               </p>
             )}
