@@ -10,26 +10,36 @@ function Leaf({ size, color, opacity }: { size: number; color: string; opacity: 
   const h = size
   return (
     <svg width={w} height={h} viewBox="0 0 16 28" style={{ display: 'block' }}>
-      {/* Main leaf body — elongated, pointed tip & base */}
       <path
         d="M8 1 C11 3 14 9 14 15 C14 21 12 25 8 27 C4 25 2 21 2 15 C2 9 5 3 8 1Z"
         fill={color}
         fillOpacity={opacity}
       />
-      {/* Central vein */}
       <line x1="8" y1="1" x2="8" y2="27" stroke={color} strokeOpacity={Math.min(opacity * 2.2, 1)} strokeWidth="0.9" />
-      {/* Upper side veins */}
       <line x1="8" y1="9"  x2="3"  y2="14" stroke={color} strokeOpacity={Math.min(opacity * 1.5, 1)} strokeWidth="0.55" />
       <line x1="8" y1="9"  x2="13" y2="14" stroke={color} strokeOpacity={Math.min(opacity * 1.5, 1)} strokeWidth="0.55" />
-      {/* Lower side veins */}
       <line x1="8" y1="16" x2="3"  y2="21" stroke={color} strokeOpacity={Math.min(opacity * 1.5, 1)} strokeWidth="0.55" />
       <line x1="8" y1="16" x2="13" y2="21" stroke={color} strokeOpacity={Math.min(opacity * 1.5, 1)} strokeWidth="0.55" />
     </svg>
   )
 }
 
+// Leaf path for branch decoration (centered at 0,0, tip pointing up, ~13px tall, ~7px wide)
+function BranchLeaf({ color, opacity }: { color: string; opacity: number }) {
+  return (
+    <>
+      <path
+        d="M0,-6 C2.5,-4 3,0 3,3 C3,6 1.5,7 0,7 C-1.5,7 -3,6 -3,3 C-3,0 -2.5,-4 0,-6Z"
+        fill={color}
+        fillOpacity={opacity}
+      />
+      <line x1="0" y1="-6" x2="0" y2="7" stroke={color} strokeOpacity={Math.min(opacity * 1.8, 1)} strokeWidth="0.55" />
+    </>
+  )
+}
+
 const LEAVES = [
-  { left: '4%',  size: 26, dur: 9.0,  delay: 0,   opacity: 0.80 },
+  { left: '4%',  size: 26, dur: 9.0,  delay: 0,    opacity: 0.80 },
   { left: '11%', size: 20, dur: 8.0,  delay: 1.8,  opacity: 0.70 },
   { left: '18%', size: 30, dur: 11.5, delay: 0.4,  opacity: 0.75 },
   { left: '25%', size: 22, dur: 8.5,  delay: 3.2,  opacity: 0.65 },
@@ -42,6 +52,8 @@ const LEAVES = [
   { left: '80%', size: 22, dur: 10.5, delay: 6.8,  opacity: 0.70 },
   { left: '88%', size: 18, dur: 11.5, delay: 3.6,  opacity: 0.76 },
 ]
+
+const C = '#7ec850'
 
 export default function BotanicalMossTheme({ profile, links }: Props) {
   const activeLinks = links.filter((l) => l.link_type === 'text')
@@ -78,7 +90,7 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
               animationFillMode: 'backwards',
             }}
           >
-            <Leaf size={l.size} color="#7ec850" opacity={l.opacity} />
+            <Leaf size={l.size} color={C} opacity={l.opacity} />
           </div>
         ))}
       </div>
@@ -86,16 +98,41 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
       <div className="min-h-screen flex flex-col items-center py-12 px-4" style={{ background: '#080c05', overflowX: 'hidden' }}>
         <div className="w-full max-w-md" style={{ position: 'relative', zIndex: 1 }}>
 
-          {/* Botanical branch decoration */}
+          {/* Branch decoration — header */}
           <div className="flex justify-center mb-6">
-            <svg width="240" height="44" viewBox="0 0 240 44">
-              <line x1="12" y1="22" x2="228" y2="22" stroke="#7ec850" strokeWidth="0.8" strokeOpacity="0.35" />
-              <ellipse cx="48"  cy="14" rx="10" ry="5" fill="#7ec850" fillOpacity="0.28" transform="rotate(-35 48 14)" />
-              <ellipse cx="80"  cy="30" rx="8"  ry="4" fill="#7ec850" fillOpacity="0.22" transform="rotate(28 80 30)" />
-              <ellipse cx="120" cy="10" rx="9"  ry="4.5" fill="#7ec850" fillOpacity="0.30" transform="rotate(-10 120 10)" />
-              <ellipse cx="160" cy="30" rx="8"  ry="4" fill="#7ec850" fillOpacity="0.22" transform="rotate(-28 160 30)" />
-              <ellipse cx="194" cy="14" rx="10" ry="5" fill="#7ec850" fillOpacity="0.28" transform="rotate(35 194 14)" />
-              <circle cx="120" cy="22" r="2.5" fill="#7ec850" fillOpacity="0.40" />
+            <svg width="240" height="48" viewBox="0 0 240 48">
+              {/* Main branch */}
+              <line x1="12" y1="24" x2="228" y2="24" stroke={C} strokeWidth="0.9" strokeOpacity="0.38" />
+              {/* Pair 1 @ x=48 — up */}
+              <g transform="translate(48,24)">
+                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.38} /></g>
+                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.32} /></g>
+              </g>
+              {/* Pair 2 @ x=92 — down */}
+              <g transform="translate(92,24)">
+                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.28} /></g>
+                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.24} /></g>
+              </g>
+              {/* Center dot */}
+              <circle cx="120" cy="24" r="2.2" fill={C} fillOpacity="0.45" />
+              {/* Pair 3 @ x=148 — down (mirror of 2) */}
+              <g transform="translate(148,24)">
+                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.28} /></g>
+              </g>
+              {/* Pair 4 @ x=192 — up (mirror of 1) */}
+              <g transform="translate(192,24)">
+                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.38} /></g>
+              </g>
             </svg>
           </div>
 
@@ -157,16 +194,35 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
           />
           <GallerySection photos={galleryPhotos} />
 
-          {/* Botanical footer decoration */}
+          {/* Branch decoration — footer (inverted) */}
           <div className="flex justify-center mt-10 mb-6">
-            <svg width="240" height="44" viewBox="0 0 240 44">
-              <line x1="12" y1="22" x2="228" y2="22" stroke="#7ec850" strokeWidth="0.8" strokeOpacity="0.35" />
-              <ellipse cx="48"  cy="30" rx="10" ry="5" fill="#7ec850" fillOpacity="0.28" transform="rotate(35 48 30)" />
-              <ellipse cx="80"  cy="14" rx="8"  ry="4" fill="#7ec850" fillOpacity="0.22" transform="rotate(-28 80 14)" />
-              <ellipse cx="120" cy="34" rx="9"  ry="4.5" fill="#7ec850" fillOpacity="0.30" transform="rotate(10 120 34)" />
-              <ellipse cx="160" cy="14" rx="8"  ry="4" fill="#7ec850" fillOpacity="0.22" transform="rotate(28 160 14)" />
-              <ellipse cx="194" cy="30" rx="10" ry="5" fill="#7ec850" fillOpacity="0.28" transform="rotate(-35 194 30)" />
-              <circle cx="120" cy="22" r="2.5" fill="#7ec850" fillOpacity="0.40" />
+            <svg width="240" height="48" viewBox="0 0 240 48">
+              <line x1="12" y1="24" x2="228" y2="24" stroke={C} strokeWidth="0.9" strokeOpacity="0.38" />
+              <g transform="translate(48,24)">
+                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.38} /></g>
+                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.32} /></g>
+              </g>
+              <g transform="translate(92,24)">
+                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.28} /></g>
+                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.24} /></g>
+              </g>
+              <circle cx="120" cy="24" r="2.2" fill={C} fillOpacity="0.45" />
+              <g transform="translate(148,24)">
+                <line x1="0" y1="0" x2="-4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(-4,-15) rotate(18)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <line x1="0" y1="0" x2="4" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.28" />
+                <g transform="translate(4,-15) rotate(-18)"><BranchLeaf color={C} opacity={0.28} /></g>
+              </g>
+              <g transform="translate(192,24)">
+                <line x1="0" y1="0" x2="-4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(-4,15) rotate(162)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <line x1="0" y1="0" x2="4" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.30" />
+                <g transform="translate(4,15) rotate(-162)"><BranchLeaf color={C} opacity={0.38} /></g>
+              </g>
             </svg>
           </div>
 

@@ -25,13 +25,13 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
       <style>{`
         html, body { background-color: #000800 !important; }
         @keyframes glitchBar {
-          0%, 82%, 100% { opacity: 0; transform: scaleX(0.2); }
-          83%, 84% { opacity: 0.5; transform: scaleX(1); }
-          85% { opacity: 0; transform: scaleX(0.8); }
-          86% { opacity: 0.3; transform: scaleX(0.6); }
-          87%, 81% { opacity: 0; }
-          92%, 93% { opacity: 0.2; transform: scaleX(0.4); }
-          94% { opacity: 0; }
+          0%, 62%, 100% { opacity: 0; transform: scaleX(0.2); }
+          63%, 64% { opacity: 0.5; transform: scaleX(1); }
+          65% { opacity: 0; transform: scaleX(0.8); }
+          66% { opacity: 0.3; transform: scaleX(0.6); }
+          67% { opacity: 0; }
+          74%, 75% { opacity: 0.2; transform: scaleX(0.4); }
+          76% { opacity: 0; }
         }
         @keyframes glitchText {
           0%, 88%, 100% { text-shadow: none; }
@@ -76,42 +76,28 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
           <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,65,0.4), transparent)' }} />
 
           <div className="flex flex-col items-center mb-10">
-            {/* Avatar with corner bracket decorations */}
+            {/* Avatar with corner brackets */}
             <div className="relative mb-4" style={{ width: 96, height: 96 }}>
-              {/* Corner brackets */}
               <div style={{ position: 'absolute', top: -6, left: -6, width: 14, height: 14, borderTop: '2px solid #00ff41', borderLeft: '2px solid #00ff41' }} />
               <div style={{ position: 'absolute', top: -6, right: -6, width: 14, height: 14, borderTop: '2px solid #00ff41', borderRight: '2px solid #00ff41' }} />
               <div style={{ position: 'absolute', bottom: -6, left: -6, width: 14, height: 14, borderBottom: '2px solid #00ff41', borderLeft: '2px solid #00ff41' }} />
               <div style={{ position: 'absolute', bottom: -6, right: -6, width: 14, height: 14, borderBottom: '2px solid #00ff41', borderRight: '2px solid #00ff41' }} />
-
               {profile.avatar_url ? (
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{ border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}
-                >
+                <div className="absolute inset-0 rounded-full" style={{ border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}>
                   <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
-                <div
-                  className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{ background: '#001500', border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}
-                >
+                <div className="absolute inset-0 rounded-full flex items-center justify-center" style={{ background: '#001500', border: '2px solid #00ff41', boxShadow: '0 0 16px rgba(0,255,65,0.4)' }}>
                   <span className="text-3xl font-bold" style={{ color: '#00ff41' }}>
                     {(profile.display_name ?? 'U')[0].toUpperCase()}
                   </span>
                 </div>
               )}
             </div>
-
-            <h1
-              className="text-2xl font-bold tracking-widest mb-1"
-              style={{ color: '#00ff41', fontFamily: 'monospace', animation: 'glitchText 6s ease infinite' }}
-            >
+            <h1 className="text-2xl font-bold tracking-widest mb-1" style={{ color: '#00ff41', fontFamily: 'monospace', animation: 'glitchText 6s ease infinite' }}>
               {profile.display_name ?? 'No Name'}
             </h1>
-            {/* Blinking cursor */}
             <span style={{ color: '#00ff41', fontFamily: 'monospace', fontSize: '1.2rem', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
-
             <div className="w-12 h-px mb-3 mt-2" style={{ background: 'rgba(0,255,65,0.3)' }} />
             {profile.bio && (
               <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#008020', fontFamily: 'monospace' }}>
@@ -130,17 +116,9 @@ export default function GlitchGreenTheme({ profile, links }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
-                style={{
-                  background: '#001800',
-                  border: '1px solid rgba(0,255,65,0.3)',
-                  color: '#00ff41',
-                  fontFamily: 'monospace',
-                }}
+                style={{ background: '#001800', border: '1px solid rgba(0,255,65,0.3)', color: '#00ff41', fontFamily: 'monospace' }}
               >
-                <span
-                  className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,65,0.1), transparent)' }}
-                />
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,65,0.1), transparent)' }} />
                 <span className="relative">{`> ${link.title}`}</span>
               </a>
             )}

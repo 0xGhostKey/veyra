@@ -5,18 +5,15 @@ import MixedLinks from '@/components/MixedLinks'
 
 type Props = { profile: Profile; links: Link[] }
 
-// Scattered pixel clusters (not full-width — TV static effect)
-const PIXELS = [
-  { top: '5%',  left: '8%',  width: '38%', height: 2, dur: 4.0, delay: 0    },
-  { top: '12%', left: '58%', width: '22%', height: 1, dur: 3.2, delay: 1.6  },
-  { top: '20%', left: '3%',  width: '50%', height: 3, dur: 5.6, delay: 0.4  },
-  { top: '31%', left: '65%', width: '28%', height: 1, dur: 4.8, delay: 2.3  },
-  { top: '42%', left: '18%', width: '45%', height: 2, dur: 3.7, delay: 0.9  },
-  { top: '55%', left: '72%', width: '20%', height: 3, dur: 6.1, delay: 3.6  },
-  { top: '63%', left: '2%',  width: '35%', height: 1, dur: 4.4, delay: 1.3  },
-  { top: '74%', left: '50%', width: '40%', height: 2, dur: 3.5, delay: 4.2  },
-  { top: '83%', left: '25%', width: '55%', height: 1, dur: 5.3, delay: 0.7  },
-  { top: '91%', left: '62%', width: '25%', height: 3, dur: 4.7, delay: 2.9  },
+const BARS = [
+  { top: '8%',   height: 1, dur: 5.2, delay: 0,   opacity: 0.45 },
+  { top: '17%',  height: 2, dur: 3.8, delay: 1.4,  opacity: 0.35 },
+  { top: '26%',  height: 3, dur: 6.5, delay: 0.6,  opacity: 0.55 },
+  { top: '38%',  height: 1, dur: 4.1, delay: 2.8,  opacity: 0.40 },
+  { top: '49%',  height: 2, dur: 7.0, delay: 0.3,  opacity: 0.50 },
+  { top: '61%',  height: 1, dur: 3.5, delay: 4.2,  opacity: 0.30 },
+  { top: '73%',  height: 3, dur: 5.8, delay: 1.1,  opacity: 0.60 },
+  { top: '85%',  height: 2, dur: 4.6, delay: 3.5,  opacity: 0.38 },
 ]
 
 export default function GlitchWhiteTheme({ profile, links }: Props) {
@@ -27,46 +24,51 @@ export default function GlitchWhiteTheme({ profile, links }: Props) {
     <>
       <style>{`
         html, body { background-color: #0a0a0a !important; }
-        @keyframes glitchPixel {
-          0%, 78%, 100% { opacity: 0; transform: scaleX(0.1) translateX(-20px); }
-          79% { opacity: 0.55; transform: scaleX(1) translateX(0); }
-          80% { opacity: 0.30; transform: scaleX(0.8) translateX(5px); }
-          81% { opacity: 0; transform: scaleX(0.5); }
-          88%, 89% { opacity: 0.20; transform: scaleX(0.6) translateX(-3px); }
-          90% { opacity: 0; }
+        @keyframes glitchBar {
+          0%, 62%, 100% { opacity: 0; transform: scaleX(0.2); }
+          63%, 64% { opacity: 0.5; transform: scaleX(1); }
+          65% { opacity: 0; transform: scaleX(0.8); }
+          66% { opacity: 0.3; transform: scaleX(0.6); }
+          67% { opacity: 0; }
+          74%, 75% { opacity: 0.2; transform: scaleX(0.4); }
+          76% { opacity: 0; }
         }
-        @keyframes glitchTextWhite {
-          0%, 91%, 100% { text-shadow: none; }
-          92% { text-shadow: -2px 0 rgba(255,255,255,0.5), 2px 0 rgba(180,180,180,0.5); }
-          93% { text-shadow: 2px 0 rgba(255,255,255,0.5); transform: translateX(-1px); }
-          94% { text-shadow: none; transform: translateX(0); }
+        @keyframes glitchText {
+          0%, 88%, 100% { text-shadow: none; }
+          89% { text-shadow: -2px 0 rgba(255,255,255,0.5), 2px 0 rgba(200,200,200,0.5); }
+          90% { text-shadow: 2px 0 rgba(255,255,255,0.5), -2px 0 rgba(200,200,200,0.5); transform: translateX(-1px); }
+          91% { text-shadow: none; transform: translateX(1px); }
+          92% { transform: translateX(0); }
+        }
+        @keyframes cursorBlink {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
         }
         @keyframes whiteGlow {
-          0%, 100% { box-shadow: 0 0 14px rgba(255,255,255,0.22); }
-          50%       { box-shadow: 0 0 26px rgba(255,255,255,0.48), 0 0 50px rgba(220,220,220,0.14); }
+          0%, 100% { box-shadow: 0 0 22px rgba(255,255,255,0.22); }
+          50%       { box-shadow: 0 0 44px rgba(255,255,255,0.48), 0 0 75px rgba(220,220,220,0.14); }
         }
       `}</style>
 
-      {/* Subtle noise texture */}
+      {/* Scanlines overlay */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 3px)',
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px)',
       }} />
 
-      {/* Scattered pixel static overlay */}
+      {/* Glitch bar overlay */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-        {PIXELS.map((p, i) => (
+        {BARS.map((b, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              top: p.top,
-              left: p.left,
-              width: p.width,
-              height: p.height,
+              left: 0, right: 0,
+              top: b.top,
+              height: b.height,
               background: '#ffffff',
-              opacity: 0,
-              animation: `glitchPixel ${p.dur}s step-end ${p.delay}s infinite`,
+              opacity: b.opacity,
+              animation: `glitchBar ${b.dur}s step-end ${b.delay}s infinite`,
               animationFillMode: 'backwards',
             }}
           />
@@ -78,40 +80,31 @@ export default function GlitchWhiteTheme({ profile, links }: Props) {
           <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }} />
 
           <div className="flex flex-col items-center mb-10">
+            {/* Avatar with corner brackets */}
             <div className="relative mb-4" style={{ width: 96, height: 96 }}>
-              {/* Pixel corner notches */}
-              <div style={{ position: 'absolute', top: 0, left: 0, width: 10, height: 10, background: '#0a0a0a', zIndex: 1 }} />
-              <div style={{ position: 'absolute', top: 0, right: 0, width: 10, height: 10, background: '#0a0a0a', zIndex: 1 }} />
-              <div style={{ position: 'absolute', bottom: 0, left: 0, width: 10, height: 10, background: '#0a0a0a', zIndex: 1 }} />
-              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, background: '#0a0a0a', zIndex: 1 }} />
-
+              <div style={{ position: 'absolute', top: -6, left: -6, width: 14, height: 14, borderTop: '2px solid rgba(255,255,255,0.7)', borderLeft: '2px solid rgba(255,255,255,0.7)' }} />
+              <div style={{ position: 'absolute', top: -6, right: -6, width: 14, height: 14, borderTop: '2px solid rgba(255,255,255,0.7)', borderRight: '2px solid rgba(255,255,255,0.7)' }} />
+              <div style={{ position: 'absolute', bottom: -6, left: -6, width: 14, height: 14, borderBottom: '2px solid rgba(255,255,255,0.7)', borderLeft: '2px solid rgba(255,255,255,0.7)' }} />
+              <div style={{ position: 'absolute', bottom: -6, right: -6, width: 14, height: 14, borderBottom: '2px solid rgba(255,255,255,0.7)', borderRight: '2px solid rgba(255,255,255,0.7)' }} />
               {profile.avatar_url ? (
-                <div
-                  className="absolute inset-0 p-px rounded-full"
-                  style={{ background: 'linear-gradient(135deg, #ffffff, #606060)', animation: 'whiteGlow 3s ease-in-out infinite' }}
-                >
+                <div className="absolute inset-0 p-px rounded-full" style={{ background: 'linear-gradient(135deg, #ffffff, #606060)', animation: 'whiteGlow 2.5s ease-in-out infinite' }}>
                   <img src={profile.avatar_url} alt={profile.display_name ?? 'avatar'} className="w-full h-full rounded-full object-cover" />
                 </div>
               ) : (
-                <div
-                  className="absolute inset-0 rounded-full flex items-center justify-center"
-                  style={{ background: '#161616', border: '2px solid rgba(255,255,255,0.6)', animation: 'whiteGlow 3s ease-in-out infinite' }}
-                >
+                <div className="absolute inset-0 rounded-full flex items-center justify-center" style={{ background: '#161616', border: '2px solid rgba(255,255,255,0.6)', animation: 'whiteGlow 2.5s ease-in-out infinite' }}>
                   <span className="text-3xl font-bold" style={{ color: '#e0e0e0' }}>
                     {(profile.display_name ?? 'U')[0].toUpperCase()}
                   </span>
                 </div>
               )}
             </div>
-            <h1
-              className="text-2xl font-bold tracking-widest mb-2"
-              style={{ color: '#ffffff', animation: 'glitchTextWhite 7s ease infinite' }}
-            >
+            <h1 className="text-2xl font-bold tracking-widest mb-1" style={{ color: '#ffffff', fontFamily: 'monospace', animation: 'glitchText 6s ease infinite' }}>
               {profile.display_name ?? 'No Name'}
             </h1>
-            <div className="w-12 h-px mb-3" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }} />
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'monospace', fontSize: '1.2rem', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
+            <div className="w-12 h-px mb-3 mt-2" style={{ background: 'rgba(255,255,255,0.3)' }} />
             {profile.bio && (
-              <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#606060' }}>
+              <p className="text-sm text-center leading-relaxed max-w-xs" style={{ color: '#606060', fontFamily: 'monospace' }}>
                 {profile.bio}
               </p>
             )}
@@ -126,19 +119,11 @@ export default function GlitchWhiteTheme({ profile, links }: Props) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block w-full px-6 py-4 text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, #161616, #1e1e1e)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  borderRadius: '3px',
-                  color: '#e0e0e0',
-                }}
+                className="group block w-full px-6 py-4 rounded-2xl text-center font-medium tracking-wider transition-all duration-300 relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #161616, #1e1e1e)', border: '1px solid rgba(255,255,255,0.15)', color: '#e0e0e0', fontFamily: 'monospace' }}
               >
-                <span
-                  className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }}
-                />
-                <span className="relative">{link.title}</span>
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
+                <span className="relative">{`> ${link.title}`}</span>
               </a>
             )}
           />
