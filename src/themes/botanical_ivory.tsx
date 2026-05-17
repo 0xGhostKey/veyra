@@ -122,36 +122,36 @@ export default function BotanicalIvoryTheme({ profile, links }: Props) {
                 stroke={C} strokeWidth="1.2" strokeOpacity="0.36" fill="none"/>
               <g transform="translate(55,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(-8,-16) rotate(-27)"><BranchLeaf color={C} opacity={0.36} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(8,-16) rotate(27)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
               <g transform="translate(105,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(-8,16) rotate(-153)"><BranchLeaf color={C} opacity={0.24} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(8,16) rotate(153)"><BranchLeaf color={C} opacity={0.20} /></g>
               </g>
               <g transform="translate(160,36)">
                 <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.40" />
                 <line x1="0" y1="0" x2="0" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.24" />
-                <g transform="translate(0,-18) rotate(0)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <g transform="translate(0,-17) rotate(0)"><BranchLeaf color={C} opacity={0.32} /></g>
                 <line x1="0" y1="0" x2="-6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(-6,-16) rotate(-37)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(-10,-14) rotate(-37)"><BranchLeaf color={C} opacity={0.22} /></g>
                 <line x1="0" y1="0" x2="6" y2="-8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(6,-16) rotate(37)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(10,-14) rotate(37)"><BranchLeaf color={C} opacity={0.22} /></g>
               </g>
               <g transform="translate(215,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(-8,16) rotate(-153)"><BranchLeaf color={C} opacity={0.20} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(8,16) rotate(153)"><BranchLeaf color={C} opacity={0.24} /></g>
               </g>
               <g transform="translate(265,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(-8,-16) rotate(-27)"><BranchLeaf color={C} opacity={0.30} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(8,-16) rotate(27)"><BranchLeaf color={C} opacity={0.36} /></g>
               </g>
             </svg>
           </div>
@@ -220,36 +220,36 @@ export default function BotanicalIvoryTheme({ profile, links }: Props) {
                 stroke={C} strokeWidth="1.2" strokeOpacity="0.36" fill="none"/>
               <g transform="translate(55,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(-8,16) rotate(-153)"><BranchLeaf color={C} opacity={0.36} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(8,16) rotate(153)"><BranchLeaf color={C} opacity={0.30} /></g>
               </g>
               <g transform="translate(105,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(-8,-16) rotate(-27)"><BranchLeaf color={C} opacity={0.24} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(8,-16) rotate(27)"><BranchLeaf color={C} opacity={0.20} /></g>
               </g>
               <g transform="translate(160,36)">
                 <circle cx="0" cy="0" r="2.5" fill={C} fillOpacity="0.40" />
                 <line x1="0" y1="0" x2="0" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.24" />
-                <g transform="translate(0,18) rotate(180)"><BranchLeaf color={C} opacity={0.32} /></g>
+                <g transform="translate(0,17) rotate(180)"><BranchLeaf color={C} opacity={0.32} /></g>
                 <line x1="0" y1="0" x2="-6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(-6,16) rotate(-143)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(-10,14) rotate(-143)"><BranchLeaf color={C} opacity={0.22} /></g>
                 <line x1="0" y1="0" x2="6" y2="8" stroke={C} strokeWidth="0.6" strokeOpacity="0.18" />
-                <g transform="translate(6,16) rotate(143)"><BranchLeaf color={C} opacity={0.22} /></g>
+                <g transform="translate(10,14) rotate(143)"><BranchLeaf color={C} opacity={0.22} /></g>
               </g>
               <g transform="translate(215,36)">
                 <line x1="0" y1="0" x2="-5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(-5,-18) rotate(-27)"><BranchLeaf color={C} opacity={0.20} /></g>
+                <g transform="translate(-8,-16) rotate(-27)"><BranchLeaf color={C} opacity={0.20} /></g>
                 <line x1="0" y1="0" x2="5" y2="-10" stroke={C} strokeWidth="0.7" strokeOpacity="0.22" />
-                <g transform="translate(5,-18) rotate(27)"><BranchLeaf color={C} opacity={0.24} /></g>
+                <g transform="translate(8,-16) rotate(27)"><BranchLeaf color={C} opacity={0.24} /></g>
               </g>
               <g transform="translate(265,36)">
                 <line x1="0" y1="0" x2="-5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(-5,18) rotate(-153)"><BranchLeaf color={C} opacity={0.30} /></g>
+                <g transform="translate(-8,16) rotate(-153)"><BranchLeaf color={C} opacity={0.30} /></g>
                 <line x1="0" y1="0" x2="5" y2="10" stroke={C} strokeWidth="0.7" strokeOpacity="0.26" />
-                <g transform="translate(5,18) rotate(153)"><BranchLeaf color={C} opacity={0.36} /></g>
+                <g transform="translate(8,16) rotate(153)"><BranchLeaf color={C} opacity={0.36} /></g>
               </g>
             </svg>
           </div>
