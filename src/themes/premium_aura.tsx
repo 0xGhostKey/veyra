@@ -43,6 +43,86 @@ function StarField() {
   return <canvas ref={ref} style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none'}}/>
 }
 
+// ── Conqueror's Haki — canvas jagged lightning: red core / black outer ────────
+function HakiCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const SZ = 300, CX = 150, CY = 150, IR = 76
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    c.width = SZ * dpr; c.height = SZ * dpr
+    const ctx = c.getContext('2d')!
+    ctx.scale(dpr, dpr)
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+
+    function mkPath(x1:number,y1:number,x2:number,y2:number,depth:number):[number,number][] {
+      if (depth<=0) return [[x1,y1],[x2,y2]]
+      const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)
+      if (len<0.5) return [[x1,y1],[x2,y2]]
+      const nx=-dy/len, ny=dx/len
+      const disp=(Math.random()-.5)*len*0.82
+      const mx=(x1+x2)/2+nx*disp, my=(y1+y2)/2+ny*disp
+      return [...mkPath(x1,y1,mx,my,depth-1).slice(0,-1),...mkPath(mx,my,x2,y2,depth-1)]
+    }
+
+    function buildPaths(base:number) {
+      const angle=base+(Math.random()-.5)*0.5
+      const len=46+Math.random()*48
+      const sx=CX+Math.cos(angle)*IR, sy=CY+Math.sin(angle)*IR
+      const ex=CX+Math.cos(angle)*(IR+len), ey=CY+Math.sin(angle)*(IR+len)
+      const path=mkPath(sx,sy,ex,ey,5)
+      const branches:[number,number][][]=[]
+      const nb=Math.random()<0.45?2:Math.random()<0.70?1:0
+      for(let b=0;b<nb;b++){
+        const bi=Math.floor(path.length*(0.25+Math.random()*0.45))
+        const [bx,by]=path[bi]
+        const ba=angle+(Math.random()-.5)*1.6
+        const bl=len*(0.25+Math.random()*0.42)
+        branches.push(mkPath(bx,by,bx+Math.cos(ba)*bl,by+Math.sin(ba)*bl,4))
+      }
+      return { path, branches }
+    }
+
+    function stroke(pts:[number,number][],a:number,main:boolean){
+      if(pts.length<2) return
+      const w=main?1.0:0.55
+      const go=()=>{ ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]) }
+      ctx.save(); ctx.strokeStyle=`rgba(0,0,0,${a*0.65})`; ctx.lineWidth=w*12; go(); ctx.stroke(); ctx.restore()
+      ctx.save(); ctx.shadowBlur=18; ctx.shadowColor='rgba(180,0,0,1)'; ctx.strokeStyle=`rgba(90,0,0,${a*0.82})`; ctx.lineWidth=w*6.5; go(); ctx.stroke(); ctx.restore()
+      ctx.save(); ctx.shadowBlur=9;  ctx.shadowColor='rgba(255,0,0,1)';   ctx.strokeStyle=`rgba(220,0,0,${a*0.93})`; ctx.lineWidth=w*2.8; go(); ctx.stroke(); ctx.restore()
+      ctx.save(); ctx.shadowBlur=4;  ctx.shadowColor='rgba(255,140,0,1)'; ctx.strokeStyle=`rgba(255,90,20,${a})`;   ctx.lineWidth=w*0.85; go(); ctx.stroke(); ctx.restore()
+    }
+
+    type Bolt = { base:number;path:[number,number][];branches:[number,number][][];alpha:number;target:number;decay:number;next:number }
+    let frame=0
+    const bolts:Bolt[]=Array.from({length:12},(_,i)=>{
+      const base=i*Math.PI*2/12
+      const {path,branches}=buildPaths(base)
+      return { base,path,branches,alpha:0.14,target:0.14,decay:0.92,next:Math.floor(Math.random()*100) }
+    })
+    let raf:number
+    const tick=()=>{
+      ctx.clearRect(0,0,SZ,SZ); frame++
+      for(const b of bolts){
+        if(frame>=b.next){
+          const p=buildPaths(b.base); b.path=p.path; b.branches=p.branches
+          b.target=0.68+Math.random()*0.32; b.decay=0.87+Math.random()*0.10
+          b.next=frame+85+Math.floor(Math.random()*145)
+        }
+        b.alpha+=(b.target-b.alpha)*0.14
+        b.target=Math.max(0.12,b.target*b.decay)
+        stroke(b.path,b.alpha,true)
+        b.branches.forEach(br=>stroke(br,b.alpha*0.55,false))
+      }
+      raf=requestAnimationFrame(tick)
+    }
+    tick()
+    return()=>cancelAnimationFrame(raf)
+  },[])
+  // SZ=300, avatar container=148 → margin=(300-148)/2=76
+  return <canvas ref={ref} style={{position:'absolute',top:-76,left:-76,width:300,height:300,pointerEvents:'none',zIndex:5}}/>
+}
+
 // ── PulseWave — concentric energy rings emanating from avatar ─────────────────
 function PulseWave() {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -75,7 +155,6 @@ function PulseWave() {
 
         const SEGS = 56
         const jitter = 2 + (1 - w.alpha / 0.72) * 7
-
         const buildPath = () => {
           ctx.beginPath()
           for (let p = 0; p <= SEGS; p++) {
@@ -86,7 +165,6 @@ function PulseWave() {
           }
           ctx.closePath()
         }
-
         ctx.save(); ctx.strokeStyle=`rgba(0,0,0,${(w.alpha*.55).toFixed(3)})`; ctx.lineWidth=9; buildPath(); ctx.stroke(); ctx.restore()
         ctx.save(); ctx.strokeStyle=`rgba(160,0,0,${(w.alpha*.78).toFixed(3)})`; ctx.lineWidth=4; ctx.shadowBlur=18; ctx.shadowColor=`rgba(255,0,0,${w.alpha.toFixed(3)})`; buildPath(); ctx.stroke(); ctx.restore()
         ctx.save(); ctx.strokeStyle=`rgba(230,10,0,${(w.alpha*.90).toFixed(3)})`; ctx.lineWidth=1.6; ctx.shadowBlur=8; ctx.shadowColor='rgba(255,60,0,1)'; buildPath(); ctx.stroke(); ctx.restore()
@@ -97,7 +175,6 @@ function PulseWave() {
     tick()
     return () => cancelAnimationFrame(raf)
   }, [])
-  // Center 440px canvas on avatar center (74px from float-div top-left)
   return <canvas ref={ref} style={{position:'absolute',top:-146,left:-146,width:440,height:440,pointerEvents:'none',zIndex:0}}/>
 }
 
@@ -122,11 +199,6 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
       <style>{`
         html, body { background-color: #010108 !important; margin: 0; padding: 0; }
 
-        @keyframes halo {
-          0%,100%{ opacity:.70; transform:scale(1.00); filter:hue-rotate(0deg);   }
-          33%    { opacity:.96; transform:scale(1.22); filter:hue-rotate(120deg); }
-          66%    { opacity:.80; transform:scale(1.12); filter:hue-rotate(240deg); }
-        }
         @keyframes float {
           0%,100%{ transform:translateY(0px)  rotate( 0.0deg); }
           25%    { transform:translateY(-14px) rotate( 0.6deg); }
@@ -167,8 +239,15 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
         .a-lnk:active { transform:scale(.982);transition:transform .08s; }
       `}</style>
 
-      {/* ── Fixed background layer — clipped by viewport, never traps scroll ── */}
-      <div aria-hidden style={{ position:'fixed', inset:0, overflow:'hidden', pointerEvents:'none', zIndex:0 }}>
+      {/*
+        ── Fixed background layer ──────────────────────────────────────────────
+        overflow:hidden は意図的に省略。
+        overflow:hidden + filter:blur の組み合わせが iOS Safari で合成レイヤーの
+        z-index バグを起こし、background が content (zIndex:1) の上に描画されてしまう。
+        fixed 配置の子要素はビューポート外にはみ出ても横スクロールを発生させないため、
+        overflow:hidden なしでも aurora の水平方向クリップは問題ない。
+      */}
+      <div aria-hidden style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:0 }}>
         <StarField />
 
         {[
@@ -210,16 +289,17 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
             {/* Profile */}
             <div style={{ display:'flex',flexDirection:'column',alignItems:'center',marginBottom:48,animation:'profIn 1.1s cubic-bezier(.22,1,.36,1) both' }}>
 
-              {/* position:relative on float div so PulseWave positions relative to it */}
-              <div style={{ marginBottom:40, animation:'float 5s ease-in-out infinite', position:'relative' }}>
+              {/*
+                marginBottom:90 ensures name text clears HakiCanvas which extends
+                76px below the 148px avatar container (canvas SZ=300, IR=76).
+              */}
+              <div style={{ marginBottom:90, animation:'float 5s ease-in-out infinite', position:'relative' }}>
                 <PulseWave />
 
                 <div style={{ position:'relative', width:148, height:148 }}>
-                  {/* Outer halos */}
-                  <div style={{ position:'absolute',inset:-52,borderRadius:'50%',background:'conic-gradient(from 0deg,#ff0077,#aa00ff,#0055ff,#00ffcc,#ff9900,#ff0077)',filter:'blur(54px)',animation:'halo 3.6s ease-in-out infinite',opacity:.72,pointerEvents:'none',zIndex:2 }} />
-                  <div style={{ position:'absolute',inset:-22,borderRadius:'50%',background:'conic-gradient(from 180deg,#00ffcc,#aa00ff,#ff006e,#ff9900,#00ffcc)',filter:'blur(22px)',animation:'halo 3.6s ease-in-out infinite .65s',opacity:.65,pointerEvents:'none',zIndex:3 }} />
+                  <HakiCanvas />
 
-                  {/* Avatar surface */}
+                  {/* Avatar surface — inset:0, avatar fills container */}
                   <div style={{
                     position:'absolute', inset:0, borderRadius:'50%',
                     overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center',
@@ -240,8 +320,8 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
                   <div style={{ position:'absolute',bottom:-8,left:'50%',width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(200,100,255,.95),0 0 24px 8px rgba(140,0,255,.58)',   animation:'spkB 3.0s ease-in-out infinite .60s',zIndex:10 }} />
                   <div style={{ position:'absolute',left:-8,  top:'50%', width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(255,80,40,.95),0 0 24px 8px rgba(200,0,0,.58)',       animation:'spkL 2.8s ease-in-out infinite 1.0s',zIndex:10 }} />
                   <div style={{ position:'absolute',right:-8, top:'50%', width:8,height:8,borderRadius:'50%',background:'#fff',boxShadow:'0 0 12px 5px rgba(255,160,60,.95),0 0 26px 10px rgba(200,80,0,.58)',    animation:'spkR 3.3s ease-in-out infinite 1.5s',zIndex:10 }} />
-                  <div style={{ position:'absolute',top:'12%',left:'12%', width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,120,60,.92)',animation:'spkD 3.7s ease-in-out infinite .25s',zIndex:10 }} />
-                  <div style={{ position:'absolute',top:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(200,80,255,.92)', animation:'spkD 4.1s ease-in-out infinite .78s',zIndex:10 }} />
+                  <div style={{ position:'absolute',top:'12%', left:'12%', width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,120,60,.92)',animation:'spkD 3.7s ease-in-out infinite .25s',zIndex:10 }} />
+                  <div style={{ position:'absolute',top:'12%', right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(200,80,255,.92)', animation:'spkD 4.1s ease-in-out infinite .78s',zIndex:10 }} />
                   <div style={{ position:'absolute',bottom:'12%',left:'12%', width:5,height:5,borderRadius:'50%',background:'#fff',boxShadow:'0 0 7px 2px rgba(255,140,40,.90)',animation:'spkD 3.5s ease-in-out infinite 1.2s',zIndex:10 }} />
                   <div style={{ position:'absolute',bottom:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,80,20,.92)', animation:'spkD 3.9s ease-in-out infinite 1.8s',zIndex:10 }} />
                 </div>
@@ -285,7 +365,7 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
             {/* Bottom divider */}
             <div style={{ height:1,borderRadius:1,background:'linear-gradient(90deg,transparent,rgba(140,0,255,.60),rgba(0,180,255,.60),transparent)',marginTop:64,marginBottom:24,animation:'hue 12s linear infinite' }} />
 
-            {/* Logo — uses shared Logo component, same as all other themes */}
+            {/* Logo — shared component, same as all other themes */}
             {!profile.logo_removed && (
               <div className="flex justify-center pb-2">
                 <Logo dark gold />
