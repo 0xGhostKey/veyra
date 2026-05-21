@@ -2,11 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 import type { Profile, Link } from '@/types'
-import Logo from '@/components/Logo'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
 
-// ── Starfield ────────────────────────────────────────────────────────────────
+// ── StarField ────────────────────────────────────────────────────────────────
 function StarField() {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
@@ -40,7 +39,7 @@ function StarField() {
     tick()
     return ()=>{cancelAnimationFrame(raf);removeEventListener('resize',fit)}
   },[])
-  return <canvas ref={ref} style={{position:'fixed',inset:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:0}}/>
+  return <canvas ref={ref} style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none'}}/>
 }
 
 // ── Conqueror's Haki — canvas jagged lightning: red core / black outer ───────
@@ -48,7 +47,7 @@ function HakiCanvas() {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const c = ref.current; if (!c) return
-    const SZ = 360, CX = 180, CY = 180, IR = 78
+    const SZ = 300, CX = 150, CY = 150, IR = 76
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     c.width = SZ * dpr; c.height = SZ * dpr
     const ctx = c.getContext('2d')!
@@ -67,7 +66,7 @@ function HakiCanvas() {
 
     function buildPaths(base:number) {
       const angle=base+(Math.random()-.5)*0.5
-      const len=50+Math.random()*52
+      const len=46+Math.random()*48
       const sx=CX+Math.cos(angle)*IR, sy=CY+Math.sin(angle)*IR
       const ex=CX+Math.cos(angle)*(IR+len), ey=CY+Math.sin(angle)*(IR+len)
       const path=mkPath(sx,sy,ex,ey,5)
@@ -83,7 +82,6 @@ function HakiCanvas() {
       return { path, branches }
     }
 
-    // Red core → black outer
     function stroke(pts:[number,number][],a:number,main:boolean){
       if(pts.length<2) return
       const w=main?1.0:0.55
@@ -120,7 +118,218 @@ function HakiCanvas() {
     tick()
     return()=>cancelAnimationFrame(raf)
   },[])
-  return <canvas ref={ref} style={{position:'absolute',top:-106,left:-106,width:360,height:360,pointerEvents:'none',zIndex:5}}/>
+  return <canvas ref={ref} style={{position:'absolute',top:-76,left:-76,width:300,height:300,pointerEvents:'none',zIndex:5}}/>
+}
+
+// ── ElectricRings — jagged lightning arcs replacing smooth plasma rings ───────
+// Matches HakiCanvas color scheme: black outer → deep red → bright red → white-orange core
+// Three rings rotate in alternating directions; arc segments regenerate for flicker effect.
+function ElectricRings() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const SZ = 148, CX = 74, CY = 74
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    c.width = SZ * dpr; c.height = SZ * dpr
+    const ctx = c.getContext('2d')!
+    ctx.scale(dpr, dpr)
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+
+    // Build jagged arc in LOCAL (ring-centered) coords.
+    // Points are relative to (0,0); ctx.rotate handles ring rotation.
+    function makeSegPts(r: number, a0: number, a1: number, jitter: number): [number,number][] {
+      const steps = Math.max(7, Math.round(Math.abs(a1 - a0) * r * 0.75))
+      const pts: [number,number][] = []
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps
+        const a = a0 + (a1 - a0) * t
+        const rr = r + (Math.random() - 0.5) * jitter * 2
+        pts.push([Math.cos(a) * rr, Math.sin(a) * rr])
+      }
+      return pts
+    }
+
+    // Draw a single arc segment: 4 layers matching Haki lightning style
+    function drawSeg(pts: [number,number][], alpha: number) {
+      if (pts.length < 2) return
+      const go = () => {
+        ctx.beginPath()
+        ctx.moveTo(pts[0][0], pts[0][1])
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1])
+      }
+      // Black outer
+      ctx.save(); ctx.strokeStyle = `rgba(0,0,0,${(alpha * 0.70).toFixed(3)})`; ctx.lineWidth = 11; go(); ctx.stroke(); ctx.restore()
+      // Deep red glow
+      ctx.save(); ctx.strokeStyle = `rgba(130,0,0,${(alpha * 0.85).toFixed(3)})`; ctx.lineWidth = 5.5; ctx.shadowBlur = 18; ctx.shadowColor = 'rgba(255,0,0,0.85)'; go(); ctx.stroke(); ctx.restore()
+      // Bright red
+      ctx.save(); ctx.strokeStyle = `rgba(230,10,0,${(alpha * 0.93).toFixed(3)})`; ctx.lineWidth = 2.4; ctx.shadowBlur = 9; ctx.shadowColor = 'rgba(255,60,0,1)'; go(); ctx.stroke(); ctx.restore()
+      // White-orange core
+      ctx.save(); ctx.strokeStyle = `rgba(255,200,80,${alpha.toFixed(3)})`; ctx.lineWidth = 0.75; ctx.shadowBlur = 5; ctx.shadowColor = 'rgba(255,130,0,1)'; go(); ctx.stroke(); ctx.restore()
+    }
+
+    type Seg = { pts: [number,number][]; alpha: number; target: number; decay: number; next: number }
+    type Ring = { r: number; dir: number; speed: number; angle: number; numSegs: number; segs: Seg[] }
+
+    const RING_DEFS = [
+      { r: 72, dir:  1, speed: 0.008, numSegs: 3 },  // outer — CW
+      { r: 65, dir: -1, speed: 0.013, numSegs: 4 },  // mid — CCW
+      { r: 59, dir:  1, speed: 0.009, numSegs: 3 },  // inner — CW
+    ]
+    const GAP_FRAC = 0.22
+
+    function initSegs(r: number, n: number): Seg[] {
+      const arcFrac = (1 - GAP_FRAC * n) / n
+      return Array.from({ length: n }, (_, i) => {
+        const a0 = (i / n) * Math.PI * 2
+        const a1 = a0 + arcFrac * Math.PI * 2
+        return {
+          pts: makeSegPts(r, a0, a1, 4.5),
+          alpha: 0.15, target: 0.15, decay: 0.92,
+          next: Math.floor(Math.random() * 80),
+        }
+      })
+    }
+
+    const rings: Ring[] = RING_DEFS.map(def => ({
+      r: def.r, dir: def.dir, speed: def.speed, numSegs: def.numSegs,
+      angle: Math.random() * Math.PI * 2,
+      segs: initSegs(def.r, def.numSegs),
+    }))
+
+    let frame = 0, raf: number
+
+    const tick = () => {
+      ctx.clearRect(0, 0, SZ, SZ)
+      frame++
+
+      for (const ring of rings) {
+        ring.angle += ring.dir * ring.speed
+        const n = ring.numSegs
+        const arcFrac = (1 - GAP_FRAC * n) / n
+
+        // Apply ring rotation via canvas transform — segments are in local coords
+        ctx.save()
+        ctx.translate(CX, CY)
+        ctx.rotate(ring.angle)
+
+        ring.segs.forEach((seg, i) => {
+          // Regenerate jagged path periodically for lightning flicker
+          if (frame >= seg.next) {
+            const a0 = (i / n) * Math.PI * 2
+            const a1 = a0 + arcFrac * Math.PI * 2
+            seg.pts = makeSegPts(ring.r, a0, a1, 4.5)
+            seg.target = 0.52 + Math.random() * 0.48
+            seg.decay  = 0.88 + Math.random() * 0.10
+            seg.next   = frame + 45 + Math.floor(Math.random() * 90)
+          }
+          seg.alpha  += (seg.target - seg.alpha) * 0.12
+          seg.target  = Math.max(0.12, seg.target * seg.decay)
+          drawSeg(seg.pts, seg.alpha)
+        })
+
+        ctx.restore()
+
+        // Discharge sparks — radial spikes flying outward from ring surface
+        if (Math.random() < 0.28) {
+          const sa = Math.random() * Math.PI * 2
+          const sl = 3 + Math.random() * 7
+          const sx = CX + Math.cos(sa) * ring.r
+          const sy = CY + Math.sin(sa) * ring.r
+          const ex = CX + Math.cos(sa) * (ring.r + sl)
+          const ey = CY + Math.sin(sa) * (ring.r + sl)
+          ctx.save()
+          ctx.strokeStyle = `rgba(255,150,40,${(0.5 + Math.random() * 0.5).toFixed(2)})`
+          ctx.lineWidth = 0.85; ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(255,60,0,0.9)'
+          ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.stroke()
+          ctx.restore()
+        }
+      }
+
+      raf = requestAnimationFrame(tick)
+    }
+    tick()
+    return () => cancelAnimationFrame(raf)
+  }, [])
+  return <canvas ref={ref} style={{position:'absolute',inset:0,width:148,height:148,pointerEvents:'none',zIndex:6}}/>
+}
+
+// ── PulseWave — PREMIUM: concentric energy rings emanating from avatar ────────
+// Spawns jagged, crackling pulse rings that expand and fade outward.
+// Matches Haki color scheme. Rendered behind avatar (zIndex 0 in float div).
+function PulseWave() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const SZ = 440
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    c.width = SZ * dpr; c.height = SZ * dpr
+    const ctx = c.getContext('2d')!
+    ctx.scale(dpr, dpr)
+    const CX = SZ / 2, CY = SZ / 2
+
+    type Wave = { r: number; alpha: number; speed: number }
+    const waves: Wave[] = []
+    const MAX_R = 210
+    const START_R = 74  // avatar radius
+    let frame = 0, nextWave = 0, raf: number
+
+    const tick = () => {
+      ctx.clearRect(0, 0, SZ, SZ)
+      frame++
+
+      // Spawn new wave every ~1.8-2.8 s at 60 fps
+      if (frame >= nextWave) {
+        waves.push({ r: START_R, alpha: 0.72, speed: 1.1 + Math.random() * 0.5 })
+        nextWave = frame + 108 + Math.floor(Math.random() * 60)
+      }
+
+      for (let wi = waves.length - 1; wi >= 0; wi--) {
+        const w = waves[wi]
+        w.r += w.speed
+        // Fade smoothly from 0.72 at START_R to 0 at MAX_R
+        w.alpha = 0.72 * Math.max(0, 1 - (w.r - START_R) / (MAX_R - START_R))
+
+        if (w.alpha <= 0.01) { waves.splice(wi, 1); continue }
+
+        // Draw a jagged circle — re-randomized each frame for crackling effect
+        const SEGS = 56
+        const jitter = 2 + (1 - w.alpha / 0.72) * 7  // more jagged as it fades
+
+        const buildPath = () => {
+          ctx.beginPath()
+          for (let p = 0; p <= SEGS; p++) {
+            const a = (p / SEGS) * Math.PI * 2
+            const r = w.r + (Math.random() - 0.5) * jitter * 2
+            const x = CX + Math.cos(a) * r
+            const y = CY + Math.sin(a) * r
+            if (p === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
+          }
+          ctx.closePath()
+        }
+
+        // Black outer
+        ctx.save(); ctx.strokeStyle = `rgba(0,0,0,${(w.alpha * 0.55).toFixed(3)})`; ctx.lineWidth = 9; buildPath(); ctx.stroke(); ctx.restore()
+        // Deep red glow
+        ctx.save(); ctx.strokeStyle = `rgba(160,0,0,${(w.alpha * 0.78).toFixed(3)})`; ctx.lineWidth = 4; ctx.shadowBlur = 18; ctx.shadowColor = `rgba(255,0,0,${w.alpha.toFixed(3)})`; buildPath(); ctx.stroke(); ctx.restore()
+        // Bright red
+        ctx.save(); ctx.strokeStyle = `rgba(230,10,0,${(w.alpha * 0.90).toFixed(3)})`; ctx.lineWidth = 1.6; ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(255,60,0,1)'; buildPath(); ctx.stroke(); ctx.restore()
+        // White-orange core
+        ctx.save(); ctx.strokeStyle = `rgba(255,200,80,${(w.alpha * 0.85).toFixed(3)})`; ctx.lineWidth = 0.6; ctx.shadowBlur = 5; ctx.shadowColor = 'rgba(255,120,0,1)'; buildPath(); ctx.restore()
+      }
+
+      raf = requestAnimationFrame(tick)
+    }
+    tick()
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  // Center 440px canvas on avatar center (74,74 in float div, avatar is 148×148)
+  // offset = avatarCenter - canvasCenter = 74 - 220 = -146px
+  return <canvas ref={ref} style={{
+    position: 'absolute', top: -146, left: -146,
+    width: 440, height: 440,
+    pointerEvents: 'none', zIndex: 0,
+  }}/>
 }
 
 // ── Theme ────────────────────────────────────────────────────────────────────
@@ -142,24 +351,16 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
   return (
     <>
       <style>{`
-        /*
-          overflow-x: hidden on html/body = viewport-level clip, no scroll container.
-          Aurora bands are position:absolute → scroll with content → no overscroll mismatch.
-        */
         html, body {
           background-color: #010108 !important;
           margin: 0; padding: 0;
-          overflow-x: hidden;
         }
 
-        @keyframes rcw  { from{filter:hue-rotate(0deg)}   to{filter:hue-rotate(360deg)}  }
-        @keyframes rccw { from{filter:hue-rotate(360deg)} to{filter:hue-rotate(0deg)}    }
         @keyframes halo {
           0%,100%{ opacity:.70; transform:scale(1.00); filter:hue-rotate(0deg);   }
           33%    { opacity:.96; transform:scale(1.22); filter:hue-rotate(120deg); }
           66%    { opacity:.80; transform:scale(1.12); filter:hue-rotate(240deg); }
         }
-        @keyframes rPulse { 0%,100%{opacity:.88} 50%{opacity:1} }
         @keyframes float {
           0%,100%{ transform:translateY(0px)  rotate( 0.0deg); }
           25%    { transform:translateY(-14px) rotate( 0.6deg); }
@@ -172,8 +373,8 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
         @keyframes spkR { 0%,100%{opacity:0;transform:translateY(-50%) scale(.1)} 36%,64%{opacity:.95;transform:translateY(-50%) scale(1.05)} }
         @keyframes spkD { 0%,100%{opacity:0;transform:scale(.1)} 50%{opacity:.85;transform:scale(.90)} }
         @keyframes nglow {
-          0%,100%{ filter:drop-shadow(0 0 16px rgba(180,80,255,.60)) drop-shadow(0 0 40px rgba(80,160,255,.35)); }
-          50%    { filter:drop-shadow(0 0 32px rgba(255,60,180,.70)) drop-shadow(0 0 72px rgba(60,220,255,.45)); }
+          0%,100%{ filter:drop-shadow(0 0 10px rgba(200,80,255,.50)) drop-shadow(0 0 28px rgba(80,160,255,.30)); }
+          50%    { filter:drop-shadow(0 0 22px rgba(255,60,180,.65)) drop-shadow(0 0 54px rgba(60,220,255,.40)); }
         }
         @keyframes hue { from{filter:hue-rotate(0deg)} to{filter:hue-rotate(360deg)} }
 
@@ -202,16 +403,16 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
         .a-lnk:active { transform:scale(.982);transition:transform .08s; }
       `}</style>
 
-      <StarField />
-
       {/*
-        ── Content wrapper ──
-        position:relative, NO overflowX → body-level overflow-x:hidden handles clipping.
-        Aurora bands use position:absolute → scroll with content → no overscroll mismatch.
+        ── Fixed background layer ──────────────────────────────────────────────
+        position:fixed + overflow:hidden clips aurora bands to the viewport
+        without creating a vertical scroll container (no two-stage scroll trap).
+        All decorative background elements live here.
       */}
-      <div style={{ position:'relative', minHeight:'100dvh', zIndex:1 }}>
+      <div aria-hidden style={{ position:'fixed', inset:0, overflow:'hidden', pointerEvents:'none', zIndex:0 }}>
+        <StarField />
 
-        {/* ── Aurora horizontal bands (position:absolute → scrolls with page) ── */}
+        {/* Aurora horizontal bands */}
         {[
           { top:'14%', h:140, col:'0,255,180',  anim:'aur1', dur:'22s', del:'0s'   },
           { top:'36%', h:120, col:'160,0,255',   anim:'aur2', dur:'28s', del:'-6s'  },
@@ -220,91 +421,80 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
           { top:'48%', h: 80, col:'0,200,255',   anim:'aur5', dur:'40s', del:'-8s'  },
           { top:'70%', h: 70, col:'100,0,220',   anim:'aur6', dur:'45s', del:'-15s' },
         ].map((a,i)=>(
-          <div key={i} aria-hidden style={{
+          <div key={i} style={{
             position:'absolute', top:a.top, left:'-42%', right:'-42%', height:a.h,
             background:`linear-gradient(180deg,transparent 0%,rgba(${a.col},.62) 38%,rgba(${a.col},.78) 52%,rgba(${a.col},.62) 66%,transparent 100%)`,
             filter:'blur(28px)', animation:`${a.anim} ${a.dur} ease-in-out infinite ${a.del}`,
-            pointerEvents:'none', zIndex:0,
+            pointerEvents:'none',
           }}/>
         ))}
 
-        {/* ── Aurora vertical curtains ── */}
+        {/* Aurora vertical curtains */}
         {CURTAINS.map((ct,i)=>{
           const anims=['crtA','crtB','crtC']
           return (
-            <div key={i} aria-hidden style={{
+            <div key={i} style={{
               position:'absolute', top:0, bottom:0, left:ct.l, width:52,
               background:`linear-gradient(180deg,transparent 0%,rgba(${ct.col},.26) 20%,rgba(${ct.col},.52) 45%,rgba(${ct.col},.26) 72%,transparent 92%)`,
               filter:'blur(24px)', animation:`${anims[i%3]} ${ct.dur} ease-in-out infinite ${ct.del}`,
-              pointerEvents:'none', zIndex:0,
+              pointerEvents:'none',
             }}/>
           )
         })}
 
-        {/* ── Ambient orbs ── */}
-        <div aria-hidden style={{ position:'absolute',top:'8%',left:'50%',width:'130vw',height:'130vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(140,0,255,.30) 0%,rgba(100,0,200,.12) 40%,transparent 65%)',filter:'blur(60px)',animation:'orbV 16s ease-in-out infinite',pointerEvents:'none',zIndex:0 }} />
-        <div aria-hidden style={{ position:'absolute',top:'52%',left:'50%',width:'110vw',height:'110vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(0,80,255,.22) 0%,rgba(0,50,180,.10) 40%,transparent 65%)',filter:'blur(64px)',animation:'orbB 22s ease-in-out infinite reverse',pointerEvents:'none',zIndex:0 }} />
-        <div aria-hidden style={{ position:'absolute',top:'75%',left:'50%',width:'90vw',height:'90vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(255,0,100,.18) 0%,transparent 60%)',filter:'blur(50px)',animation:'orbR 28s ease-in-out infinite',pointerEvents:'none',zIndex:0 }} />
+        {/* Ambient orbs */}
+        <div style={{ position:'absolute',top:'8%',left:'50%',width:'130vw',height:'130vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(140,0,255,.30) 0%,rgba(100,0,200,.12) 40%,transparent 65%)',filter:'blur(60px)',animation:'orbV 16s ease-in-out infinite' }} />
+        <div style={{ position:'absolute',top:'52%',left:'50%',width:'110vw',height:'110vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(0,80,255,.22) 0%,rgba(0,50,180,.10) 40%,transparent 65%)',filter:'blur(64px)',animation:'orbB 22s ease-in-out infinite reverse' }} />
+        <div style={{ position:'absolute',top:'75%',left:'50%',width:'90vw',height:'90vw',borderRadius:'50%',background:'radial-gradient(circle,rgba(255,0,100,.18) 0%,transparent 60%)',filter:'blur(50px)',animation:'orbR 28s ease-in-out infinite' }} />
+      </div>
 
-        {/* ── Content ── */}
+      {/*
+        ── Scrollable content layer ────────────────────────────────────────────
+        No overflow restriction here — vertical scroll works naturally on all iOS.
+        Background clipping is handled entirely by the fixed layer above.
+      */}
+      <div style={{ position:'relative', zIndex:1, minHeight:'100dvh' }}>
         <div style={{ position:'relative', zIndex:1, display:'flex', flexDirection:'column', alignItems:'center', padding:'120px 16px 64px' }}>
           <div style={{ width:'100%', maxWidth:420 }}>
 
             {/* ── Profile ── */}
             <div style={{ display:'flex',flexDirection:'column',alignItems:'center',marginBottom:48,animation:'profIn 1.1s cubic-bezier(.22,1,.36,1) both' }}>
 
-              <div style={{ marginBottom:40, animation:'float 5s ease-in-out infinite' }}>
+              {/*
+                Float wrapper has position:relative so PulseWave can be
+                positioned absolutely relative to it.
+                marginBottom:90 ensures name text clears HakiCanvas below.
+              */}
+              <div style={{ marginBottom:90, animation:'float 5s ease-in-out infinite', position:'relative' }}>
+
+                {/* PulseWave — behind everything (zIndex:0) */}
+                <PulseWave />
+
                 <div style={{ position:'relative', width:148, height:148 }}>
 
-                  {/* Canvas Haki: red core, black outer — extends 106px outside box */}
+                  {/* HakiCanvas: 300px canvas, starts at IR=76 outside container */}
                   <HakiCanvas />
 
-                  {/* ── Halo layers — two, offset phase ── */}
+                  {/* Outer halo */}
                   <div style={{ position:'absolute',inset:-52,borderRadius:'50%',
                     background:'conic-gradient(from 0deg,#ff0077,#aa00ff,#0055ff,#00ffcc,#ff9900,#ff0077)',
                     filter:'blur(54px)', animation:'halo 3.6s ease-in-out infinite',
-                    opacity:.72, pointerEvents:'none' }} />
+                    opacity:.72, pointerEvents:'none', zIndex:2 }} />
                   <div style={{ position:'absolute',inset:-22,borderRadius:'50%',
                     background:'conic-gradient(from 180deg,#00ffcc,#aa00ff,#ff006e,#ff9900,#00ffcc)',
                     filter:'blur(22px)', animation:'halo 3.6s ease-in-out infinite .65s',
-                    opacity:.65, pointerEvents:'none' }} />
+                    opacity:.65, pointerEvents:'none', zIndex:3 }} />
 
-                  {/* ── Ring 1 — outermost CW, glow cycles with hue ── */}
-                  <div style={{ position:'absolute',inset:0,borderRadius:'50%',
-                    background:'conic-gradient(from 0deg,#ff006e,#9900ff,#0055ff,#00e5cc,#aaff00,#ff9900,#ff006e)',
-                    animation:'rcw 3.8s linear infinite, rPulse 2.2s ease-in-out infinite',
-                    boxShadow:'0 0 22px 8px rgba(255,0,100,.62), 0 0 44px 16px rgba(180,0,255,.28), inset 0 0 10px 4px rgba(255,200,255,.20)',
-                  }} />
-                  {/* Gap 1 — energy gradient, NOT flat */}
-                  <div style={{ position:'absolute',inset:3,borderRadius:'50%',
-                    background:'radial-gradient(circle, rgba(60,0,140,.14) 0%, rgba(4,1,18,.96) 52%, rgba(2,0,12,.98) 100%)' }} />
+                  {/* ElectricRings — lightning arc rings matching Haki */}
+                  <ElectricRings />
 
-                  {/* ── Ring 2 — middle CCW ── */}
-                  <div style={{ position:'absolute',inset:5,borderRadius:'50%',
-                    background:'conic-gradient(from 180deg,#00ffcc,#0055ff,#9900ff,#ff006e,#00ffcc)',
-                    animation:'rccw 8.5s linear infinite, rPulse 3.0s ease-in-out infinite .8s',
-                    boxShadow:'0 0 18px 6px rgba(0,200,255,.55), 0 0 36px 12px rgba(0,100,255,.25), inset 0 0 8px 3px rgba(180,255,255,.18)',
-                  }} />
-                  {/* Gap 2 */}
-                  <div style={{ position:'absolute',inset:8,borderRadius:'50%',
-                    background:'radial-gradient(circle, rgba(0,60,140,.12) 0%, rgba(3,1,16,.96) 52%, rgba(2,0,12,.98) 100%)' }} />
-
-                  {/* ── Ring 3 — inner CW ── */}
-                  <div style={{ position:'absolute',inset:10,borderRadius:'50%',
-                    background:'conic-gradient(from 60deg,#9900ff,#ff006e,#ff9900,#00e5cc,#0055ff,#9900ff)',
-                    animation:'rcw 6.2s linear infinite, rPulse 2.8s ease-in-out infinite 1.4s',
-                    boxShadow:'0 0 14px 5px rgba(200,100,255,.52), 0 0 28px 10px rgba(100,0,200,.22), inset 0 0 6px 2px rgba(255,200,255,.15)',
-                  }} />
-                  {/* Gap 3 */}
-                  <div style={{ position:'absolute',inset:13,borderRadius:'50%',
-                    background:'radial-gradient(circle, rgba(80,0,180,.16) 0%, rgba(3,1,14,.97) 52%, rgba(2,0,10,.99) 100%)' }} />
-
-                  {/* ── Avatar surface — energy glow from within ── */}
+                  {/* Avatar surface */}
                   <div style={{
                     position:'absolute', inset:16, borderRadius:'50%',
                     overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center',
                     background:'radial-gradient(circle at 50% 35%, rgba(100,0,220,.22) 0%, rgba(14,8,38,.95) 45%, rgba(7,2,20,.98) 100%)',
                     boxShadow:'inset 0 0 28px 10px rgba(80,0,200,.24), inset 0 0 56px 20px rgba(20,0,80,.14)',
+                    zIndex:7,
                   }}>
                     {profile.avatar_url
                       ? <img src={profile.avatar_url} alt={profile.display_name??''} style={{ width:'100%',height:'100%',objectFit:'cover' }} />
@@ -314,19 +504,20 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
                     }
                   </div>
 
-                  {/* ── Sparkle nodes (zIndex:10 > HakiCanvas z:5) ── */}
-                  <div style={{ position:'absolute',top:-8,left:'50%',width:8,height:8,borderRadius:'50%',background:'#fff',boxShadow:'0 0 12px 5px rgba(200,140,255,.98),0 0 26px 10px rgba(140,80,255,.60)',animation:'spkT 2.4s ease-in-out infinite',zIndex:10 }} />
-                  <div style={{ position:'absolute',bottom:-8,left:'50%',width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(140,200,255,.95),0 0 24px 8px rgba(80,150,255,.58)',animation:'spkB 3.0s ease-in-out infinite .60s',zIndex:10 }} />
-                  <div style={{ position:'absolute',left:-8,top:'50%',width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(255,140,220,.95),0 0 24px 8px rgba(255,80,185,.58)',animation:'spkL 2.8s ease-in-out infinite 1.0s',zIndex:10 }} />
-                  <div style={{ position:'absolute',right:-8,top:'50%',width:8,height:8,borderRadius:'50%',background:'#fff',boxShadow:'0 0 12px 5px rgba(140,230,255,.95),0 0 26px 10px rgba(60,200,255,.58)',animation:'spkR 3.3s ease-in-out infinite 1.5s',zIndex:10 }} />
-                  <div style={{ position:'absolute',top:'12%',left:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,140,195,.92)',animation:'spkD 3.7s ease-in-out infinite .25s',zIndex:10 }} />
-                  <div style={{ position:'absolute',top:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(140,165,255,.92)',animation:'spkD 4.1s ease-in-out infinite .78s',zIndex:10 }} />
-                  <div style={{ position:'absolute',bottom:'12%',left:'12%',width:5,height:5,borderRadius:'50%',background:'#fff',boxShadow:'0 0 7px 2px rgba(180,255,210,.90)',animation:'spkD 3.5s ease-in-out infinite 1.2s',zIndex:10 }} />
-                  <div style={{ position:'absolute',bottom:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,210,140,.92)',animation:'spkD 3.9s ease-in-out infinite 1.8s',zIndex:10 }} />
+                  {/* Sparkle nodes — white/red/orange palette to match Haki */}
+                  <div style={{ position:'absolute',top:-8,left:'50%',width:8,height:8,borderRadius:'50%',background:'#fff',boxShadow:'0 0 12px 5px rgba(255,180,80,.98),0 0 26px 10px rgba(255,100,0,.60)',animation:'spkT 2.4s ease-in-out infinite',zIndex:10 }} />
+                  <div style={{ position:'absolute',bottom:-8,left:'50%',width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(200,100,255,.95),0 0 24px 8px rgba(140,0,255,.58)',animation:'spkB 3.0s ease-in-out infinite .60s',zIndex:10 }} />
+                  <div style={{ position:'absolute',left:-8,top:'50%',width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:'0 0 11px 4px rgba(255,80,40,.95),0 0 24px 8px rgba(200,0,0,.58)',animation:'spkL 2.8s ease-in-out infinite 1.0s',zIndex:10 }} />
+                  <div style={{ position:'absolute',right:-8,top:'50%',width:8,height:8,borderRadius:'50%',background:'#fff',boxShadow:'0 0 12px 5px rgba(255,160,60,.95),0 0 26px 10px rgba(200,80,0,.58)',animation:'spkR 3.3s ease-in-out infinite 1.5s',zIndex:10 }} />
+                  <div style={{ position:'absolute',top:'12%',left:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,120,60,.92)',animation:'spkD 3.7s ease-in-out infinite .25s',zIndex:10 }} />
+                  <div style={{ position:'absolute',top:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(200,80,255,.92)',animation:'spkD 4.1s ease-in-out infinite .78s',zIndex:10 }} />
+                  <div style={{ position:'absolute',bottom:'12%',left:'12%',width:5,height:5,borderRadius:'50%',background:'#fff',boxShadow:'0 0 7px 2px rgba(255,140,40,.90)',animation:'spkD 3.5s ease-in-out infinite 1.2s',zIndex:10 }} />
+                  <div style={{ position:'absolute',bottom:'12%',right:'12%',width:6,height:6,borderRadius:'50%',background:'#fff',boxShadow:'0 0 8px 3px rgba(255,80,20,.92)',animation:'spkD 3.9s ease-in-out infinite 1.8s',zIndex:10 }} />
                 </div>
               </div>{/* /float */}
 
-              <h1 style={{ fontSize:26,fontWeight:700,letterSpacing:'0.22em',
+              {/* Name — letter spacing reduced from 0.22em to 0.06em */}
+              <h1 style={{ fontSize:26,fontWeight:700,letterSpacing:'0.06em',
                 background:'linear-gradient(135deg,#fff 0%,#e0c8ff 25%,#c8e0ff 55%,#fff 100%)',
                 WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',
                 marginBottom:20,textAlign:'center',animation:'nglow 5s ease-in-out infinite' }}>
@@ -345,10 +536,7 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
               )}
             </div>{/* /profile */}
 
-            {/*
-              ── Prismatic divider — between profile and links ──
-              Positioned BELOW the avatar (not above where HakiCanvas overlaps).
-            */}
+            {/* Prismatic divider */}
             <div style={{ height:1.5,borderRadius:1,
               background:'linear-gradient(90deg,transparent,rgba(255,0,110,.88),rgba(140,0,255,.88),rgba(0,160,255,.88),rgba(0,255,180,.88),transparent)',
               marginBottom:36,animation:'hue 8s linear infinite',
@@ -386,9 +574,15 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
               background:'linear-gradient(90deg,transparent,rgba(140,0,255,.60),rgba(0,180,255,.60),transparent)',
               marginTop:64,marginBottom:24,animation:'hue 12s linear infinite' }} />
 
+            {/* Logo */}
             {!profile.logo_removed && (
-              <div style={{ display:'flex',justifyContent:'center',paddingBottom:8 }}>
-                <Logo gold />
+              <div style={{ display:'flex', justifyContent:'center', paddingBottom:8 }}>
+                <a href="/" style={{ display:'flex', alignItems:'center', gap:4, opacity:.75, textDecoration:'none' }}>
+                  <span style={{ width:6, height:6, borderRadius:'50%', background:'#d4af37', display:'inline-block', flexShrink:0 }} />
+                  <span style={{ fontSize:12, fontWeight:600, color:'#d4af37', letterSpacing:'0.05em' }}>
+                    Powered by <strong style={{ color:'#d4af37' }}>Veyra</strong>
+                  </span>
+                </a>
               </div>
             )}
           </div>
