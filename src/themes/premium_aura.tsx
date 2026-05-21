@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react'
 import type { Profile, Link } from '@/types'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
-import Logo from '@/components/Logo'
 
 // ── StarField ────────────────────────────────────────────────────────────────
 function StarField() {
@@ -365,10 +364,15 @@ export default function PremiumAuraTheme({ profile, links }: Props) {
             {/* Bottom divider */}
             <div style={{ height:1,borderRadius:1,background:'linear-gradient(90deg,transparent,rgba(140,0,255,.60),rgba(0,180,255,.60),transparent)',marginTop:64,marginBottom:24,animation:'hue 12s linear infinite' }} />
 
-            {/* Logo — shared component, same as all other themes */}
+            {/* Logo — inline styles only, no Tailwind dependency */}
             {!profile.logo_removed && (
-              <div className="flex justify-center pb-2">
-                <Logo dark gold />
+              <div style={{ display:'flex', justifyContent:'center', paddingBottom:8 }}>
+                <a href="/" style={{ display:'flex', alignItems:'center', gap:6, opacity:0.75, textDecoration:'none' }}>
+                  <span style={{ width:6, height:6, borderRadius:'50%', background:'#d4af37', display:'inline-block', flexShrink:0 }} />
+                  <span style={{ fontSize:12, fontWeight:600, color:'#d4af37', letterSpacing:'0.05em' }}>
+                    Powered by <strong style={{ color:'#d4af37' }}>Veyra</strong>
+                  </span>
+                </a>
               </div>
             )}
           </div>
