@@ -46,6 +46,11 @@ export default function DashboardPage() {
   const [editingGalleryPhoto, setEditingGalleryPhoto] = useState<EditingGalleryPhoto | null>(null)
   const [showGalleryForm, setShowGalleryForm] = useState(false)
   const [uploadingGalleryPhoto, setUploadingGalleryPhoto] = useState(false)
+  const [currentEmail, setCurrentEmail] = useState<string | null>(null)
+  const [newEmail, setNewEmail] = useState('')
+  const [emailChanging, setEmailChanging] = useState(false)
+  const [emailChangeMessage, setEmailChangeMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [cancelingSubscription, setCancelingSubscription] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -58,6 +63,7 @@ export default function DashboardPage() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
+      setCurrentEmail(user.email ?? null)
 
       let { data: profileData } = await supabase.from('profiles').select('*').eq('user_id', user.id).single()
       if (!profileData) {
@@ -208,6 +214,44 @@ export default function DashboardPage() {
       setAvatarUrl(url); setProfile({ ...profile, avatar_url: url })
     }
     setUploadingAvatar(false)
+  }
+
+  const handleLogoRemoveSubscribe = async () => {
+    const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_LOGO_REMOVE_MONTHLY
+    if (!priceId) { alert('現在ご利用いただけません。'); return }
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item_type: 'logo_remove', item_id: 'logo_remove', price_id: priceId }),
+    })
+    const data = await res.json()
+    if (data.url) window.location.href = data.url
+  }
+
+  const handleCancelSubscription = async () => {
+    if (!confirm('サブスクリプションをキャンセルしますか？\n次の更新日まではロゴ非表示が継続されます。')) return
+    setCancelingSubscription(true)
+    const res = await fetch('/api/subscription/cancel', { method: 'POST' })
+    if (res.ok) {
+      setProfile(prev => prev ? { ...prev, subscription_status: 'canceling' } : prev)
+    } else {
+      alert('キャンセル処理に失敗しました。')
+    }
+    setCancelingSubscription(false)
+  }
+
+  const handleEmailChange = async () => {
+    if (!newEmail) return
+    setEmailChanging(true)
+    setEmailChangeMessage(null)
+    const { error } = await supabase.auth.updateUser({ email: newEmail })
+    if (error) {
+      setEmailChangeMessage({ type: 'error', text: 'メールアドレスの変更に失敗しました。' })
+    } else {
+      setEmailChangeMessage({ type: 'success', text: '確認メールを新しいアドレスに送信しました。' })
+      setNewEmail('')
+    }
+    setEmailChanging(false)
   }
 
   const handleLogout = async () => { await supabase.auth.signOut(); router.push('/') }
@@ -469,6 +513,91 @@ export default function DashboardPage() {
               </SortableContext>
             </DndContext>
           )}
+        </section>
+
+        {/* Logo Remove Subscription */}
+        <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
+          <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase mb-5">ロゴ非表示</p>
+          {profile?.logo_removed ? (
+            <div>
+              <div className="flex items-center gap-3 mb-4 px-4 py-3 bg-[#d4af37]/8 border border-[#d4af37]/20 rounded-xl">
+                <div className="w-2 h-2 rounded-full bg-[#d4af37] flex-none" />
+                <p className="text-[13px] text-[#d4af37]">
+                  {profile.subscription_status === 'canceling'
+                    ? '次の更新日をもって終了します'
+                    : 'ロゴ非表示が有効です'}
+                </p>
+              </div>
+              <p className="text-[12px] text-gray-600 mb-4">
+                {profile.subscription_status === 'canceling'
+                  ? '期間終了後にロゴが再表示されます。'
+                  : '公開プロフィールにVeyraロゴが表示されていません。'}
+              </p>
+              {profile.subscription_status !== 'canceling' && (
+                <button
+                  onClick={handleCancelSubscription}
+                  disabled={cancelingSubscription}
+                  className="w-full py-3 text-[13px] text-gray-500 border border-white/8 rounded-xl hover:border-white/15 hover:text-gray-400 active:scale-[0.98] transition-all disabled:opacity-40"
+                >
+                  {cancelingSubscription ? '処理中...' : 'キャンセルする'}
+                </button>
+              )}
+            </div>
+          ) : (
+            <div>
+              <p className="text-[13px] text-gray-400 mb-1">公開ページのVeyraロゴを非表示にします。</p>
+              <p className="text-[12px] text-gray-600 mb-5">月額サブスクリプション。いつでもキャンセル可能。</p>
+              <button
+                onClick={handleLogoRemoveSubscribe}
+                className="w-full py-3 text-[13px] font-bold bg-[#d4af37] text-black rounded-xl hover:bg-[#c49e30] active:scale-[0.98] transition-all"
+              >
+                ¥490/月 — ロゴを非表示にする
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* Email Change */}
+        <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
+          <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase mb-5">メールアドレス変更</p>
+          <div className="space-y-3">
+            {currentEmail && (
+              <div>
+                <label className="block text-[11px] text-gray-500 mb-1.5">現在のメールアドレス</label>
+                <div className="px-4 py-3.5 bg-white/3 border border-white/8 rounded-xl text-gray-400 text-[14px]">
+                  {currentEmail}
+                </div>
+              </div>
+            )}
+            <div>
+              <label className="block text-[11px] text-gray-500 mb-1.5">新しいメールアドレス</label>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={e => setNewEmail(e.target.value)}
+                placeholder="new@example.com"
+                className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
+              />
+            </div>
+
+            {emailChangeMessage && (
+              <div className={`px-4 py-3 rounded-xl text-[13px] ${
+                emailChangeMessage.type === 'success'
+                  ? 'bg-green-500/10 border border-green-500/20 text-green-400'
+                  : 'bg-red-500/10 border border-red-500/20 text-red-400'
+              }`}>
+                {emailChangeMessage.text}
+              </div>
+            )}
+
+            <button
+              onClick={handleEmailChange}
+              disabled={emailChanging || !newEmail}
+              className="w-full py-3 text-[13px] font-bold bg-white text-black rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {emailChanging ? '変更中...' : '変更する'}
+            </button>
+          </div>
         </section>
 
       </main>

@@ -244,7 +244,6 @@ const FEATURES = [
   { title: 'アニメーション対応', desc: '花びら・波など、動くテーマで個性を際立たせます。' },
   { title: 'リンクをまとめる',   desc: 'SNS・サイト・ECなどのリンクをひとつのページに集約。' },
   { title: '画像ギャラリー',     desc: '写真をそのままリンクに。ビジュアルで訴求できます。' },
-  { title: '買い切り課金',       desc: '月額ゼロ。一度買えばずっと使えます。' },
   { title: 'スマホ最適化',       desc: 'どのデバイスでも美しく表示されます。' },
 ]
 
@@ -284,7 +283,6 @@ export default function HomePage() {
           <div className="hidden sm:flex items-center gap-7">
             <a href="#themes"   className="text-[13px] text-gray-500 hover:text-white transition-colors">テーマ</a>
             <a href="#features" className="text-[13px] text-gray-500 hover:text-white transition-colors">機能</a>
-            <a href="#pricing"  className="text-[13px] text-gray-500 hover:text-white transition-colors">料金</a>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/login" className="text-[13px] text-gray-500 hover:text-white transition-colors">
@@ -400,17 +398,6 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Premium callout */}
-          <div className="mt-2 rounded-xl p-px" style={{ background: 'linear-gradient(135deg, #ff008080, #8800ff80, #0055ff80, #00ffcc80)' }}>
-            <div className="flex items-center gap-4 rounded-[11px] px-5 py-3.5 relative overflow-hidden" style={{ background: '#0a0a12' }}>
-              <div className="w-1 h-7 rounded-full flex-none" style={{ background: 'linear-gradient(to bottom, #ff0080, #8800ff, #00ffcc)' }} />
-              <div className="flex-1">
-                <div className="text-[13px] font-semibold">Premium</div>
-                <div className="text-[11px] text-gray-600">シリーズ外の限定テーマ · ¥3,000</div>
-              </div>
-              <span className="text-[10px] font-bold tracking-widest text-gray-600">✦</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -422,16 +409,15 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500">好みのスタイルを見つけてください。</p>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4 theme-card-scroll no-scrollbar">
-          <div className="flex-none w-5" aria-hidden="true" />
+        <div className="px-5 grid grid-cols-2 gap-3 max-w-lg mx-auto">
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
-              className="flex-none w-[148px] rounded-2xl overflow-hidden border border-white/10 [transform:translateZ(0)]"
+              className="rounded-2xl overflow-hidden border border-white/10 [transform:translateZ(0)]"
             >
               {/* Card body */}
               <div
-                className="w-full h-[220px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
+                className="w-full h-[200px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
                 style={{ background: theme.bg }}
               >
                 {'topDecor' in theme && theme.topDecor && (
@@ -481,7 +467,6 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-          <div className="flex-none w-6" aria-hidden="true" />
         </div>
 
         <div className="px-5 mt-3 max-w-lg mx-auto">
@@ -543,106 +528,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Pricing ── */}
-      <section id="pricing" className="px-5 pt-20 pb-6">
-        <div className="max-w-sm mx-auto">
-          <p className="text-[10px] text-gray-500 font-bold tracking-[0.15em] uppercase mb-2">Pricing</p>
-          <h2 className="text-[24px] font-bold mb-2">シンプルな料金</h2>
-          <p className="text-[13px] text-gray-500 mb-10">基本は無料。テーマは好きなものだけ買い切りで。</p>
-
-          <div className="space-y-3">
-            {/* Free */}
-            <div className="rounded-3xl border border-white/10 p-6 bg-white/[0.03]">
-              <h3 className="text-base font-bold mb-1">基本プラン</h3>
-              <p className="text-[36px] font-bold tracking-tight mb-5">¥0</p>
-              <ul className="space-y-3 text-[13px] text-gray-400 mb-6">
-                {[
-                  '無料テーマ 2種類',
-                  'プロフィール・リンク設定',
-                  '画像ギャラリー',
-                  'Veyra ロゴ表示あり',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5">
-                    <span className="flex-none w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] text-white">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/signup"
-                className="block w-full py-3.5 text-center border border-white/15 rounded-2xl text-[13px] font-semibold hover:bg-white/5 active:scale-[0.98] transition-all"
-              >
-                無料で始める
-              </Link>
-            </div>
-
-            {/* Theme series */}
-            <div className="rounded-3xl border border-white/10 p-6 bg-white/[0.03]">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-base font-bold">テーマシリーズ</h3>
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/8 text-gray-400 font-bold tracking-wide">買い切り</span>
-              </div>
-              <p className="text-[36px] font-bold tracking-tight mb-0.5">
-                ¥300<span className="text-base text-gray-500 font-normal"> / 件</span>
-              </p>
-              <p className="text-[11px] text-gray-600 mb-6">テーマごとに一括購入。月額費用なし。</p>
-              <ul className="space-y-3 text-[13px] text-gray-400 mb-6">
-                {[
-                  '好きなテーマを選んで購入',
-                  'Sakura / Ocean / Neon / Chrome / Luxury / Ember / Botanical / Glitch など',
-                  '一度買えばずっと使える',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5">
-                    <span className="flex-none w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] text-white">✦</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/signup"
-                className="block w-full py-3.5 text-center bg-white text-black font-bold rounded-2xl text-[13px] hover:bg-gray-100 active:scale-[0.98] transition-all"
-              >
-                テーマを選ぶ
-              </Link>
-            </div>
-
-            {/* Premium */}
-            <div className="rounded-3xl p-px" style={{ background: 'linear-gradient(135deg, #ff0080, #8800ff, #0055ff, #00ffcc)' }}>
-              <div className="rounded-[23px] p-6" style={{ background: '#08080f' }}>
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-base font-bold">プレミアムテーマ</h3>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full font-bold tracking-wide" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>限定</span>
-                </div>
-                <p className="text-[36px] font-bold tracking-tight mb-0.5">
-                  ¥3,000<span className="text-base font-normal" style={{ color: 'rgba(255,255,255,0.35)' }}> / 件</span>
-                </p>
-                <p className="text-[11px] mb-6" style={{ color: 'rgba(255,255,255,0.35)' }}>シリーズに縛られない、一点ものの体験。</p>
-                <ul className="space-y-3 text-[13px] mb-6" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                  {[
-                    'プリズム光輪・フルカラーアニメ',
-                    'どのシリーズにもない独自ビジュアル',
-                    '一度買えばずっと使える',
-                    '新テーマ随時追加予定',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-2.5">
-                      <span className="flex-none w-4 h-4 rounded-full flex items-center justify-center text-[9px]" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}>✦</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/signup"
-                  className="block w-full py-3.5 text-center font-bold rounded-2xl text-[13px] text-black hover:opacity-90 active:scale-[0.98] transition-all"
-                  style={{ background: 'linear-gradient(135deg, #ff0080, #8800ff, #0055ff, #00ffcc)' }}
-                >
-                  テーマを見る
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── FAQ ── */}
       <section className="px-5 pt-20 pb-6">
         <div className="max-w-sm mx-auto">
@@ -653,10 +538,6 @@ export default function HomePage() {
               {
                 q: 'テーマはいつでも変えられますか？',
                 a: 'はい。ダッシュボードからいつでも切り替え可能。購入済みのテーマは何度でも使えます。',
-              },
-              {
-                q: 'テーマは買い切りですか？',
-                a: 'はい。月額費用は一切かかりません。テーマを一度購入すればずっと使えます。',
               },
               {
                 q: 'SNSのプロフィールにどう使うの？',
@@ -709,9 +590,10 @@ export default function HomePage() {
             <div className="flex items-center gap-6 text-[12px] text-gray-600">
               <a href="#themes"   className="hover:text-gray-400 transition-colors">テーマ</a>
               <a href="#features" className="hover:text-gray-400 transition-colors">機能</a>
-              <a href="#pricing"  className="hover:text-gray-400 transition-colors">料金</a>
               <Link href="/login"  className="hover:text-gray-400 transition-colors">ログイン</Link>
               <Link href="/signup" className="hover:text-gray-400 transition-colors">新規登録</Link>
+              <Link href="/terms"   className="hover:text-gray-400 transition-colors">利用規約</Link>
+              <Link href="/privacy" className="hover:text-gray-400 transition-colors">プライバシー</Link>
             </div>
           </div>
           <div className="mt-6 pt-6 border-t border-white/5 text-center">

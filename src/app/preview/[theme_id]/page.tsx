@@ -45,6 +45,9 @@ const DUMMY_PROFILE: Profile = {
   selected_theme: 'free_basic',
   logo_removed: false,
   role: 'user',
+  stripe_customer_id: null,
+  stripe_subscription_id: null,
+  subscription_status: null,
   created_at: '',
   updated_at: '',
 }

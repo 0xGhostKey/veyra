@@ -87,6 +87,11 @@ export default function LoginPage() {
                   className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
                 />
               </div>
+              <div className="text-right">
+                <Link href="/forgot-password" className="text-[12px] text-gray-600 hover:text-gray-400 transition-colors">
+                  パスワードを忘れた場合
+                </Link>
+              </div>
 
               <button
                 type="submit"

@@ -46,6 +46,55 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // ── ロゴ非表示: サブスクリプションモード ──
+    if (item_type === 'logo_remove') {
+      // 既にアクティブなサブスクリプションがあれば弾く
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('stripe_customer_id, stripe_subscription_id, subscription_status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profile?.subscription_status === 'active' || profile?.subscription_status === 'trialing') {
+        return NextResponse.json({ error: 'Already subscribed' }, { status: 409 });
+      }
+
+      // Stripe Customer を取得 or 作成
+      let customerId = profile?.stripe_customer_id ?? null;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          metadata: { user_id: user.id },
+        });
+        customerId = customer.id;
+        // customer_id を保存（後続の webhook で上書きされるが先に保存しておく）
+        await supabase
+          .from('profiles')
+          .update({ stripe_customer_id: customerId })
+          .eq('user_id', user.id);
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        mode: 'subscription',
+        customer: customerId,
+        line_items: [{ price: price_id, quantity: 1 }],
+        metadata: {
+          user_id: user.id,
+          item_type: 'logo_remove',
+          item_id: 'logo_remove',
+        },
+        subscription_data: {
+          metadata: {
+            user_id: user.id,
+          },
+        },
+        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel`,
+      });
+
+      return NextResponse.json({ url: session.url });
+    }
+
+    // ── テーマ: 買い切りモード ──
     // 購入済みチェック
     const { data: existing } = await supabase
       .from('purchases')
@@ -60,7 +109,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Already purchased' }, { status: 409 });
     }
 
-    // Stripe Checkout Session 取得（price は Stripe ダッシュボードで事前作成済みを想定）
     const theme = await supabase
       .from('themes')
       .select('price, name')
@@ -71,20 +119,13 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      line_items: [
-        {
-          price: price_id,
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: price_id, quantity: 1 }],
       metadata: {
         user_id: user.id,
         item_type,
         item_id,
         amount: String(amount),
       },
-      // {CHECKOUT_SESSION_ID} は Stripe が実際の session.id に展開するテンプレート変数
-      // success ページがこの値を使って Webhook 到達を確認する
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel`,
     });
