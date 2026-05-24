@@ -18,12 +18,12 @@ const CAROUSEL_AVATARS = [
   { initial: 'J', name: '@jun_style',   color: 'linear-gradient(135deg, #2dd4bf, #0891b2)' },
 ]
 
+// カード幅 148px × 高さ 296px（2:1比でスマホ型）
 const THEME_PREVIEWS = [
   {
     id: 'sakura_white',
     name: 'Sakura White',
     series: 'Sakura',
-    badge: '桜',
     accent: '#c4849a',
     bg: '#fdf6f8',
     avatarBg: 'linear-gradient(135deg, #e8b4c0, #c4849a)',
@@ -33,14 +33,12 @@ const THEME_PREVIEWS = [
     linkBorder: '#e8b4c0',
     linkBg: '#ffffff',
     linkText: '#5a2840',
-    cardBg: '#f0eaec',
     light: true,
   },
   {
     id: 'ocean_arctic',
     name: 'Ocean Arctic',
     series: 'Ocean',
-    badge: '波',
     accent: '#a0d8f8',
     bg: '#04080e',
     avatarBg: 'linear-gradient(135deg, #a0d8f8, #2050a0)',
@@ -50,14 +48,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(160,216,248,0.2)',
     linkBg: 'rgba(160,216,248,0.07)',
     linkText: '#a0d8f8',
-    cardBg: '#0a1018',
     light: false,
   },
   {
     id: 'neon_violet',
     name: 'Neon Violet',
     series: 'Neon',
-    badge: 'NEON',
     accent: '#c77dff',
     bg: '#08000f',
     avatarBg: 'rgba(199,125,255,0.15)',
@@ -67,14 +63,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(199,125,255,0.25)',
     linkBg: 'rgba(199,125,255,0.06)',
     linkText: 'rgba(199,125,255,0.9)',
-    cardBg: '#0d0014',
     light: false,
   },
   {
     id: 'chrome_silver',
     name: 'Chrome Silver',
     series: 'Chrome',
-    badge: '金属',
     accent: '#b0bcd0',
     bg: '#060810',
     avatarBg: 'linear-gradient(135deg, #b0bcd0, #506080)',
@@ -84,14 +78,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(176,188,208,0.2)',
     linkBg: 'rgba(176,188,208,0.05)',
     linkText: '#b0bcd0',
-    cardBg: '#0c1018',
     light: false,
   },
   {
     id: 'luxury_black',
     name: 'Luxury Black',
     series: 'Luxury',
-    badge: 'LUXURY',
     accent: '#d4af37',
     bg: '#0a0a0a',
     avatarBg: 'linear-gradient(135deg, #d4af37, #8B6914)',
@@ -101,15 +93,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(212,175,55,0.25)',
     linkBg: 'rgba(212,175,55,0.07)',
     linkText: '#d4af37',
-    cardBg: '#111',
-    topDecor: true,
     light: false,
   },
   {
     id: 'sakura_dusk',
     name: 'Sakura Dusk',
     series: 'Sakura',
-    badge: '夜桜',
     accent: '#e87ca8',
     bg: '#13090d',
     avatarBg: 'linear-gradient(135deg, #e87ca8, #8a2040)',
@@ -119,14 +108,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(232,124,168,0.3)',
     linkBg: '#1e0a12',
     linkText: '#e87ca8',
-    cardBg: '#120810',
     light: false,
   },
   {
     id: 'neon_amber',
     name: 'Neon Amber',
     series: 'Neon',
-    badge: 'NEON',
     accent: '#ffb300',
     bg: '#0d0800',
     avatarBg: 'rgba(255,179,0,0.15)',
@@ -136,14 +123,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(255,179,0,0.25)',
     linkBg: 'rgba(255,179,0,0.06)',
     linkText: 'rgba(255,179,0,0.9)',
-    cardBg: '#100e00',
     light: false,
   },
   {
     id: 'ocean_lagoon',
     name: 'Ocean Lagoon',
     series: 'Ocean',
-    badge: '波',
     accent: '#40e0c0',
     bg: '#020d0a',
     avatarBg: 'linear-gradient(135deg, #40e0c0, #008060)',
@@ -153,14 +138,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(64,224,192,0.2)',
     linkBg: 'rgba(64,224,192,0.06)',
     linkText: '#40e0c0',
-    cardBg: '#060e0c',
     light: false,
   },
   {
     id: 'ember_red',
     name: 'Ember Red',
     series: 'Ember',
-    badge: '炎',
     accent: '#ff4400',
     bg: '#0f0300',
     avatarBg: 'linear-gradient(135deg, #ff7700, #cc2200)',
@@ -170,14 +153,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(255,68,0,0.2)',
     linkBg: 'rgba(255,68,0,0.06)',
     linkText: '#ff7700',
-    cardBg: '#1a0800',
     light: false,
   },
   {
     id: 'botanical_moss',
     name: 'Botanical Moss',
     series: 'Botanical',
-    badge: '葉',
     accent: '#7ec850',
     bg: '#080c05',
     avatarBg: 'linear-gradient(135deg, #a0e870, #3a8020)',
@@ -187,14 +168,12 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(126,200,80,0.2)',
     linkBg: 'rgba(126,200,80,0.06)',
     linkText: '#a0e870',
-    cardBg: '#0d1408',
     light: false,
   },
   {
     id: 'glitch_green',
     name: 'Glitch Green',
     series: 'Glitch',
-    badge: 'GLITCH',
     accent: '#00ff41',
     bg: '#000800',
     avatarBg: 'rgba(0,255,65,0.15)',
@@ -204,7 +183,21 @@ const THEME_PREVIEWS = [
     linkBorder: 'rgba(0,255,65,0.3)',
     linkBg: 'rgba(0,255,65,0.05)',
     linkText: '#00ff41',
-    cardBg: '#001800',
+    light: false,
+  },
+  {
+    id: 'snow_night',
+    name: 'Snow Night',
+    series: 'Snow',
+    accent: '#a8d4ff',
+    bg: '#020615',
+    avatarBg: 'linear-gradient(135deg, #a8d4ff, #2050a0)',
+    avatarBorder: 'rgba(168,212,255,0.4)',
+    textColor: '#dce8ff',
+    subColor: '#304880',
+    linkBorder: 'rgba(168,212,255,0.2)',
+    linkBg: 'rgba(168,212,255,0.06)',
+    linkText: '#a8d4ff',
     light: false,
   },
 ]
@@ -228,15 +221,16 @@ const USE_CASES = [
 ]
 
 const SERIES = [
-  { name: 'Sakura',    desc: '桜・花びらアニメ',   color: '#e87ca8' },
-  { name: 'Ocean',     desc: '海・波アニメ',        color: '#40e0c0' },
-  { name: 'Neon',      desc: 'サイバー・発光',      color: '#c77dff' },
-  { name: 'Chrome',    desc: 'メタリック',           color: '#b0bcd0' },
-  { name: 'Luxury',    desc: '上品・エレガント',    color: '#d4af37' },
-  { name: 'Snow',      desc: '雪・結晶アニメ',      color: '#a8d4ff' },
-  { name: 'Ember',     desc: '炎・火花アニメ',      color: '#ff6600' },
-  { name: 'Botanical', desc: '植物・葉っぱアニメ',  color: '#7ec850' },
-  { name: 'Glitch',    desc: 'デジタルノイズ',      color: '#00ff41' },
+  { name: 'Sakura',    desc: '桜・花びらアニメ',    color: '#e87ca8' },
+  { name: 'Ocean',     desc: '海・波アニメ',         color: '#40e0c0' },
+  { name: 'Neon',      desc: 'サイバー・発光',       color: '#c77dff' },
+  { name: 'Chrome',    desc: 'メタリック',            color: '#b0bcd0' },
+  { name: 'Luxury',    desc: '上品・エレガント',     color: '#d4af37' },
+  { name: 'Snow',      desc: '雪・結晶アニメ',       color: '#a8d4ff' },
+  { name: 'Ember',     desc: '炎・火花アニメ',       color: '#ff6600' },
+  { name: 'Botanical', desc: '植物・葉っぱアニメ',   color: '#7ec850' },
+  { name: 'Glitch',    desc: 'デジタルノイズ',       color: '#00ff41' },
+  { name: 'Premium',   desc: '限定・一点もの',        color: '#a78bfa' },
 ]
 
 const FEATURES = [
@@ -356,6 +350,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Free Plan Callout ── */}
+      <section className="px-5 pt-12 pb-0">
+        <div className="max-w-lg mx-auto">
+          <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.02] px-5 py-4">
+            <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center flex-none">
+              <span className="text-[15px]">✓</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-[14px] font-bold text-white mb-0.5">基本機能はすべて無料</p>
+              <p className="text-[12px] text-gray-500">登録するだけでプロフィールページを作成。テーマは好きなものだけ選んで追加できます。</p>
+            </div>
+            <Link
+              href="/signup"
+              className="flex-none text-[12px] font-bold px-3 py-2 bg-white text-black rounded-xl hover:bg-gray-100 active:scale-[0.97] transition-all whitespace-nowrap"
+            >
+              無料で始める
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── Use Cases ── */}
       <section className="px-5 pt-20 pb-6">
         <div className="max-w-lg mx-auto">
@@ -382,22 +397,21 @@ export default function HomePage() {
           <h2 className="text-[24px] font-bold text-center mb-2">テーマはシリーズ展開</h2>
           <p className="text-[13px] text-gray-500 text-center mb-8">各シリーズに複数のテーマ。続々追加中です。</p>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2">
             {SERIES.map(({ name, desc, color }) => (
               <div
                 key={name}
-                className="flex items-center gap-4 rounded-xl border border-white/6 bg-white/[0.02] px-5 py-3.5 relative overflow-hidden"
+                className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/[0.02] px-4 py-3 relative overflow-hidden"
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}80, transparent)` }} />
-                <div className="w-1 h-7 rounded-full flex-none" style={{ background: color }} />
+                <div className="w-1 h-6 rounded-full flex-none" style={{ background: color }} />
                 <div>
                   <div className="text-[13px] font-semibold">{name}</div>
-                  <div className="text-[11px] text-gray-600">{desc}</div>
+                  <div className="text-[10px] text-gray-600">{desc}</div>
                 </div>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -409,38 +423,45 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500">好みのスタイルを見つけてください。</p>
         </div>
 
-        <div className="px-5 grid grid-cols-2 gap-3 max-w-lg mx-auto">
+        {/* 横スクロール・スマホ型カード */}
+        <div className="flex gap-3 overflow-x-auto pb-4 theme-card-scroll no-scrollbar">
+          <div className="flex-none w-5" aria-hidden="true" />
           {THEME_PREVIEWS.map((theme) => (
             <div
               key={theme.id}
-              className="rounded-2xl overflow-hidden border border-white/10 [transform:translateZ(0)]"
+              className="flex-none w-[140px] rounded-[28px] overflow-hidden border border-white/10 [transform:translateZ(0)]"
+              style={{ background: theme.bg }}
             >
-              {/* Card body */}
-              <div
-                className="w-full h-[200px] flex flex-col items-center pt-5 px-3.5 overflow-hidden"
-                style={{ background: theme.bg }}
-              >
-                {'topDecor' in theme && theme.topDecor && (
-                  <div className="w-full h-px mb-3 opacity-40" style={{ background: `linear-gradient(to right, transparent, ${theme.accent}, transparent)` }} />
-                )}
+              {/* Phone top: speaker */}
+              <div className="flex justify-center pt-3 pb-2">
+                <div
+                  className="w-10 h-[5px] rounded-full"
+                  style={{ background: theme.light ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)' }}
+                />
+              </div>
+
+              {/* Screen content */}
+              <div className="flex flex-col items-center px-3 pb-5">
                 {/* Avatar */}
                 <div
-                  className="w-11 h-11 rounded-full flex items-center justify-center text-[15px] font-bold mb-2 flex-none"
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-[16px] font-bold mb-2 flex-none"
                   style={{
                     background: theme.avatarBg,
                     border: `1.5px solid ${theme.avatarBorder}`,
                     color: theme.light ? '#5a2840' : '#fff',
-                    boxShadow: `0 0 14px ${theme.accent}55`,
+                    boxShadow: `0 0 16px ${theme.accent}55`,
                   }}
                 >
                   Y
                 </div>
                 <p className="text-[11px] font-bold mb-0.5" style={{ color: theme.textColor }}>Yuna</p>
-                <p className="text-[8px] mb-3" style={{ color: theme.subColor }}>@yuna</p>
+                <p className="text-[9px] mb-4" style={{ color: theme.subColor }}>photographer</p>
+
+                {/* Links */}
                 {['Instagram', 'Portfolio', 'Shop'].map((label) => (
                   <div
                     key={label}
-                    className="w-full h-[26px] rounded-xl mb-1.5 flex items-center justify-center text-[8px] font-semibold tracking-wide flex-none"
+                    className="w-full h-[24px] rounded-lg mb-1.5 flex items-center justify-center text-[8px] font-semibold tracking-wide flex-none"
                     style={{
                       border: `1px solid ${theme.linkBorder}`,
                       background: theme.linkBg,
@@ -450,23 +471,18 @@ export default function HomePage() {
                     {label}
                   </div>
                 ))}
-              </div>
-              {/* Card footer */}
-              <div className="px-3 py-2.5" style={{ background: theme.cardBg }}>
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold" style={{ color: theme.light ? '#3d2030' : '#fff' }}>
-                    {theme.name}
-                  </span>
-                  <span
-                    className="text-[8px] px-1.5 py-0.5 rounded-full font-bold"
-                    style={{ background: `${theme.accent}22`, color: theme.accent }}
-                  >
+
+                {/* Theme name at bottom */}
+                <div className="mt-3 flex items-center gap-1.5">
+                  <div className="w-1 h-1 rounded-full flex-none" style={{ background: theme.accent }} />
+                  <span className="text-[9px] font-bold tracking-wide" style={{ color: theme.light ? theme.subColor : 'rgba(255,255,255,0.4)' }}>
                     {theme.series}
                   </span>
                 </div>
               </div>
             </div>
           ))}
+          <div className="flex-none w-5" aria-hidden="true" />
         </div>
 
         <div className="px-5 mt-3 max-w-lg mx-auto">
@@ -507,7 +523,7 @@ export default function HomePage() {
 
           <div className="space-y-px">
             {[
-              { step: '01', title: 'アカウント作成',     desc: 'メールアドレスだけで登録。30秒で完了。' },
+              { step: '01', title: 'アカウント作成',     desc: 'メールアドレスだけで登録。30秒で完了。完全無料。' },
               { step: '02', title: 'テーマ・リンク設定', desc: '好きなテーマを選び、SNSやサイトのリンクを追加。' },
               { step: '03', title: 'SNSに貼る',          desc: 'あなただけのURLをプロフィールに設定して完成。' },
             ].map(({ step, title, desc }, idx) => (
@@ -535,6 +551,10 @@ export default function HomePage() {
           <h2 className="text-[24px] font-bold mb-10">よくある質問</h2>
           <div className="space-y-3">
             {[
+              {
+                q: '無料でどこまで使えますか？',
+                a: '登録だけで無料テーマ2種類を使ったプロフィールページを作れます。リンク追加・画像ギャラリーも無料で使えます。',
+              },
               {
                 q: 'テーマはいつでも変えられますか？',
                 a: 'はい。ダッシュボードからいつでも切り替え可能。購入済みのテーマは何度でも使えます。',
@@ -567,7 +587,7 @@ export default function HomePage() {
               ))}
             </div>
             <h2 className="text-[22px] font-bold mb-3">さっそく作ってみよう</h2>
-            <p className="text-[13px] text-gray-500 mb-7">好きなテーマを選んで、あなただけのページを。</p>
+            <p className="text-[13px] text-gray-500 mb-7">無料で始めて、好きなテーマを選んで、あなただけのページを。</p>
             <Link
               href="/signup"
               className="block w-full py-[15px] bg-white text-black font-bold rounded-2xl hover:bg-gray-100 active:scale-[0.98] transition-all text-[15px]"
