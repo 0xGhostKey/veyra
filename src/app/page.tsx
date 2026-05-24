@@ -398,19 +398,43 @@ export default function HomePage() {
           <p className="text-[13px] text-gray-500 text-center mb-8">各シリーズに複数のテーマ。続々追加中です。</p>
 
           <div className="grid grid-cols-2 gap-2">
-            {SERIES.map(({ name, desc, color }) => (
-              <div
-                key={name}
-                className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/[0.02] px-4 py-3 relative overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}80, transparent)` }} />
-                <div className="w-1 h-6 rounded-full flex-none" style={{ background: color }} />
-                <div>
-                  <div className="text-[13px] font-semibold">{name}</div>
-                  <div className="text-[10px] text-gray-600">{desc}</div>
+            {SERIES.map(({ name, desc, color }) => {
+              const isPremium = name === 'Premium'
+              const rainbow = 'linear-gradient(90deg, #f472b6, #a78bfa, #60a5fa, #34d399)'
+              return (
+                <div
+                  key={name}
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 relative overflow-hidden"
+                  style={isPremium ? {
+                    background: 'linear-gradient(135deg, rgba(244,114,182,0.06) 0%, rgba(167,139,250,0.08) 40%, rgba(96,165,250,0.06) 70%, rgba(52,211,153,0.05) 100%)',
+                    border: '1px solid transparent',
+                    backgroundClip: 'padding-box',
+                    boxShadow: '0 0 0 1px rgba(167,139,250,0.35)',
+                  } : {
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.02)',
+                  }}
+                >
+                  <div
+                    className="absolute top-0 left-0 right-0 h-px"
+                    style={{ background: isPremium ? rainbow : `linear-gradient(90deg, transparent, ${color}80, transparent)` }}
+                  />
+                  <div
+                    className="w-1 h-6 rounded-full flex-none"
+                    style={{ background: isPremium ? rainbow : color }}
+                  />
+                  <div>
+                    <div className="text-[13px] font-semibold" style={isPremium ? {
+                      background: rainbow,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    } : {}}>{name}</div>
+                    <div className="text-[10px] text-gray-600">{desc}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
