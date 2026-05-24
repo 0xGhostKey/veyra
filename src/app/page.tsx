@@ -239,6 +239,7 @@ const FEATURES = [
   { title: 'リンクをまとめる',   desc: 'SNS・サイト・ECなどのリンクをひとつのページに集約。' },
   { title: '画像ギャラリー',     desc: '写真をそのままリンクに。ビジュアルで訴求できます。' },
   { title: 'スマホ最適化',       desc: 'どのデバイスでも美しく表示されます。' },
+  { title: 'かんたん設定',       desc: '名前・自己紹介・アイコンをすぐに設定。登録から公開まで5分。' },
 ]
 
 export default function HomePage() {
