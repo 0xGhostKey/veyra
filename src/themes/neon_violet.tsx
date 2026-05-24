@@ -41,6 +41,7 @@ export default function NeonVioletTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#050510';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #050510 !important; }
         @keyframes rainFall {

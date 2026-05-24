@@ -41,6 +41,7 @@ export default function NeonGlowTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#0d0d0d';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #0d0d0d !important; }
         @keyframes rainFallGlow {

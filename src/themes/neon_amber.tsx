@@ -41,6 +41,7 @@ export default function NeonAmberTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#0a0800';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #0a0800 !important; }
         @keyframes rainFallAmber {

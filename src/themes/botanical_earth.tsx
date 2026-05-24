@@ -66,6 +66,7 @@ export default function BotanicalEarthTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#120c05';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #120c05 !important; }
         @keyframes leafFall {

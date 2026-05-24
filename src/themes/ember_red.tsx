@@ -46,8 +46,10 @@ export default function EmberRedTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){document.documentElement.style.backgroundColor='#050100';document.body.style.backgroundColor='#200900';})()` }} />
       <style>{`
-        html, body { background-color: #050100 !important; }
+        html { background-color: #050100 !important; }
+        body { background-color: #200900 !important; }
         @keyframes sparkRise {
           0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
           5%   { opacity: 1; }

@@ -46,8 +46,10 @@ export default function EmberAshTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){document.documentElement.style.backgroundColor='#0e0c0b';document.body.style.backgroundColor='#1e1a16';})()` }} />
       <style>{`
-        html, body { background-color: #0e0c0b !important; }
+        html { background-color: #0e0c0b !important; }
+        body { background-color: #1e1a16 !important; }
         @keyframes sparkRise {
           0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
           5%   { opacity: 1; }

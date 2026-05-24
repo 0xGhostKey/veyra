@@ -64,6 +64,7 @@ export default function BotanicalIvoryTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#f5f0e8';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #f5f0e8 !important; }
         @keyframes leafFall {

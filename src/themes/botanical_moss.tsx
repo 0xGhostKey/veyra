@@ -64,6 +64,7 @@ export default function BotanicalMossTheme({ profile, links }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){var b='#070b04';document.documentElement.style.backgroundColor=b;document.body.style.backgroundColor=b;})()` }} />
       <style>{`
         html, body { background-color: #070b04 !important; }
         @keyframes leafFall {
