@@ -40,22 +40,22 @@ function BranchLeaf({ color, opacity }: { color: string; opacity: number }) {
 const LEAF_COLORS = ['#c87040', '#e09060', '#c87040', '#d47848']
 
 const LEAVES = [
-  { left: '2%',  size: 27, dur: 9.0,  delay: 0,    opacity: 0.70, colorIdx: 0 },
-  { left: '8%',  size: 23, dur: 7.5,  delay: 2.2,  opacity: 0.62, colorIdx: 1 },
-  { left: '14%', size: 33, dur: 11.0, delay: 0.7,  opacity: 0.75, colorIdx: 2 },
-  { left: '20%', size: 25, dur: 8.8,  delay: 4.1,  opacity: 0.58, colorIdx: 3 },
-  { left: '27%', size: 29, dur: 10.5, delay: 1.4,  opacity: 0.68, colorIdx: 0 },
-  { left: '33%', size: 21, dur: 9.2,  delay: 6.3,  opacity: 0.60, colorIdx: 1 },
-  { left: '40%', size: 36, dur: 12.0, delay: 0.3,  opacity: 0.72, colorIdx: 2 },
-  { left: '47%', size: 26, dur: 8.0,  delay: 3.8,  opacity: 0.65, colorIdx: 3 },
-  { left: '54%', size: 20, dur: 11.5, delay: 5.5,  opacity: 0.55, colorIdx: 0 },
-  { left: '61%', size: 31, dur: 9.8,  delay: 1.0,  opacity: 0.70, colorIdx: 1 },
-  { left: '68%', size: 23, dur: 7.8,  delay: 7.2,  opacity: 0.62, colorIdx: 2 },
-  { left: '75%', size: 29, dur: 10.2, delay: 2.6,  opacity: 0.68, colorIdx: 3 },
-  { left: '82%', size: 21, dur: 9.5,  delay: 4.9,  opacity: 0.58, colorIdx: 0 },
-  { left: '88%', size: 33, dur: 11.8, delay: 0.8,  opacity: 0.72, colorIdx: 1 },
-  { left: '93%', size: 25, dur: 8.5,  delay: 6.1,  opacity: 0.60, colorIdx: 2 },
-  { left: '97%', size: 27, dur: 10.0, delay: 3.3,  opacity: 0.66, colorIdx: 3 },
+  { left: '2%',  size: 16, dur: 9.0,  delay: 0,    opacity: 0.70, colorIdx: 0 },
+  { left: '8%',  size: 14, dur: 7.5,  delay: 2.2,  opacity: 0.62, colorIdx: 1 },
+  { left: '14%', size: 20, dur: 11.0, delay: 0.7,  opacity: 0.75, colorIdx: 2 },
+  { left: '20%', size: 15, dur: 8.8,  delay: 4.1,  opacity: 0.58, colorIdx: 3 },
+  { left: '27%', size: 17, dur: 10.5, delay: 1.4,  opacity: 0.68, colorIdx: 0 },
+  { left: '33%', size: 13, dur: 9.2,  delay: 6.3,  opacity: 0.60, colorIdx: 1 },
+  { left: '40%', size: 22, dur: 12.0, delay: 0.3,  opacity: 0.72, colorIdx: 2 },
+  { left: '47%', size: 16, dur: 8.0,  delay: 3.8,  opacity: 0.65, colorIdx: 3 },
+  { left: '54%', size: 12, dur: 11.5, delay: 5.5,  opacity: 0.55, colorIdx: 0 },
+  { left: '61%', size: 19, dur: 9.8,  delay: 1.0,  opacity: 0.70, colorIdx: 1 },
+  { left: '68%', size: 14, dur: 7.8,  delay: 7.2,  opacity: 0.62, colorIdx: 2 },
+  { left: '75%', size: 17, dur: 10.2, delay: 2.6,  opacity: 0.68, colorIdx: 3 },
+  { left: '82%', size: 13, dur: 9.5,  delay: 4.9,  opacity: 0.58, colorIdx: 0 },
+  { left: '88%', size: 20, dur: 11.8, delay: 0.8,  opacity: 0.72, colorIdx: 1 },
+  { left: '93%', size: 15, dur: 8.5,  delay: 6.1,  opacity: 0.60, colorIdx: 2 },
+  { left: '97%', size: 16, dur: 10.0, delay: 3.3,  opacity: 0.66, colorIdx: 3 },
 ]
 
 const C = '#c87040'
