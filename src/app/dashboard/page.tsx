@@ -518,7 +518,12 @@ export default function DashboardPage() {
         {/* Logo Remove Subscription */}
         <section className="bg-[#111] rounded-3xl border border-white/8 p-5">
           <p className="text-[11px] font-bold text-gray-500 tracking-[0.12em] uppercase mb-5">ロゴ非表示</p>
-          {profile?.logo_removed ? (
+          {profile?.role === 'admin' || profile?.role === 'complete' ? (
+            <div className="flex items-center gap-3 px-4 py-3 bg-[#d4af37]/8 border border-[#d4af37]/20 rounded-xl">
+              <div className="w-2 h-2 rounded-full bg-[#d4af37] flex-none" />
+              <p className="text-[13px] text-[#d4af37]">管理者アカウントのため常に非表示</p>
+            </div>
+          ) : profile?.logo_removed ? (
             <div>
               <div className="flex items-center gap-3 mb-4 px-4 py-3 bg-[#d4af37]/8 border border-[#d4af37]/20 rounded-xl">
                 <div className="w-2 h-2 rounded-full bg-[#d4af37] flex-none" />
