@@ -41,7 +41,7 @@ const DUMMY_PROFILE: Profile = {
   user_id: 'preview',
   display_name: 'Yuna',
   bio: 'photographer · Tokyo',
-  avatar_url: null,
+  avatar_url: '/yuna/avatar.png',
   selected_theme: 'free_basic',
   logo_removed: false,
   role: 'user',
@@ -56,6 +56,9 @@ const DUMMY_LINKS: Link[] = [
   { id: '1', profile_id: 'preview', title: 'Instagram', url: '#', icon_type: null, link_type: 'text', image_url: null, link_size: 'small', sort_order: 0, is_active: true, created_at: '', updated_at: '' },
   { id: '2', profile_id: 'preview', title: 'Portfolio', url: '#', icon_type: null, link_type: 'text', image_url: null, link_size: 'small', sort_order: 1, is_active: true, created_at: '', updated_at: '' },
   { id: '3', profile_id: 'preview', title: 'Online Shop', url: '#', icon_type: null, link_type: 'text', image_url: null, link_size: 'small', sort_order: 2, is_active: true, created_at: '', updated_at: '' },
+  { id: '4', profile_id: 'preview', title: '', url: '', icon_type: null, link_type: 'gallery', image_url: '/yuna/gallery1.png', link_size: 'small', sort_order: 0, is_active: true, created_at: '', updated_at: '' },
+  { id: '5', profile_id: 'preview', title: '', url: '', icon_type: null, link_type: 'gallery', image_url: '/yuna/gallery2.png', link_size: 'small', sort_order: 1, is_active: true, created_at: '', updated_at: '' },
+  { id: '6', profile_id: 'preview', title: '', url: '', icon_type: null, link_type: 'gallery', image_url: '/yuna/gallery3.png', link_size: 'small', sort_order: 2, is_active: true, created_at: '', updated_at: '' },
 ]
 
 const THEME_BODY_CSS: Record<string, string> = {
