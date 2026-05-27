@@ -5,40 +5,18 @@ import type { ThemeDefinition } from '@/types'
 type ThemeCardProps = {
   theme: ThemeDefinition
   isSelected: boolean
-  isPurchased: boolean
-  isPrerequisiteLocked?: boolean
-  prerequisiteName?: string
-  stepNumber?: number
   onSelect: (themeId: string) => void
-  onPurchase: (themeId: string) => void
 }
 
-export default function ThemeCard({
-  theme,
-  isSelected,
-  isPurchased,
-  isPrerequisiteLocked = false,
-  prerequisiteName,
-  stepNumber,
-  onSelect,
-  onPurchase,
-}: ThemeCardProps) {
-  const isAccessible = theme.isFree || isPurchased
-  const isPurchaseLocked = !theme.isFree && !isPurchased && !isPrerequisiteLocked
-  const isAnyLocked = !isAccessible
-
+export default function ThemeCard({ theme, isSelected, onSelect }: ThemeCardProps) {
   return (
     <div
-      className={`relative rounded-2xl border overflow-hidden transition-all duration-200 ${
+      className={`relative rounded-2xl border overflow-hidden transition-all duration-200 cursor-pointer ${
         isSelected
           ? 'border-[#d4af37]/50 bg-[#d4af37]/5'
-          : isAnyLocked
-          ? 'border-white/8 bg-white/[0.02]'
-          : 'border-white/10 bg-[#111] hover:border-white/20 cursor-pointer'
+          : 'border-white/10 bg-[#111] hover:border-white/20'
       }`}
-      onClick={() => {
-        if (isAccessible) onSelect(theme.id)
-      }}
+      onClick={() => onSelect(theme.id)}
     >
       {/* Phone preview */}
       <div className="flex justify-center items-center py-5 bg-black/20">
@@ -68,22 +46,6 @@ export default function ThemeCard({
             </div>
           </div>
 
-          {/* Lock overlay */}
-          {isAnyLocked && (
-            <div className="absolute inset-0 rounded-[28px] bg-black/50 z-20 flex flex-col items-center justify-center gap-2">
-              <div className="w-9 h-9 bg-black/60 rounded-full flex items-center justify-center border border-white/15">
-                <svg className="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              {isPrerequisiteLocked && prerequisiteName && (
-                <span className="text-[10px] text-white/50 font-medium px-3 text-center leading-tight">
-                  {prerequisiteName} を先に入手
-                </span>
-              )}
-            </div>
-          )}
-
           {/* Selected badge */}
           {isSelected && (
             <div className="absolute top-2 right-2 z-20 w-7 h-7 bg-[#d4af37] rounded-full flex items-center justify-center shadow-lg">
@@ -92,37 +54,22 @@ export default function ThemeCard({
               </svg>
             </div>
           )}
-
-          {/* Step badge */}
-          {stepNumber !== undefined && (
-            <div className="absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full bg-black/60 border border-white/15">
-              <span className="text-[9px] font-bold text-white/60 tracking-widest">
-                STEP {stepNumber}
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
       {/* Info */}
       <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <div className="flex items-center gap-2">
-            <h3 className="font-bold text-white text-[14px]">{theme.name}</h3>
-            {theme.isAnimated && (
-              <span className="text-[9px] text-[#d4af37] font-bold bg-[#d4af37]/15 px-2 py-0.5 rounded-full tracking-wide">
-                ANIMATED
-              </span>
-            )}
-          </div>
-          <span className="text-[13px] font-bold text-gray-300 flex-none">
-            {theme.isFree ? '無料' : `¥${theme.price.toLocaleString()}`}
-          </span>
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="font-bold text-white text-[14px]">{theme.name}</h3>
+          {theme.isAnimated && (
+            <span className="text-[9px] text-[#d4af37] font-bold bg-[#d4af37]/15 px-2 py-0.5 rounded-full tracking-wide">
+              ANIMATED
+            </span>
+          )}
         </div>
         <p className="text-[12px] text-gray-500 mb-4 leading-relaxed">{theme.description}</p>
 
         <div className="flex gap-2">
-          {/* Preview button */}
           <a
             href={`/preview/${theme.id}`}
             target="_blank"
@@ -133,22 +80,7 @@ export default function ThemeCard({
             全画面で見る ↗
           </a>
 
-          {/* Action button */}
-          {isPrerequisiteLocked ? (
-            <div className="flex-1 py-2.5 text-center text-[12px] text-gray-600 font-medium cursor-not-allowed">
-              🔒 前のステップが必要
-            </div>
-          ) : isPurchaseLocked ? (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onPurchase(theme.id)
-              }}
-              className="flex-1 py-2.5 bg-[#d4af37] text-black text-[12px] font-bold rounded-xl hover:bg-[#e8cc6a] active:scale-[0.97] transition-all"
-            >
-              購入する
-            </button>
-          ) : isSelected ? (
+          {isSelected ? (
             <div className="flex-1 py-2.5 text-center text-[12px] text-[#d4af37] font-semibold">
               選択中 ✓
             </div>

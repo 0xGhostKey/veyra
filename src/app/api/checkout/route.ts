@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { item_type, item_id, price_id } = body as {
-      item_type: 'logo_remove' | 'theme';
+      item_type: 'logo_remove';
       item_id: string;
       price_id: string;
     };
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     if (!item_type || !item_id || !price_id) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    if (!['logo_remove', 'theme'].includes(item_type)) {
+    if (item_type !== 'logo_remove') {
       return NextResponse.json({ error: 'Invalid item_type' }, { status: 400 });
     }
 
@@ -94,43 +94,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ url: session.url });
     }
 
-    // ── テーマ: 買い切りモード ──
-    // 購入済みチェック
-    const { data: existing } = await supabase
-      .from('purchases')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('item_type', item_type)
-      .eq('item_id', item_id)
-      .eq('status', 'paid')
-      .maybeSingle();
-
-    if (existing) {
-      return NextResponse.json({ error: 'Already purchased' }, { status: 409 });
-    }
-
-    const theme = await supabase
-      .from('themes')
-      .select('price, name')
-      .eq('id', item_id)
-      .maybeSingle();
-
-    const amount = theme.data?.price ?? 0;
-
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [{ price: price_id, quantity: 1 }],
-      metadata: {
-        user_id: user.id,
-        item_type,
-        item_id,
-        amount: String(amount),
-      },
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel`,
-    });
-
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ error: 'Invalid item_type' }, { status: 400 });
   } catch (err) {
     console.error('[checkout] error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
