@@ -1,4 +1,4 @@
-import type { Profile, Link } from '@/types'
+﻿import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
@@ -118,7 +118,7 @@ export default function OceanAbyssTheme({ profile, links }: Props) {
         </div>
 
                   <div className="flex justify-center mt-4">
-            <Logo dark />
+            {!profile.logo_removed && <Logo dark />}
           </div>
       </div>
     </div>

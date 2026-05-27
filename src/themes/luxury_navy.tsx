@@ -1,4 +1,4 @@
-import type { Profile, Link } from '@/types'
+﻿import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
@@ -150,7 +150,7 @@ export default function LuxuryNavyTheme({ profile, links }: Props) {
               </div>
 
                               <div className="flex justify-center mt-6">
-                  <Logo dark gold />
+                  {!profile.logo_removed && <Logo dark gold />}
                 </div>
             </div>
           </div>

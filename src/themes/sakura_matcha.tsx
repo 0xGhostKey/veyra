@@ -1,4 +1,4 @@
-import type { Profile, Link } from '@/types'
+﻿import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
@@ -146,7 +146,7 @@ export default function SakuraMatchaTheme({ profile, links }: Props) {
         <GallerySection photos={galleryPhotos} />
 
                   <div className="mt-10 flex justify-center">
-            <Logo dark />
+            {!profile.logo_removed && <Logo dark />}
           </div>
       </div>
     </div>

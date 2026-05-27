@@ -1,4 +1,4 @@
-import type { Profile, Link } from '@/types'
+﻿import type { Profile, Link } from '@/types'
 import Logo from '@/components/Logo'
 import GallerySection from '@/components/GallerySection'
 import MixedLinks from '@/components/MixedLinks'
@@ -130,7 +130,7 @@ export default function ChromePlatinumTheme({ profile, links }: Props) {
           />
           <GallerySection photos={galleryPhotos} />
           <div className="h-px mt-10 mb-6" style={{ background: `linear-gradient(90deg, transparent, #b0bac4, transparent)` }} />
-          <div className="flex justify-center"><Logo dark /></div>
+          <div className="flex justify-center">{!profile.logo_removed && <Logo dark />}</div>
         </div>
       </div>
     </>

@@ -83,7 +83,7 @@ export default async function PublicProfilePage({ params }: Props) {
   const activeLinks: Link[] = links ?? []
 
   const resolvedProfile = profile as Profile
-  const effectiveProfile = (resolvedProfile.role === 'admin' || resolvedProfile.role === 'complete')
+  const effectiveProfile = resolvedProfile.role === 'admin'
     ? { ...resolvedProfile, logo_removed: true }
     : resolvedProfile
 
