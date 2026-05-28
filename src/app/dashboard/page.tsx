@@ -47,6 +47,12 @@ export default function DashboardPage() {
   const [emailChangeMessage, setEmailChangeMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [cancelingSubscription, setCancelingSubscription] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [customSlug, setCustomSlug] = useState('')
+  const [slugInput, setSlugInput] = useState('')
+  const [showSlugEdit, setShowSlugEdit] = useState(false)
+  const [slugSaving, setSlugSaving] = useState(false)
+  const [slugError, setSlugError] = useState<string | null>(null)
+  const [slugSaved, setSlugSaved] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -73,6 +79,8 @@ export default function DashboardPage() {
         setDisplayName(profileData.display_name ?? '')
         setBio(profileData.bio ?? '')
         setAvatarUrl(profileData.avatar_url ?? null)
+        setCustomSlug(profileData.custom_slug ?? '')
+        setSlugInput(profileData.custom_slug ?? '')
         // 初回ログイン判定
         if (!localStorage.getItem('veyra_onboarding_done')) {
           setShowOnboarding(true)
@@ -118,7 +126,8 @@ export default function DashboardPage() {
   const handleAddLink = async () => {
     if (!profile || !editingLink) return
     const currentTextLinks = links.filter(l => l.link_type === 'text')
-    if (currentTextLinks.length >= 10) return
+    const limit = (profile.role === 'admin' || profile.logo_removed) ? 30 : 5
+    if (currentTextLinks.length >= limit) return
     setSaving(true)
     const { data, error } = await supabase.from('links').insert({
       profile_id: profile.id, title: editingLink.title, url: editingLink.url,
@@ -266,9 +275,44 @@ export default function DashboardPage() {
     setEmailChanging(false)
   }
 
+  // ── Custom slug ──
+
+  const RESERVED_SLUGS = new Set(['admin', 'api', 'dashboard', 'login', 'signup', 'themes', 'preview', 'terms', 'privacy', 'u', 'auth', 'checkout', 'reset-password', 'forgot-password'])
+
+  const handleSaveSlug = async () => {
+    if (!profile) return
+    const slug = slugInput.trim().toLowerCase()
+    if (!/^[a-zA-Z0-9_-]{3,20}$/.test(slug)) {
+      setSlugError('3〜20文字の英数字・ハイフン・アンダースコアのみ使えます')
+      return
+    }
+    if (RESERVED_SLUGS.has(slug)) {
+      setSlugError('このURLは使用できません')
+      return
+    }
+    setSlugSaving(true)
+    setSlugError(null)
+    // 重複チェック
+    const { data: existing } = await supabase.from('profiles').select('user_id').eq('custom_slug', slug).maybeSingle()
+    if (existing && existing.user_id !== profile.user_id) {
+      setSlugError('このURLはすでに使われています')
+      setSlugSaving(false)
+      return
+    }
+    const { error } = await supabase.from('profiles').update({ custom_slug: slug }).eq('user_id', profile.user_id)
+    if (!error) {
+      setCustomSlug(slug)
+      setProfile({ ...profile, custom_slug: slug })
+      setShowSlugEdit(false)
+      setSlugSaved(true)
+      setTimeout(() => setSlugSaved(false), 2000)
+    }
+    setSlugSaving(false)
+  }
+
   const handleCopyUrl = () => {
     if (!profile) return
-    navigator.clipboard.writeText(`${window.location.origin}/u/${profile.user_id}`)
+    navigator.clipboard.writeText(publicUrl)
     setUrlCopied(true); setTimeout(() => setUrlCopied(false), 2000)
   }
 
@@ -301,6 +345,9 @@ export default function DashboardPage() {
   const textLinks = links.filter(l => l.link_type === 'text')
   const imageLinks = links.filter(l => l.link_type === 'image')
   const galleryPhotos = links.filter(l => l.link_type === 'gallery')
+  const isPremium = profile?.role === 'admin' || !!profile?.logo_removed
+  const linkLimit = isPremium ? 30 : 5
+  const publicUrl = `${window.location.origin}/u/${customSlug || profile?.user_id}`
 
   const dismissOnboarding = () => {
     localStorage.setItem('veyra_onboarding_done', '1')
@@ -375,7 +422,7 @@ export default function DashboardPage() {
               <div className="flex-1 min-w-0 px-4 py-3 bg-black/40 border border-white/8 rounded-xl">
                 <p className="text-[13px] text-gray-300 truncate">
                   <span className="text-gray-600">veyra.jp/u/</span>
-                  <span className="text-white font-medium">{profile.user_id.slice(0, 8)}...</span>
+                  <span className="text-white font-medium">{customSlug || `${profile.user_id.slice(0, 8)}...`}</span>
                 </p>
               </div>
               <button onClick={handleCopyUrl}
@@ -383,7 +430,45 @@ export default function DashboardPage() {
                 {urlCopied ? '済み ✓' : 'コピー'}
               </button>
             </div>
-            <a href={`/u/${profile.user_id}`} target="_blank" rel="noopener noreferrer" className="text-[12px] text-gray-500 hover:text-gray-300 transition-colors">公開ページを開く ↗</a>
+            <div className="flex items-center justify-between">
+              <a href={`/u/${customSlug || profile.user_id}`} target="_blank" rel="noopener noreferrer" className="text-[12px] text-gray-500 hover:text-gray-300 transition-colors">公開ページを開く ↗</a>
+              <button onClick={() => { setShowSlugEdit(v => !v); setSlugError(null) }}
+                className="text-[12px] text-gray-600 hover:text-gray-400 transition-colors">
+                {customSlug ? 'URLを変更 ✏' : 'カスタムURLを設定 +'}
+              </button>
+            </div>
+
+            {/* Slug edit form */}
+            {showSlugEdit && (
+              <div className="mt-4 pt-4 border-t border-white/8 space-y-2.5">
+                <div className="flex items-center gap-2 bg-black/40 border border-white/8 rounded-xl px-4 py-2.5">
+                  <span className="text-[12px] text-gray-600 flex-none">veyra.jp/u/</span>
+                  <input
+                    type="text"
+                    value={slugInput}
+                    onChange={e => { setSlugInput(e.target.value.toLowerCase()); setSlugError(null) }}
+                    onKeyDown={e => { if (e.key === 'Enter') handleSaveSlug() }}
+                    placeholder="yourname"
+                    maxLength={20}
+                    className="flex-1 bg-transparent text-white text-[13px] focus:outline-none placeholder-gray-700"
+                  />
+                  <span className="text-[10px] text-gray-700 flex-none">{slugInput.length}/20</span>
+                </div>
+                {slugError && <p className="text-[12px] text-red-400">{slugError}</p>}
+                {slugSaved && <p className="text-[12px] text-green-400">URLを更新しました ✓</p>}
+                <p className="text-[11px] text-gray-700">3〜20文字 · 英数字 / ハイフン / アンダースコアのみ</p>
+                <div className="flex gap-2">
+                  <button onClick={handleSaveSlug} disabled={slugSaving || slugInput.length < 3}
+                    className="flex-1 py-2.5 bg-white text-black text-[13px] font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-40">
+                    {slugSaving ? '保存中...' : '保存'}
+                  </button>
+                  <button onClick={() => { setShowSlugEdit(false); setSlugInput(customSlug); setSlugError(null) }}
+                    className="flex-1 py-2.5 bg-white/5 border border-white/8 text-gray-400 text-[13px] rounded-xl hover:bg-white/10 transition-colors">
+                    キャンセル
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         )}
 
@@ -406,6 +491,7 @@ export default function DashboardPage() {
         <LinksSection
           textLinks={textLinks}
           imageLinks={imageLinks}
+          linkLimit={linkLimit}
           showLinkForm={showLinkForm}
           editingLink={editingLink}
           saving={saving}

@@ -10,13 +10,14 @@ type Props = {
   params: Promise<{ user_id: string }>
 }
 
-const fetchProfile = cache(async (user_id: string) => {
+const fetchProfile = cache(async (slug: string) => {
   const supabase = await createClient()
+  // custom_slug で先に検索、なければ user_id で fallback
   const { data } = await supabase
     .from('profiles')
     .select('*')
-    .eq('user_id', user_id)
-    .single()
+    .or(`custom_slug.eq.${slug},user_id.eq.${slug}`)
+    .maybeSingle()
   return data as Profile | null
 })
 

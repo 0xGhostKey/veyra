@@ -48,6 +48,7 @@ const DUMMY_PROFILE: Profile = {
   stripe_customer_id: null,
   stripe_subscription_id: null,
   subscription_status: null,
+  custom_slug: null,
   created_at: '',
   updated_at: '',
 }
