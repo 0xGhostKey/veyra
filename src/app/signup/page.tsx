@@ -5,6 +5,18 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
+function getPasswordStrength(pw: string): { level: 0 | 1 | 2 | 3; label: string } {
+  if (pw.length === 0) return { level: 0, label: '' }
+  if (pw.length < 8) return { level: 1, label: '弱' }
+  const checks = [/[a-z]/, /[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].filter(r => r.test(pw)).length
+  if (checks >= 3) return { level: 3, label: '強' }
+  if (checks >= 2) return { level: 2, label: '中' }
+  return { level: 1, label: '弱' }
+}
+
+const STRENGTH_COLOR = ['', 'bg-red-500', 'bg-amber-400', 'bg-green-500'] as const
+const STRENGTH_TEXT  = ['', 'text-red-400', 'text-amber-400', 'text-green-400'] as const
+
 export default function SignupPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -12,6 +24,8 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+
+  const strength = getPasswordStrength(password)
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -120,11 +134,25 @@ export default function SignupPage() {
                   placeholder="8文字以上"
                   className="w-full px-4 py-3.5 bg-white/5 border border-white/8 rounded-xl text-white placeholder-gray-700 focus:outline-none focus:border-[#d4af37]/40 transition-colors text-[15px]"
                 />
+                {/* Strength indicator */}
+                {password.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    <div className="flex gap-1">
+                      {[1, 2, 3].map(i => (
+                        <div
+                          key={i}
+                          className={`h-1 flex-1 rounded-full transition-all duration-300 ${strength.level >= i ? STRENGTH_COLOR[strength.level] : 'bg-white/10'}`}
+                        />
+                      ))}
+                    </div>
+                    <p className={`text-[11px] ${STRENGTH_TEXT[strength.level]}`}>{strength.label}</p>
+                  </div>
+                )}
               </div>
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || strength.level < 1}
                 className="w-full py-[15px] bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-[15px] mt-2"
               >
                 {loading ? '処理中...' : '無料で登録する'}

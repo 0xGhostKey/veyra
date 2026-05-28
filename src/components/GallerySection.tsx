@@ -15,10 +15,13 @@ export default function GallerySection({ photos }: Props) {
   const swipeAxis = useRef<'x' | 'y' | null>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  // Prevent body scroll while lightbox is open
+  // Prevent body scroll while lightbox is open + ESC to close
   useEffect(() => {
     if (lightboxIndex !== null) {
       document.body.style.overflow = 'hidden'
+      const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') setLightboxIndex(null) }
+      window.addEventListener('keydown', onKeyDown)
+      return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKeyDown) }
     } else {
       document.body.style.overflow = ''
     }

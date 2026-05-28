@@ -11,23 +11,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [emailUnconfirmed, setEmailUnconfirmed] = useState(false)
+  const [resendStatus, setResendStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setEmailUnconfirmed(false)
 
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
-      setError('メールアドレスまたはパスワードが正しくありません。')
+      if (error.message.toLowerCase().includes('email not confirmed')) {
+        setEmailUnconfirmed(true)
+      } else {
+        setError('メールアドレスまたはパスワードが正しくありません。')
+      }
       setLoading(false)
       return
     }
 
     router.push('/dashboard')
     router.refresh()
+  }
+
+  const handleResend = async () => {
+    setResendStatus('sending')
+    const supabase = createClient()
+    await supabase.auth.resend({ type: 'signup', email })
+    setResendStatus('sent')
   }
 
   return (
@@ -55,6 +69,23 @@ export default function LoginPage() {
             {error && (
               <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px]">
                 {error}
+              </div>
+            )}
+
+            {emailUnconfirmed && (
+              <div className="mb-4 px-4 py-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[13px]">
+                <p className="text-amber-400 mb-2.5">メールアドレスの確認が完了していません。</p>
+                {resendStatus === 'sent' ? (
+                  <p className="text-green-400 text-[12px]">確認メールを再送しました ✓</p>
+                ) : (
+                  <button
+                    onClick={handleResend}
+                    disabled={resendStatus === 'sending'}
+                    className="text-[12px] font-bold text-amber-300 underline underline-offset-2 hover:text-amber-200 disabled:opacity-50"
+                  >
+                    {resendStatus === 'sending' ? '送信中...' : '確認メールを再送する'}
+                  </button>
+                )}
               </div>
             )}
 

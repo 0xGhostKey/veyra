@@ -61,6 +61,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing metadata' }, { status: 400 });
     }
 
+    if (item_type !== 'theme') {
+      console.error('[webhook] invalid item_type:', item_type);
+      return NextResponse.json({ error: 'Invalid item_type' }, { status: 400 });
+    }
+
     const { error: insertError } = await supabase.from('purchases').insert({
       user_id,
       item_type,

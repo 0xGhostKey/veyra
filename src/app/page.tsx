@@ -449,6 +449,14 @@ export default function HomePage() {
         </div>
 
         {/* 横スクロール・スマホ型カード */}
+        <div className="relative">
+          {/* 右フェード＋矢印 */}
+          <div className="pointer-events-none absolute right-0 top-0 bottom-4 w-16 z-10 flex items-center justify-end pr-2"
+            style={{ background: 'linear-gradient(to right, transparent, #0a0a0a)' }}>
+            <svg className="w-5 h-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         <div className="flex gap-3 overflow-x-auto pb-4 theme-card-scroll no-scrollbar">
           <div className="flex-none w-5" aria-hidden="true" />
           {THEME_PREVIEWS.map((theme) => (
@@ -508,6 +516,7 @@ export default function HomePage() {
             </div>
           ))}
           <div className="flex-none w-5" aria-hidden="true" />
+        </div>
         </div>
 
         <div className="px-5 mt-3 max-w-lg mx-auto">
